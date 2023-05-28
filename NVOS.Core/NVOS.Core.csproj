@@ -37,6 +37,12 @@
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.1.1.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Data.Sqlite, Version=7.0.5.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Data.Sqlite.Core.7.0.5\lib\netstandard2.0\Microsoft.Data.Sqlite.dll</HintPath>
+    </Reference>
+    <Reference Include="SQLitePCLRaw.core, Version=2.1.4.1835, Culture=neutral, PublicKeyToken=1488e028ca7ab535, processorArchitecture=MSIL">
+      <HintPath>..\packages\SQLitePCLRaw.core.2.1.4\lib\netstandard2.0\SQLitePCLRaw.core.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
@@ -67,6 +73,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutowirePropertySelector.cs" />
+    <Compile Include="Database\DatabaseService.cs" />
+    <Compile Include="Database\DbCollection.cs" />
+    <Compile Include="Database\DbCollectionInfo.cs" />
+    <Compile Include="Database\Exceptions\DbCollectionException.cs" />
+    <Compile Include="Database\IDbAdapter.cs" />
+    <Compile Include="Database\SqliteDbAdapter.cs" />
     <Compile Include="IContainerRegistry.cs" />
     <Compile Include="IDisposableService.cs" />
     <Compile Include="InjectDependencyAttribute.cs" />
