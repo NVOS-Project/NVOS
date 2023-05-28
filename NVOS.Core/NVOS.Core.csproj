@@ -66,19 +66,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AutowirePropertySelector.cs" />
-    <Compile Include="IContainerRegistry.cs" />
-    <Compile Include="IDisposableService.cs" />
-    <Compile Include="InjectDependencyAttribute.cs" />
-    <Compile Include="IService.cs" />
+    <Compile Include="Services\EventArgs\ServiceEventArgs.cs" />
+    <Compile Include="Services\IService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ServiceDependencyAttribute.cs" />
-    <Compile Include="ServiceType.cs" />
-    <Compile Include="ServiceTypeAttribute.cs" />
+    <Compile Include="Services\IServiceManager.cs" />
+    <Compile Include="Services\IServiceRegistry.cs" />
+    <Compile Include="Services\IServiceResolver.cs" />
+    <Compile Include="Services\Attributes\ServiceDependencyAttribute.cs" />
+    <Compile Include="Services\Enums\ServiceState.cs" />
+    <Compile Include="Services\Enums\ServiceStopReason.cs" />
+    <Compile Include="Services\Enums\ServiceType.cs" />
+    <Compile Include="Services\Attributes\ServiceTypeAttribute.cs" />
+    <Compile Include="Services\ServiceUnit.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

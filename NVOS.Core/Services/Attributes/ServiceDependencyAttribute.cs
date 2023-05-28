@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace NVOS.Core
+namespace NVOS.Core.Services.Attributes
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
     public class ServiceDependencyAttribute : Attribute

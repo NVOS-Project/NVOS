@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using NVOS.Core.Services.Enums;
+using System;
 
-namespace NVOS.Core
+namespace NVOS.Core.Services.Attributes
 {
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
     public class ServiceTypeAttribute : Attribute
