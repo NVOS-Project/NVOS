@@ -1,0 +1,10 @@
+﻿using System;
+
+namespace NVOS.Core.Services
+{
+    public interface IServiceResolver
+    {
+        T Resolve<T>() where T : class;
+        object Resolve(Type type);
+    }
+}
