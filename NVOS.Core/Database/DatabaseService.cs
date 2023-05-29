@@ -3,14 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NVOS.Core.Database.Exceptions;
+
 
 namespace NVOS.Core.Database
 {
     public class DatabaseService
     {
         private IDbAdapter adapter;
-        private DbCollection this[string name]
+
+        public DatabaseService(IDbAdapter adapter)
+        {
+            this.adapter = adapter;
+        }
+
+        public DbCollection this[string name]
         {
             get { return GetCollection(name); }
         }
@@ -24,31 +30,31 @@ namespace NVOS.Core.Database
 
             if (CollectionExists(name))
             {
-                throw new DbCollectionException("Collection already exists!", name);
+                throw new InvalidOperationException("Collection already exists!");
             }
 
             
             return adapter.CreateCollection(name);
         }
 
-        public bool DeleteCollection(Guid id)
+        public void DeleteCollection(Guid id)
         {
             if (!CollectionExists(id))
             {
-                return false;
+                throw new InvalidOperationException("Collection does not exist!");
             }
 
-            return adapter.DeleteCollection(id);
+            adapter.DeleteCollection(id);
         }
 
-        public bool DeleteCollection(string name)
+        public void DeleteCollection(string name)
         {
             if (!CollectionExists(name))
             {
-                return false;
+                throw new InvalidOperationException("Collection does not exist!");
             }
 
-            return adapter.DeleteCollection(name);
+            adapter.DeleteCollection(name);
         }
 
         public IEnumerable<DbCollection> ListCollections()
@@ -78,7 +84,7 @@ namespace NVOS.Core.Database
         {
             if (!CollectionExists(collectionId))
             {
-                throw new DbCollectionException("Collection does not exist!", collectionId);
+                throw new InvalidOperationException("Collection does not exist!");
             }
 
             return adapter.CountRecords(collectionId);
@@ -88,7 +94,7 @@ namespace NVOS.Core.Database
         {
             if (!CollectionExists(collectionName))
             {
-                throw new DbCollectionException("Collection does not exist!", collectionName);
+                throw new InvalidOperationException("Collection does not exist!");
             }
 
             return adapter.CountRecords(collectionName);
@@ -98,7 +104,7 @@ namespace NVOS.Core.Database
         {
             if (!CollectionExists(collectionId))
             {
-                throw new DbCollectionException("Collection does not exist!", collectionId);
+                throw new InvalidOperationException("Collection does not exist!");
             }
 
             foreach (KeyValuePair<string, object> record in adapter.ListRecords(collectionId))
@@ -111,7 +117,7 @@ namespace NVOS.Core.Database
         {
             if (!CollectionExists(collectionName))
             {
-                throw new DbCollectionException("Collection does not exist!", collectionName);
+                throw new InvalidOperationException("Collection does not exist!");
             }
 
             foreach (KeyValuePair<string, object> record in adapter.ListRecords(collectionName))
@@ -122,39 +128,29 @@ namespace NVOS.Core.Database
 
         public object Read(Guid collectionId, string key)
         {
-            if (!CollectionExists(collectionId))
-            {
-                throw new DbCollectionException("Collection does not exist!", collectionId);
-            }
-
             return adapter.ReadRecord(collectionId, key);
         }
 
         public object Read(string collectionName, string key)
         {
-            if (!CollectionExists(collectionName))
-            {
-                throw new DbCollectionException("Collection does not exist!", collectionName);
-            }
-
             return adapter.ReadRecord(collectionName, key);
         }
 
-        public bool Write(string collectionName, string key, object value)
+        public void Write(Guid collectionId, string key, object value)
         {
-            if (!CollectionExists(collectionName))
-            {
-                throw new DbCollectionException("Collection does not exist!", collectionName);
-            }
+            adapter.WriteRecord(collectionId, key, value);
+        }
 
-            return adapter.WriteRecord(collectionName, key, value);
+        public void Write(string collectionName, string key, object value)
+        {
+            adapter.WriteRecord(collectionName, key, value);
         }
 
         public DbCollection GetCollection(Guid id)
         {
             if (!CollectionExists(id))
             {
-                throw new DbCollectionException("Collection does not exist!", id);
+                throw new InvalidOperationException("Collection does not exist!");
             }
 
             DbCollectionInfo info = adapter.GetCollection(id);
@@ -165,7 +161,7 @@ namespace NVOS.Core.Database
         {
             if (!CollectionExists(name))
             {
-                throw new DbCollectionException("Collection does not exist!", name);
+                throw new InvalidOperationException("Collection does not exist!");
             }
 
             DbCollectionInfo info = adapter.GetCollection(name);

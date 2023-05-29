@@ -19,28 +19,28 @@ namespace NVOS.Core.Database
 
         public object Read(string name)
         {
-            throw new NotImplementedException();
+            return databaseService.Read(dbCollectionInfo.Id, name);
         }
 
-        public bool Write(string name, object value)
+        public void Write(string name, object value)
         {
-            throw new NotImplementedException();
+            databaseService.Write(dbCollectionInfo.Id, name, value);
         }
 
         public object this[string name]
         {
-            get { throw new NotImplementedException(); }
-            set { throw new NotImplementedException(); }
+            get { return Read(name); }
+            set { Write(name, value); }
         }
 
         public uint CountRecords()
         {
-            throw new NotImplementedException();
+            return databaseService.CountRecords(dbCollectionInfo.Id);
         }
 
         public IEnumerable<KeyValuePair<string, object>> ListRecords()
         {
-            throw new NotImplementedException();
+            return databaseService.ListRecords(dbCollectionInfo.Id);
         }
     }
 }

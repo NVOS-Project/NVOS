@@ -9,8 +9,8 @@ namespace NVOS.Core.Database
     public interface IDbAdapter
     {
         Guid CreateCollection(string name);
-        bool DeleteCollection(Guid id);
-        bool DeleteCollection(string name);
+        void DeleteCollection(Guid id);
+        void DeleteCollection(string name);
         DbCollectionInfo GetCollection(Guid id);
         DbCollectionInfo GetCollection(string name);
         IEnumerable<DbCollectionInfo> ListCollections();
@@ -23,7 +23,7 @@ namespace NVOS.Core.Database
         IEnumerable<KeyValuePair<string, object>> ListRecords(string collectionName);
         object ReadRecord(Guid collectionId, string key);
         object ReadRecord(string collectionName, string key);
-        bool WriteRecord(Guid collectionId, string key, object value);
-        bool WriteRecord(string collectionName, string key, object value);
+        void WriteRecord(Guid collectionId, string key, object value);
+        void WriteRecord(string collectionName, string key, object value);
     }
 }

@@ -1,4 +1,4 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using System.Data.SQLite;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,24 +9,25 @@ using System.Diagnostics;
 
 namespace NVOS.Core.Database
 {
-    public class SqliteDbAdapter : IDbAdapter
+    public class SQLiteDbAdapter : IDbAdapter
     {
         public bool IsOpen { get; }
 
-        private SqliteConnection SqliteConnection;
+        private SQLiteConnection connection;
+        private IDbSerializer serializer;
 
-        public SqliteDbAdapter(string dbFile)
+        public SQLiteDbAdapter(IDbSerializer serializer)
         {
-            Open(dbFile);
+            this.serializer = serializer;
         }
 
         public Guid CreateCollection(string name)
         {
             Guid collectionId = Guid.NewGuid();
 
-            using (SqliteCommand command = SqliteConnection.CreateCommand())
+            using (SQLiteCommand command = connection.CreateCommand())
             {
-                command.CommandText = $@"INSERT INTO Collections VALUES (@ID, @Name)";
+                command.CommandText = "INSERT INTO Collections VALUES (@ID, @Name)";
                 command.Parameters.AddWithValue("@ID", collectionId.ToString());
                 command.Parameters.AddWithValue("@Name", name);
                 command.ExecuteNonQuery();
@@ -35,96 +36,279 @@ namespace NVOS.Core.Database
             return collectionId;
         }
 
-        public bool DeleteCollection(Guid id)
+        public void DeleteCollection(Guid id)
         {
-            throw new NotImplementedException();
+            using (SQLiteCommand command = connection.CreateCommand())
+            {
+                command.CommandText = "DELETE FROM Collections WHERE ID='@ID'";
+                command.Parameters.AddWithValue("@ID", id.ToString());
+                command.ExecuteNonQuery();
+            }
+
+            using (SQLiteCommand command = connection.CreateCommand())
+            {
+                command.CommandText = "DELETE FROM Records WHERE CollectionID='@ID'";
+                command.Parameters.AddWithValue("@ID", id.ToString());
+                command.ExecuteNonQuery();
+            }
         }
 
-        public bool DeleteCollection(string name)
+        public void DeleteCollection(string name)
         {
-            throw new NotImplementedException();
+            DbCollectionInfo info = GetCollection(name);
+
+            using (SQLiteCommand command = connection.CreateCommand())
+            {
+                command.CommandText = "DELETE FROM Records WHERE CollectionID='@ID'";
+                command.Parameters.AddWithValue("@ID", info.Id);
+                command.ExecuteNonQuery();
+            }
+
+            using (SQLiteCommand command = connection.CreateCommand())
+            {
+                command.CommandText = "DELETE FROM Collections WHERE ID='@ID'";
+                command.Parameters.AddWithValue("@ID", info.Id);
+                command.ExecuteNonQuery();
+            }
         }
 
         public DbCollectionInfo GetCollection(Guid id)
         {
-            throw new NotImplementedException();
+            using (SQLiteCommand command = connection.CreateCommand())
+            {
+                command.CommandText = "SELECT Name FROM Collections WHERE ID=@ID";
+                command.Parameters.AddWithValue("@ID", id);
+                SQLiteDataReader reader = command.ExecuteReader();
+
+                reader.Read();
+                string name = (string)reader["Name"];
+
+                return new DbCollectionInfo(id, name);
+            }
         }
 
         public DbCollectionInfo GetCollection(string name)
         {
-            throw new NotImplementedException();
+            using (SQLiteCommand command = connection.CreateCommand())
+            {
+                command.CommandText = "SELECT ID FROM Collections WHERE Name=@Name";
+                command.Parameters.AddWithValue("@Name", name);
+                SQLiteDataReader reader = command.ExecuteReader();
+
+                reader.Read();
+                Guid id = Guid.Parse((string)reader["ID"]);
+
+                return new DbCollectionInfo(id, name);
+            }
         }
 
         public IEnumerable<DbCollectionInfo> ListCollections()
         {
-            throw new NotImplementedException();
+            List<DbCollectionInfo> collectionList = new List<DbCollectionInfo>();
+            
+            using (SQLiteCommand command = connection.CreateCommand())
+            {
+                command.CommandText = "SELECT ID, Name FROM Collections";
+                SQLiteDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    Guid id = Guid.Parse((string)reader["ID"]);
+                    string name = (string)reader["Name"];
+
+                    collectionList.Add(new DbCollectionInfo(id, name));
+                }
+
+                return collectionList;
+            }
         }
 
         public bool CollectionExists(Guid id)
         {
-            throw new NotImplementedException();
+            using (SQLiteCommand command = connection.CreateCommand())
+            {
+                command.CommandText = "SELECT ID, Name FROM Collections WHERE ID=@ID";
+                command.Parameters.AddWithValue("@ID", id);
+                SQLiteDataReader reader = command.ExecuteReader();
+
+                if (!reader.HasRows)
+                {
+                    return false;
+                }
+
+                return true;
+            }
         }
 
         public bool CollectionExists(string name)
         {
-            throw new NotImplementedException();
+            using (SQLiteCommand command = connection.CreateCommand())
+            {
+                command.CommandText = "SELECT ID, Name FROM Collections WHERE Name=@Name";
+                command.Parameters.AddWithValue("@Name", name);
+                SQLiteDataReader reader = command.ExecuteReader();
+
+                if (!reader.HasRows)
+                {
+                    return false;
+                }
+
+                return true;
+            }
         }
 
         public uint CountCollections()
         {
-            throw new NotImplementedException();
+            using (SQLiteCommand command = connection.CreateCommand())
+            {
+                command.CommandText = "SELECT COUNT(ID) FROM Collections";
+                uint count = (uint)command.ExecuteScalar();
+
+                return count;
+            }
         }
 
         public uint CountRecords(Guid collectionId)
         {
-            throw new NotImplementedException();
+            using (SQLiteCommand command = connection.CreateCommand())
+            {
+                command.CommandText = "SELECT COUNT(ID) FROM Records WHERE CollectionID=@ID";
+                command.Parameters.AddWithValue("@ID", collectionId);
+                uint count = (uint)command.ExecuteScalar();
+
+                return count;
+            }
         }
 
         public uint CountRecords(string collectionName)
         {
-            throw new NotImplementedException();
+            DbCollectionInfo info = GetCollection(collectionName);
+
+            using (SQLiteCommand command = connection.CreateCommand())
+            {
+                command.CommandText = "SELECT COUNT(ID) FROM Records WHERE CollectionID=@ID";
+                command.Parameters.AddWithValue("@ID", info.Id);
+                uint count = (uint)command.ExecuteScalar();
+
+                return count;
+            }
         }
 
         public IEnumerable<KeyValuePair<string, object>> ListRecords(Guid collectionId)
         {
-            throw new NotImplementedException();
+            List<KeyValuePair<string, object>> recordList = new List<KeyValuePair<string, object>>();
+
+            using (SQLiteCommand command = connection.CreateCommand())
+            {
+                command.CommandText = "SELECT Key, Value FROM Records WHERE CollectionID=@ID";
+                command.Parameters.AddWithValue("@ID", collectionId);
+                SQLiteDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    string key = (string)reader["Key"];
+                    object value = serializer.Deserialize((byte[])reader["Value"]);
+
+                    recordList.Add(new KeyValuePair<string, object>(key, value));
+                }
+
+                return recordList;
+            }
         }
 
         public IEnumerable<KeyValuePair<string, object>> ListRecords(string collectionName)
         {
-            throw new NotImplementedException();
+            DbCollectionInfo info = GetCollection(collectionName);
+            List<KeyValuePair<string, object>> recordList = new List<KeyValuePair<string, object>>();
+
+            using (SQLiteCommand command = connection.CreateCommand())
+            {
+                command.CommandText = "SELECT Key, Value FROM Records WHERE CollectionID=@ID";
+                command.Parameters.AddWithValue("@ID", info.Id);
+                SQLiteDataReader reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    string key = (string)reader["Key"];
+                    object value = serializer.Deserialize((byte[])reader["Value"]);
+
+                    recordList.Add(new KeyValuePair<string, object>(key, value));
+                }
+
+                return recordList;
+            }
         }
 
         public object ReadRecord(Guid collectionId, string key)
         {
-            throw new NotImplementedException();
+            using (SQLiteCommand command = connection.CreateCommand())
+            {
+                command.CommandText = "SELECT Value FROM Records WHERE CollectionID=@ID AND Key=@Key";
+                command.Parameters.AddWithValue("@ID", collectionId);
+                command.Parameters.AddWithValue("@Key", key);
+                SQLiteDataReader reader = command.ExecuteReader();
+
+                reader.Read();
+                object value = serializer.Deserialize((byte[])reader["Value"]);
+
+                return value;
+            }
         }
 
         public object ReadRecord(string collectionName, string key)
         {
-            throw new NotImplementedException();
-        }
+            DbCollectionInfo info = GetCollection(collectionName);
 
-        public bool WriteRecord(Guid collectionId, string key, object value)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool WriteRecord(string collectionName, string key, object value)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Open(string file)
-        {
-            try
+            using (SQLiteCommand command = connection.CreateCommand())
             {
-                if (!File.Exists(file))
-                {
-                    SqliteConnection = new SqliteConnection($"Data Source={file}");
-                    SqliteConnection.Open();
-                    SqliteCommand command = SqliteConnection.CreateCommand();
-                    command.CommandText = @"
+                command.CommandText = "SELECT Value FROM Records WHERE CollectionID=@ID AND Key=@Key";
+                command.Parameters.AddWithValue("@ID", info.Id);
+                command.Parameters.AddWithValue("@Key", key);
+                SQLiteDataReader reader = command.ExecuteReader();
+
+                reader.Read();
+                object value = serializer.Deserialize((byte[])reader["Value"]);
+
+                return value;
+            }
+        }
+
+        public void WriteRecord(Guid collectionId, string key, object value)
+        {
+            using (SQLiteCommand command = connection.CreateCommand())
+            {
+                byte[] valueSerialized = serializer.Serialize(value);
+                command.CommandText = "INSERT INTO Records (CollectionID, Key, Value) VALUES (@ID, @Key, @Value)";
+                command.Parameters.AddWithValue("@ID", collectionId.ToString());
+                command.Parameters.AddWithValue("@Key", key);
+                command.Parameters.AddWithValue("@Value", valueSerialized);
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public void WriteRecord(string collectionName, string key, object value)
+        {
+            DbCollectionInfo info = GetCollection(collectionName);
+
+            using (SQLiteCommand command = connection.CreateCommand())
+            {
+                byte[] valueSerialized = serializer.Serialize(value);
+                command.CommandText = "INSERT INTO Records (CollectionID, Key, Value) VALUES (@ID, @Key, @Value)";
+                command.Parameters.AddWithValue("@ID", info.Id.ToString());
+                command.Parameters.AddWithValue("@Key", key);
+                command.Parameters.AddWithValue("@Value", valueSerialized);
+                command.ExecuteNonQuery();
+            }
+        }
+
+        public void Open(string file)
+        {
+            if (!File.Exists(file))
+            {
+                connection = new SQLiteConnection($"Data Source={file}");
+                connection.Open();
+                SQLiteCommand command = connection.CreateCommand();
+                command.CommandText = @"
                         CREATE TABLE Collections (
                             ID TEXT NOT NULL UNIQUE,
                             Name  TEXT NOT NULL,
@@ -135,37 +319,28 @@ namespace NVOS.Core.Database
                             ID INTEGER NOT NULL UNIQUE,
                             CollectionID TEXT NOT NULL UNIQUE,
                             Key TEXT NOT NULL UNIQUE,
-                            Value TEXT,
+                            Value BLOB,
 	                        FOREIGN KEY(CollectionID) REFERENCES Collections(ID),
 	                        PRIMARY KEY(ID AUTOINCREMENT)
                         );
                     ";
-                    command.ExecuteNonQuery();
-                }
-                else
-                {
-                    SqliteConnection = new SqliteConnection($"Data Source={file}");
-                    SqliteConnection.Open();
-                }
+                command.ExecuteNonQuery();
             }
-            catch(Exception ex)
+            else
             {
-                Debug.WriteLine(ex.Message);
-                return false;
+                connection = new SQLiteConnection($"Data Source={file}");
+                connection.Open();
             }
-
-            return true;
         }
 
-        public bool Close()
+        public void Close()
         {
             if (!IsOpen)
             {
-                return false;
+                throw new InvalidOperationException("Connection is already closed!");
             }
 
-            SqliteConnection.Close();
-            return true;
+            connection.Close();
         }
     }
 }
