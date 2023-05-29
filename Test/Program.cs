@@ -8,6 +8,7 @@ using NVOS.Core.Database;
 
 namespace NVOS.Core
 {
+    [Serializable]
     public class Test
     {
         public string Name { get; set; }
@@ -27,12 +28,12 @@ namespace NVOS.Core
     {
         static void Main(string[] args)
         {
-            SQLiteDbSerializer serializer = new SQLiteDbSerializer();
+            BinarySerializer serializer = new BinarySerializer();
             SQLiteDbAdapter adapter = new SQLiteDbAdapter(serializer);
             DatabaseService dbService = new DatabaseService(adapter);
 
             Console.WriteLine("Connecting to database");
-            adapter.Open("./among.db");
+            adapter.Open("D:\\dev\\projects\\other\\nvos\\Test\\among.db");
             Console.WriteLine($"Connection status: {adapter.IsOpen}");
 
             Console.WriteLine("Writing to database (string objects)");
@@ -63,7 +64,7 @@ namespace NVOS.Core
             Console.WriteLine("Collection1 count: " + dbService.CountRecords(collectionId1));
             Console.WriteLine("Collection2 count: " + dbService.CountRecords(collectionId2));
 
-            List<DbCollection> collectionList = (List<DbCollection>)dbService.ListCollections();
+            IEnumerable<DbCollection> collectionList = dbService.ListCollections();
             Console.WriteLine("Listing collections:");
             foreach(DbCollection collection in collectionList)
             {
@@ -71,14 +72,14 @@ namespace NVOS.Core
             }
 
             Console.WriteLine("Listing collection1 records:");
-            List<KeyValuePair<string, object>> records1 = (List<KeyValuePair<string, object>>)dbService.ListRecords(collectionId1);
+            IEnumerable<KeyValuePair<string, object>> records1 = dbService.ListRecords(collectionId1);
             foreach(KeyValuePair<string, object> record in records1)
             {
                 Console.WriteLine(record.Value);
             }
 
             Console.WriteLine("Listing collection2 records:");
-            List<KeyValuePair<string, object>> records2 = (List<KeyValuePair<string, object>>)dbService.ListRecords(collectionId2);
+            IEnumerable<KeyValuePair<string, object>> records2 = dbService.ListRecords(collectionId2);
             foreach (KeyValuePair<string, object> record in records2)
             {
                 Console.WriteLine(record.Value);
@@ -94,6 +95,13 @@ namespace NVOS.Core
 
             Console.WriteLine("Getting test object");
             ((Test)dbService.Read(collectionId2, "key1")).Sex();
+
+            Console.Read();
+
+            Console.WriteLine("Modifying collection1 key1 value");
+            dbService.Write(collectionId1, "key1", "booba");
+
+            
         }
     }
 }
