@@ -28,7 +28,7 @@ namespace NVOS.Core
     {
         static void Main(string[] args)
         {
-            BinarySerializer serializer = new BinarySerializer();
+            JsonSerializer serializer = new JsonSerializer();
             SQLiteDbAdapter adapter = new SQLiteDbAdapter(serializer);
             DatabaseService dbService = new DatabaseService(adapter);
 
@@ -36,14 +36,14 @@ namespace NVOS.Core
             adapter.Open("D:\\dev\\projects\\other\\nvos\\Test\\among.db");
             Console.WriteLine($"Connection status: {adapter.IsOpen}");
 
-            Console.WriteLine("Writing to database (string objects)");
-            Guid collectionId1 = dbService.CreateCollection("collection1");
-            dbService.Write(collectionId1, "key1", "key1-val");
-            dbService.Write(collectionId1, "key2", 25234542);
+            //Console.WriteLine("Writing to database (string objects)");
+            //Guid collectionId1 = dbService.CreateCollection("collection1");
+            //dbService.Write(collectionId1, "key1", "key1-val");
+            //dbService.Write(collectionId1, "key2", 25234542);
 
-            Console.WriteLine("Reading from database (string objects)");
-            Console.WriteLine(dbService.Read(collectionId1, "key1"));
-            Console.WriteLine(dbService.Read(collectionId1, "key2"));
+            //Console.WriteLine("Reading from database (string objects)");
+            //Console.WriteLine(dbService.Read(collectionId1, "key1"));
+            //Console.WriteLine(dbService.Read(collectionId1, "key2"));
 
             Test test1 = new Test("mark", 21);
             Test test2 = new Test("cark", 12);
@@ -61,7 +61,7 @@ namespace NVOS.Core
             Console.WriteLine(dbService.Read(collectionId2, "key3"));
 
             Console.WriteLine("Collection count: " + dbService.CountCollections());
-            Console.WriteLine("Collection1 count: " + dbService.CountRecords(collectionId1));
+            //Console.WriteLine("Collection1 count: " + dbService.CountRecords(collectionId1));
             Console.WriteLine("Collection2 count: " + dbService.CountRecords(collectionId2));
 
             IEnumerable<DbCollection> collectionList = dbService.ListCollections();
@@ -72,11 +72,11 @@ namespace NVOS.Core
             }
 
             Console.WriteLine("Listing collection1 records:");
-            IEnumerable<KeyValuePair<string, object>> records1 = dbService.ListRecords(collectionId1);
-            foreach(KeyValuePair<string, object> record in records1)
-            {
-                Console.WriteLine(record.Value);
-            }
+            //IEnumerable<KeyValuePair<string, object>> records1 = dbService.ListRecords(collectionId1);
+            //foreach(KeyValuePair<string, object> record in records1)
+            //{
+            //    Console.WriteLine(record.Value);
+            //}
 
             Console.WriteLine("Listing collection2 records:");
             IEnumerable<KeyValuePair<string, object>> records2 = dbService.ListRecords(collectionId2);
@@ -99,7 +99,7 @@ namespace NVOS.Core
             Console.Read();
 
             Console.WriteLine("Modifying collection1 key1 value");
-            dbService.Write(collectionId1, "key1", "booba");
+            //dbService.Write(collectionId1, "key1", "booba");
 
             
         }

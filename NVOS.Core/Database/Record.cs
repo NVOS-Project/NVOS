@@ -23,11 +23,11 @@ namespace NVOS.Core.Database
         public string Key { get; set; }
 
         [Column("Value")]
-        public byte[] Value { get; set; }
+        public string Value { get; set; }
 
         public Record() { }
 
-        public Record(Guid collectionId, string key, byte[] value)
+        public Record(Guid collectionId, string key, string value)
         {
             CollectionId = collectionId;
             Key = key;

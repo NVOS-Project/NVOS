@@ -147,7 +147,7 @@ namespace NVOS.Core.Database
             selectCommand.Bind("@Key", key);
 
             Record record = selectCommand.ExecuteQuery<Record>().FirstOrDefault();
-            byte[] valueSerialized = serializer.Serialize(value);
+            string valueSerialized = serializer.Serialize(value);
 
             if (record == null)
             {
