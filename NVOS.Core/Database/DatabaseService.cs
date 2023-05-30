@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 
 namespace NVOS.Core.Database
@@ -33,7 +30,7 @@ namespace NVOS.Core.Database
                 throw new InvalidOperationException("Collection already exists!");
             }
 
-            
+
             return adapter.CreateCollection(name);
         }
 
@@ -59,7 +56,7 @@ namespace NVOS.Core.Database
 
         public IEnumerable<DbCollection> ListCollections()
         {
-            foreach(DbCollectionInfo info in adapter.ListCollections())
+            foreach (DbCollectionInfo info in adapter.ListCollections())
             {
                 yield return new DbCollection(info, this); ;
             }

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NVOS.Core.Database
 {
@@ -10,6 +7,9 @@ namespace NVOS.Core.Database
     {
         private DbCollectionInfo dbCollectionInfo;
         private DatabaseService databaseService;
+
+        public Guid Id { get { return dbCollectionInfo.Id; } }
+        public string Name { get { return dbCollectionInfo.Name; } }
 
         public DbCollection(DbCollectionInfo info, DatabaseService service)
         {

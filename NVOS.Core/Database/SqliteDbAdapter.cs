@@ -1,11 +1,7 @@
-﻿using System;
+﻿using SQLite;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.IO;
-using System.Threading.Tasks;
-using System.Diagnostics;
-using SQLite;
 
 namespace NVOS.Core.Database
 {
@@ -54,14 +50,14 @@ namespace NVOS.Core.Database
         {
             SQLiteCommand command = connection.CreateCommand("SELECT Id, Name FROM Collections WHERE Id=@Id");
             command.Bind("@Id", id);
-            return command.ExecuteQuery<DbCollectionInfo>().FirstOrDefault();
+            return command.ExecuteQuery<DbCollectionInfo>().First();
         }
 
         public DbCollectionInfo GetCollection(string name)
         {
             SQLiteCommand command = connection.CreateCommand("SELECT Id, Name FROM Collections WHERE Name=@Name");
             command.Bind("@Name", name);
-            return command.ExecuteQuery<DbCollectionInfo>().FirstOrDefault();
+            return command.ExecuteQuery<DbCollectionInfo>().First();
         }
 
         public IEnumerable<DbCollectionInfo> ListCollections()
@@ -147,7 +143,7 @@ namespace NVOS.Core.Database
             selectCommand.Bind("@Key", key);
 
             Record record = selectCommand.ExecuteQuery<Record>().FirstOrDefault();
-            string valueSerialized = serializer.Serialize(value);
+            byte[] valueSerialized = serializer.Serialize(value);
 
             if (record == null)
             {
@@ -164,7 +160,6 @@ namespace NVOS.Core.Database
         public void WriteRecord(string collectionName, string key, object value)
         {
             DbCollectionInfo info = GetCollection(collectionName);
-
             WriteRecord(info.Id, key, value);
         }
 

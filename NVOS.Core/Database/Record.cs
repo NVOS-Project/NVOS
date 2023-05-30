@@ -1,9 +1,5 @@
 ﻿using SQLite;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NVOS.Core.Database
 {
@@ -23,11 +19,11 @@ namespace NVOS.Core.Database
         public string Key { get; set; }
 
         [Column("Value")]
-        public string Value { get; set; }
+        public byte[] Value { get; set; }
 
         public Record() { }
 
-        public Record(Guid collectionId, string key, string value)
+        public Record(Guid collectionId, string key, byte[] value)
         {
             CollectionId = collectionId;
             Key = key;
