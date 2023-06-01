@@ -5,42 +5,39 @@ namespace NVOS.Core.Database
 {
     public class DbCollection
     {
-        private DbCollectionInfo dbCollectionInfo;
-        private DatabaseService databaseService;
+        private IDatabaseService databaseService;
+        public string Name { get; private set; }
 
-        public Guid Id { get { return dbCollectionInfo.Id; } }
-        public string Name { get { return dbCollectionInfo.Name; } }
-
-        public DbCollection(DbCollectionInfo info, DatabaseService service)
+        public DbCollection(string name, IDatabaseService service)
         {
-            dbCollectionInfo = info;
+            Name = name;
             databaseService = service;
         }
 
-        public object Read(string name)
+        public object Read(string key)
         {
-            return databaseService.Read(dbCollectionInfo.Id, name);
+            return databaseService.Read(Name, key);
         }
 
-        public void Write(string name, object value)
+        public void Write(string key, object value)
         {
-            databaseService.Write(dbCollectionInfo.Id, name, value);
+            databaseService.Write(Name, key, value);
         }
 
-        public object this[string name]
+        public object this[string key]
         {
-            get { return Read(name); }
-            set { Write(name, value); }
+            get { return Read(key); }
+            set { Write(key, value); }
         }
 
-        public uint CountRecords()
+        public int CountRecords()
         {
-            return databaseService.CountRecords(dbCollectionInfo.Id);
+            return databaseService.CountRecords(Name);
         }
 
         public IEnumerable<KeyValuePair<string, object>> ListRecords()
         {
-            return databaseService.ListRecords(dbCollectionInfo.Id);
+            return databaseService.ListRecords(Name);
         }
     }
 }

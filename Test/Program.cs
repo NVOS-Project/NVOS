@@ -24,29 +24,22 @@ namespace Test
     {
         static void Main(string[] args)
         {
-            BinaryDbSerializer serializer = new BinaryDbSerializer();
-            SQLiteDbAdapter adapter = new SQLiteDbAdapter(serializer);
-            DatabaseService dbService = new DatabaseService(adapter);
+            LiteDbService dbService = new LiteDbService();
+            string collectionId1 = "collection1";
+            string collectionId2 = "collection2";
 
             Console.WriteLine("Connecting to database");
-            adapter.Open("among.db");
-            Console.WriteLine($"Connection status: {adapter.IsOpen}");
+            dbService.Open("among.db");
 
             Console.WriteLine("Writing to database (string objects)");
-            Guid collectionId1 = dbService.CreateCollection("collection1");
             dbService.Write(collectionId1, "key1", "key1-val");
             dbService.Write(collectionId1, "key2", 25234542);
-
-            //Console.WriteLine("Reading from database (string objects)");
-            //Console.WriteLine(dbService.Read(collectionId1, "key1"));
-            //Console.WriteLine(dbService.Read(collectionId1, "key2"));
 
             Test test1 = new Test("mark", 21);
             Test test2 = new Test("cark", 12);
             Test test3 = new Test("bark", 69);
 
             Console.WriteLine("Writing to database (class objects)");
-            Guid collectionId2 = dbService.CreateCollection("collection2");
             dbService.Write(collectionId2, "key1", test1);
             dbService.Write(collectionId2, "key2", test2);
             dbService.Write(collectionId2, "key3", test3);
@@ -60,9 +53,9 @@ namespace Test
             //Console.WriteLine("Collection1 count: " + dbService.CountRecords(collectionId1));
             Console.WriteLine("Collection2 count: " + dbService.CountRecords(collectionId2));
 
-            IEnumerable<DbCollection> collectionList = dbService.ListCollections();
+            IEnumerable<string> collectionList = dbService.ListCollections();
             Console.WriteLine("Listing collections:");
-            foreach (DbCollection collection in collectionList)
+            foreach (string collection in collectionList)
             {
                 Console.WriteLine(collection);
             }
