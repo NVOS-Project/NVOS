@@ -1,5 +1,6 @@
 ﻿using NVOS.Core.Services.EventArgs;
 using System;
+using System.Collections.Generic;
 
 namespace NVOS.Core.Services
 {
@@ -22,5 +23,6 @@ namespace NVOS.Core.Services
         void Unregister<T>();
         void Unregister(Type type);
         void UnregisterDomain(string domain);
+        List<Type> GetRegisteredTypes();
     }
 }
