@@ -107,7 +107,7 @@
     <Compile Include="Services\Enums\ServiceStopReason.cs" />
     <Compile Include="Services\Enums\ServiceType.cs" />
     <Compile Include="Services\Attributes\ServiceTypeAttribute.cs" />
-    <Compile Include="Services\ServiceDependencyGraph.cs" />
+    <Compile Include="Services\ServiceDependencyResolver.cs" />
     <Compile Include="Logger\LoggerService.cs" />
     <Compile Include="Services\ServiceUnit.cs" />
   </ItemGroup>
