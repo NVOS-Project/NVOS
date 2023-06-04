@@ -14,6 +14,11 @@ namespace NVOS.Core.Database
 
         public DbCollection this[string collectionName] => GetCollection(collectionName);
 
+        public bool Init()
+        {
+            return true;
+        }
+
         public void Open(string file)
         {
             db = new LiteDatabase(file);
