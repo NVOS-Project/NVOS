@@ -1,5 +1,6 @@
 ﻿using NVOS.Core;
 using NVOS.Core.Services.Attributes;
+using NVOS.Core.Services.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace Test
 {
+    [ServiceType(ServiceType.Singleton)]
     [ServiceDependency(typeof(ServiceB))]
     [ServiceDependency(typeof(ServiceD))]
     public class ServiceA : IService
@@ -19,6 +21,7 @@ namespace Test
         }
     }
 
+    [ServiceType(ServiceType.Singleton)]
     [ServiceDependency(typeof(ServiceC))]
     [ServiceDependency(typeof(ServiceE))]
     public class ServiceB : IService
@@ -30,35 +33,54 @@ namespace Test
         }
     }
 
+    [ServiceType(ServiceType.Singleton)]
     [ServiceDependency(typeof(ServiceD))]
     [ServiceDependency(typeof(ServiceE))]
-    public class ServiceC : IService
+    public class ServiceC : IService, IDisposable
     {
         public bool Init()
         {
             Console.WriteLine("Service C up!");
             return true;
         }
+
+        public void Dispose()
+        {
+            Console.WriteLine("Dobranoc C");
+        }
     }
 
-    public class ServiceD : IService
+    [ServiceType(ServiceType.Singleton)]
+    public class ServiceD : IService, IDisposable
     {
         public bool Init()
         {
             Console.WriteLine("Service D up!");
             return true;
         }
+
+        public void Dispose()
+        {
+            Console.WriteLine("Dobranoc D");
+        }
     }
 
-    public class ServiceE : IService
+    [ServiceType(ServiceType.Singleton)]
+    public class ServiceE : IService, IDisposable
     {
         public bool Init()
         {
             Console.WriteLine("Service E up!");
             return true;
         }
+
+        public void Dispose()
+        {
+            Console.WriteLine("Dobranoc E");
+        }
     }
 
+    [ServiceType(ServiceType.Singleton)]
     [ServiceDependency(typeof(ServiceA))]
     public class ServiceF : IService
     {

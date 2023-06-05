@@ -1,4 +1,6 @@
-﻿using NVOS.Core.Database;
+﻿using NVOS.Core.Containers;
+using NVOS.Core.Database;
+using NVOS.Core.Logger;
 using NVOS.Core.Services;
 using QuikGraph;
 using System;
@@ -10,18 +12,23 @@ namespace Test
     {
         static void Main(string[] args)
         {
-            ServiceDependencyResolver graphResolver = new ServiceDependencyResolver(typeof(ServiceA), typeof(ServiceB), typeof(ServiceC), typeof(ServiceD), typeof(ServiceE), typeof(ServiceF));
-            Console.WriteLine("----------- ServiceA START CHAIN");
-            foreach(Type type in graphResolver.ResolveDependencyOrder(typeof(ServiceA)))
-            {
-                Console.WriteLine(type.Name);
-            }
+            BufferingLogger logger = new BufferingLogger(100, ".");
+            ManagedContainer container = new ManagedContainer();
+            ServiceDependencyResolver resolver = new ServiceDependencyResolver();
+            ServiceManager serviceManager = new ServiceManager(container, resolver, logger);
 
-            Console.WriteLine("----------- ServiceC STOP CHAIN");
-            foreach (Type type in graphResolver.ResolveInverseDependencyOrder(typeof(ServiceC)))
-            {
-                Console.WriteLine(type.Name);
-            }
+            serviceManager.Register<ServiceA>();
+            serviceManager.Register<ServiceB>();
+            serviceManager.Register<ServiceC>();
+            serviceManager.Register<ServiceD>();
+            serviceManager.Register<ServiceE>();
+            serviceManager.Register<ServiceF>();
+
+            serviceManager.Start<ServiceF>();
+
+            serviceManager.Dispose();
+            container.Dispose();
+            logger.Dispose();
 
             Console.ReadLine();
         }

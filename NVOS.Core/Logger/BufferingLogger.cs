@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace NVOS.Core.Logger
 {
@@ -34,6 +36,7 @@ namespace NVOS.Core.Logger
             logDate = DateTime.Now;
             this.filePath = filePath;
             logLevel = LogLevel.INFO;
+            SetPath(filePath);
         }
 
         public BufferingLogger(int bufferSize, string filePath, LogLevel logLevel)
@@ -42,12 +45,7 @@ namespace NVOS.Core.Logger
             logDate = DateTime.Now;
             this.filePath = filePath;
             this.logLevel = logLevel;
-        }
-
-        public bool Init()
-        {
             SetPath(filePath);
-            return true;
         }
 
         public void Dispose()
@@ -71,8 +69,9 @@ namespace NVOS.Core.Logger
                 return;
 
             buffer.Write(message);
-            string logMessage = $"<{DateTime.Now}> [{level}] {message}";
+            string logMessage = $"[{DateTime.Now}] <{level}> {message}";
 
+            Console.WriteLine(logMessage);
             streamWriter.WriteLine(logMessage);
             streamWriter.Flush();
         }

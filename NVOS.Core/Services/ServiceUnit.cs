@@ -78,13 +78,6 @@ namespace NVOS.Core.Services
             if (OwningScope == null)
                 throw new InvalidOperationException("Service scope does not currently exist.");
 
-            // Destroy all instances
-            IService instance;
-            while ((instance = instances.FirstOrDefault()) != null)
-            {
-                DestroyInstance(instance);
-            }
-
             instances.Clear();
             OwningScope.Dispose();
             OwningScope = null;
@@ -104,13 +97,12 @@ namespace NVOS.Core.Services
 
         private bool DestroyInstance(IService instance)
         {
-            if (!instances.Contains(instance))
+            if (instances.Contains(instance))
             {
                 try
                 {
                     IDisposable disposableService = instance as IDisposable;
-                    if (disposableService != null)
-                        disposableService.Dispose();
+                    disposableService?.Dispose();
                 }
                 catch { }
                 instances.Remove(instance);

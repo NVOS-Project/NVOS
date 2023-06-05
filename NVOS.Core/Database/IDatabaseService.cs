@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 
 namespace NVOS.Core.Database
 {
-    public interface IDatabaseService : IDisposable, ICoreService
+    public interface IDatabaseService : IDisposable
     {
         DbCollection this[string collectionName] { get; }
         DbCollection GetCollection(string collectionName);

@@ -1,28 +1,29 @@
-﻿using NVOS.Core.Services.EventArgs;
+﻿using NVOS.Core.Services.Enums;
+using NVOS.Core.Services.EventArgs;
 using System;
 using System.Collections.Generic;
 
 namespace NVOS.Core.Services
 {
-    public interface IServiceManager : IServiceResolver
+    public interface IServiceManager : IServiceResolver, IDisposable
     {
         event EventHandler<ServiceEventArgs> OnServiceRegistered;
         event EventHandler<ServiceEventArgs> OnServiceUnregistered;
         event EventHandler<ServiceEventArgs> OnServiceStarted;
         event EventHandler<ServiceEventArgs> OnServiceStopped;
 
-        void Start<T>();
+        void Start<T>() where T : IService;
         void Start(Type type);
-        void StartDomain(string domain);
-        void Stop<T>();
+        void Stop<T>() where T : IService;
         void Stop(Type type);
-        void StopDomain(string domain);
-        void Register<T>(string domain = null);
+        void Register<T>(string domain = null) where T : IService;
         void Register(Type type, string domain = null);
-        void RegisterDomain(string domain, params Type[] types);
-        void Unregister<T>();
+        void Unregister<T>() where T : IService;
         void Unregister(Type type);
-        void UnregisterDomain(string domain);
-        List<Type> GetRegisteredTypes();
+        ServiceState GetServiceState<T>() where T : IService;
+        ServiceState GetServiceState(Type type);
+        ServiceStopReason GetStopReason<T>() where T : IService;
+        ServiceStopReason GetStopReason(Type type);
+        IEnumerable<Type> GetRegisteredTypes();
     }
 }
