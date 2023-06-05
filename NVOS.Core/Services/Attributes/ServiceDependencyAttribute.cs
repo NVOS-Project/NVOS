@@ -5,26 +5,15 @@ namespace NVOS.Core.Services.Attributes
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
     public class ServiceDependencyAttribute : Attribute
     {
-        private string name;
+        private bool required;
         private Type type;
+        public bool IsRequired { get { return required; } }
+        public Type Type { get { return type; } }
 
-        public ServiceDependencyAttribute(string serviceName)
+        public ServiceDependencyAttribute(Type serviceType, bool required = true)
         {
-            name = serviceName ?? throw new ArgumentNullException(nameof(serviceName));
-        }
-
-        public ServiceDependencyAttribute(Type serviceType)
-        {
+            this.required = required;
             type = serviceType ?? throw new ArgumentNullException(nameof(serviceType));
-        }
-
-        public Type Resolve()
-        {
-            if (type != null)
-                return type;
-
-            type = Type.GetType(name);
-            return type;
         }
     }
 }

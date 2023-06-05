@@ -1,6 +1,6 @@
 ﻿using NVOS.Core.Database;
-using NVOS.Core.Logger;
-using NVOS.Core.Logger.Enums;
+using NVOS.Core.Services;
+using QuikGraph;
 using System;
 using System.Collections.Generic;
 
@@ -10,19 +10,17 @@ namespace Test
     {
         static void Main(string[] args)
         {
-            BufferingLogger logger = new BufferingLogger(5, "./", LogLevel.INFO);
-            logger.Init();
-
-            logger.Debug("debug log 1");
-            logger.Debug("debug log 2");
-            logger.Debug("debug log 3");
-            logger.Error("error log 1");
-            logger.Info("info log 1");
-            logger.Info("info log 2");
-
-            foreach (string message in logger.ReadLogs())
+            ServiceDependencyResolver graphResolver = new ServiceDependencyResolver(typeof(ServiceA), typeof(ServiceB), typeof(ServiceC), typeof(ServiceD), typeof(ServiceE), typeof(ServiceF));
+            Console.WriteLine("----------- ServiceA START CHAIN");
+            foreach(Type type in graphResolver.ResolveDependencyOrder(typeof(ServiceA)))
             {
-                Console.WriteLine(message);
+                Console.WriteLine(type.Name);
+            }
+
+            Console.WriteLine("----------- ServiceC STOP CHAIN");
+            foreach (Type type in graphResolver.ResolveInverseDependencyOrder(typeof(ServiceC)))
+            {
+                Console.WriteLine(type.Name);
             }
 
             Console.ReadLine();
