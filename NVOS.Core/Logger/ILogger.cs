@@ -10,8 +10,7 @@ namespace NVOS.Core.Logger
 {
     public interface ILogger : ICoreService
     {
-        string FilePath { get; set; }
-        void Log(string message, LogLevel level = LogLevel.INFO);
+        void Log(LogLevel level, string message);
         IEnumerable<string> ReadLogs();
     }
 }

@@ -21,14 +21,13 @@ namespace NVOS.Core.Autofac
 
         public void RegisterComponents(ContainerBuilder builder)
         {
-            AutowirePropertySelector autowirePropertySelector = new AutowirePropertySelector();
 
             IEnumerable<Type> coreServices = Assembly.GetCallingAssembly()
                 .GetTypes().Where(x => typeof(ICoreService).IsAssignableFrom(x) && x.IsClass && !x.IsAbstract);
 
             foreach (Type coreServiceType in coreServices)
             {
-                builder.RegisterType(coreServiceType).InstancePerLifetimeScope().PropertiesAutowired(autowirePropertySelector, true);
+                builder.RegisterType(coreServiceType).InstancePerLifetimeScope();
             }
 
             builder.RegisterInstance(databaseService).As<IDatabaseService>().ExternallyOwned();

@@ -79,11 +79,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Autofac\AutowirePropertySelector.cs" />
     <Compile Include="Autofac\CoreAutoFacRegistry.cs" />
     <Compile Include="Autofac\CoreServiceLocator.cs" />
     <Compile Include="Autofac\IAutoFacRegistrar.cs" />
-    <Compile Include="Autofac\InjectDependencyAttribute.cs" />
     <Compile Include="Database\DatabaseException.cs" />
     <Compile Include="Database\LiteDbRecord.cs" />
     <Compile Include="Database\LiteDbService.cs" />
@@ -104,7 +102,7 @@
     <Compile Include="Services\Enums\ServiceStopReason.cs" />
     <Compile Include="Services\Enums\ServiceType.cs" />
     <Compile Include="Services\Attributes\ServiceTypeAttribute.cs" />
-    <Compile Include="Logger\LoggerService.cs" />
+    <Compile Include="Logger\BufferingLogger.cs" />
     <Compile Include="Services\ServiceUnit.cs" />
   </ItemGroup>
   <ItemGroup>

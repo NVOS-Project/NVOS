@@ -10,14 +10,15 @@ namespace Test
     {
         static void Main(string[] args)
         {
-            LoggerService logger = new LoggerService(5, "./");
+            BufferingLogger logger = new BufferingLogger(5, "./", LogLevel.INFO);
+            logger.Init();
 
-            logger.Log("debug log 1", LogLevel.DEBUG);
-            logger.Log("debug log 2", LogLevel.DEBUG);
-            logger.Log("debug log 3", LogLevel.DEBUG);
-            logger.Log("fatal log 1", LogLevel.FATAL);
-            logger.Log("info log 1");
-            logger.Log("info log 2");
+            logger.Debug("debug log 1");
+            logger.Debug("debug log 2");
+            logger.Debug("debug log 3");
+            logger.Error("error log 1");
+            logger.Info("info log 1");
+            logger.Info("info log 2");
 
             foreach (string message in logger.ReadLogs())
             {

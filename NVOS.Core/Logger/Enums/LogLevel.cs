@@ -11,7 +11,6 @@ namespace NVOS.Core.Logger.Enums
         DEBUG,
         INFO,
         WARN,
-        ERROR,
-        FATAL
+        ERROR
     }
 }
