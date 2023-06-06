@@ -24,7 +24,7 @@ namespace NVOS.Core.Logger
         {
             collection = database.GetCollection("logger");
             int bufferSize = (int)collection.ReadOrDefault("bufferSize", 200);
-            logLevel = (LogLevel)Enum.Parse(typeof(LogLevel), (string)collection.ReadOrDefault("logLevel", LogLevel.INFO));
+            logLevel = (LogLevel)collection.ReadOrDefault("logLevel", LogLevel.INFO);
             logDirectory = (string)collection.ReadOrDefault("logDirectory", "logs");
             buffer = new CircularBuffer<string>(bufferSize);
             Init();

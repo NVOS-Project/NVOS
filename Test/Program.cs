@@ -1,5 +1,6 @@
 ﻿using NVOS.Core.Containers;
 using NVOS.Core.Database;
+using NVOS.Core.Database.Serialization;
 using NVOS.Core.Logger;
 using NVOS.Core.Logger.Enums;
 using NVOS.Core.Services;
@@ -13,7 +14,8 @@ namespace Test
     {
         static void Main(string[] args)
         {
-            LiteDbService database = new LiteDbService();
+            JsonDbValueSerializer serializer = new JsonDbValueSerializer();
+            LiteDbService database = new LiteDbService(serializer);
             database.Open("./database.db");
             BufferingLogger logger = new BufferingLogger(database);
             ManagedContainer container = new ManagedContainer();

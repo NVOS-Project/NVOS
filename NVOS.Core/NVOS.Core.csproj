@@ -95,10 +95,10 @@
     <Compile Include="Database\LiteDbRecord.cs" />
     <Compile Include="Database\LiteDbService.cs" />
     <Compile Include="Database\Serialization\EnumValueWrapper.cs" />
+    <Compile Include="Database\Serialization\IDbValueSerializer.cs" />
     <Compile Include="Database\Serialization\JsonDbValueSerializer.cs" />
     <Compile Include="Logger\Enums\LogLevel.cs" />
     <Compile Include="Logger\ILogger.cs" />
-    <Compile Include="Logger\LogBuffer.cs" />
     <Compile Include="Services\EventArgs\ServiceEventArgs.cs" />
     <Compile Include="Services\IService.cs" />
     <Compile Include="Database\DbCollection.cs" />
