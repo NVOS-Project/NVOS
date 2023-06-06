@@ -16,6 +16,7 @@ namespace NVOS.Core.Database
         int CountRecords(string collectionName);
         IEnumerable<KeyValuePair<string, object>> ListRecords(string collectionName);
         object Read(string collectionName, string key);
+        object ReadOrDefault(string collectionName, string key, object defaultValue);
         bool Write(string collectionName, string key, object value);
     }
 }

@@ -1,51 +1,55 @@
-﻿using NVOS.Core.Logger.Enums;
+﻿using NVOS.Core.Database;
+using NVOS.Core.Logger.Enums;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CircularBuffer;
 
 namespace NVOS.Core.Logger
 {
     public class BufferingLogger : ILogger, IDisposable
     {
-        private LogBuffer<string> buffer;
-        private DateTime logDate;
+        private CircularBuffer<string> buffer;
         private StreamWriter streamWriter;
         private LogLevel logLevel;
+        private DbCollection collection;
         private int fileIndex;
+        private string logDirectory;
         private string filePath;
 
-        public string FilePath
+        public BufferingLogger(IDatabaseService database)
         {
-            get
-            {
-                return filePath;
-            }
-
-            set
-            {
-                SetPath(value);
-            }
+            collection = database.GetCollection("logger");
+            int bufferSize = (int)collection.ReadOrDefault("bufferSize", 200);
+            logLevel = (LogLevel)Enum.Parse(typeof(LogLevel), (string)collection.ReadOrDefault("logLevel", LogLevel.INFO));
+            logDirectory = (string)collection.ReadOrDefault("logDirectory", "logs");
+            buffer = new CircularBuffer<string>(bufferSize);
+            Init();
         }
 
-        public BufferingLogger(int bufferSize, string filePath)
+        private void Init()
         {
-            buffer = new LogBuffer<string>(bufferSize);
-            logDate = DateTime.Now;
-            this.filePath = filePath;
-            logLevel = LogLevel.INFO;
-            SetPath(filePath);
-        }
+            DateTime logDate = DateTime.Now;
 
-        public BufferingLogger(int bufferSize, string filePath, LogLevel logLevel)
-        {
-            buffer = new LogBuffer<string>(bufferSize);
-            logDate = DateTime.Now;
-            this.filePath = filePath;
-            this.logLevel = logLevel;
-            SetPath(filePath);
+            string logFileName = $"{logDate:MM-dd-yyyy}_{fileIndex}.log";
+            string logFilePath = Path.Combine(logDirectory, logFileName);
+
+            while (File.Exists(logFilePath))
+            {
+                fileIndex++;
+                logFileName = $"{logDate:MM-dd-yyyy}_{fileIndex}.log";
+                logFilePath = Path.Combine(logDirectory, logFileName);
+            }
+
+            if (!Directory.Exists(logDirectory))
+                Directory.CreateDirectory(logDirectory);
+
+            filePath = logFilePath;
+            FileStream fileStream = new FileStream(filePath, FileMode.Append, FileAccess.Write);
+            streamWriter = new StreamWriter(fileStream);
         }
 
         public void Dispose()
@@ -56,6 +60,7 @@ namespace NVOS.Core.Logger
         public void SetLevel(LogLevel level)
         {
             logLevel = level;
+            collection.Write("logLevel", level);
         }
 
         public LogLevel GetLevel()
@@ -68,10 +73,10 @@ namespace NVOS.Core.Logger
             if (level < logLevel)
                 return;
 
-            buffer.Write(message);
             string logMessage = $"[{DateTime.Now}] <{level}> {message}";
 
             Console.WriteLine(logMessage);
+            buffer.PushBack(logMessage);
             streamWriter.WriteLine(logMessage);
             streamWriter.Flush();
         }
@@ -98,31 +103,17 @@ namespace NVOS.Core.Logger
 
         public IEnumerable<string> ReadLogs()
         {
-            foreach (string message in buffer.ReadItems())
+            foreach (string message in buffer)
             {
                 yield return message;
             }
         }
 
-        private void SetPath(string path)
+        private void SetLogDirectory(string dir)
         {
-            fileIndex = 0;
-            string logFileName = $"{logDate:MM-dd-yyyy}_{fileIndex}.log";
-            string logFilePath = Path.Combine(path, logFileName);
-
-            while (File.Exists(logFilePath))
-            {
-                fileIndex++;
-                logFileName = $"{logDate:MM-dd-yyyy}_{fileIndex}.log";
-                logFilePath = Path.Combine(path, logFileName);
-            }
-
-            filePath = logFilePath;
-            if (streamWriter != null)
-                streamWriter.Close();
-
-            FileStream fileStream = new FileStream(FilePath, FileMode.Append, FileAccess.Write);
-            streamWriter = new StreamWriter(fileStream);
+            logDirectory = dir;
+            collection.Write("logDirectory", dir);
+            Init();
         }
     }
 }
