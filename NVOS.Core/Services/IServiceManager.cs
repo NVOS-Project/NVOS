@@ -7,10 +7,10 @@ namespace NVOS.Core.Services
 {
     public interface IServiceManager : IServiceResolver, IDisposable
     {
-        event EventHandler<ServiceEventArgs> OnServiceRegistered;
-        event EventHandler<ServiceEventArgs> OnServiceUnregistered;
-        event EventHandler<ServiceEventArgs> OnServiceStarted;
-        event EventHandler<ServiceEventArgs> OnServiceStopped;
+        event EventHandler<ServiceEventArgs> ServiceRegistered;
+        event EventHandler<ServiceEventArgs> ServiceUnregistered;
+        event EventHandler<ServiceEventArgs> ServiceStarted;
+        event EventHandler<ServiceEventArgs> ServiceStopped;
 
         void Start<T>() where T : IService;
         void Start(Type type);

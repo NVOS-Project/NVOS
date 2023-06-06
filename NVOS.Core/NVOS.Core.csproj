@@ -49,6 +49,9 @@
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=7.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.7.0.0\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="QuikGraph, Version=2.5.0.0, Culture=neutral, PublicKeyToken=46bd58b0789759cb, processorArchitecture=MSIL">
       <HintPath>..\packages\QuikGraph.2.5.0\lib\net45\QuikGraph.dll</HintPath>
     </Reference>
@@ -84,11 +87,16 @@
   <ItemGroup>
     <Compile Include="Containers\ManagedContainer.cs" />
     <Compile Include="Database\DatabaseException.cs" />
+    <Compile Include="Database\EventArgs\DbCollectionEventArgs.cs" />
+    <Compile Include="Database\EventArgs\DbRecordEventArgs.cs" />
     <Compile Include="Database\LiteDbRecord.cs" />
     <Compile Include="Database\LiteDbService.cs" />
+    <Compile Include="Database\Serialization\EnumValueWrapper.cs" />
+    <Compile Include="Database\Serialization\JsonDbValueSerializer.cs" />
     <Compile Include="Logger\Enums\LogLevel.cs" />
     <Compile Include="Logger\ILogger.cs" />
     <Compile Include="Logger\LogBuffer.cs" />
+    <Compile Include="Database\Serialization\IDbValueSerializer.cs" />
     <Compile Include="Services\EventArgs\ServiceEventArgs.cs" />
     <Compile Include="Services\IService.cs" />
     <Compile Include="Database\DbCollection.cs" />

@@ -21,10 +21,10 @@ namespace NVOS.Core.Services
         private ILifetimeScope serviceScope;
         private ILogger logger;
 
-        public event EventHandler<ServiceEventArgs> OnServiceRegistered;
-        public event EventHandler<ServiceEventArgs> OnServiceUnregistered;
-        public event EventHandler<ServiceEventArgs> OnServiceStarted;
-        public event EventHandler<ServiceEventArgs> OnServiceStopped;
+        public event EventHandler<ServiceEventArgs> ServiceRegistered;
+        public event EventHandler<ServiceEventArgs> ServiceUnregistered;
+        public event EventHandler<ServiceEventArgs> ServiceStarted;
+        public event EventHandler<ServiceEventArgs> ServiceStopped;
 
         public ServiceManager(ManagedContainer container, ServiceDependencyResolver resolver, ILogger logger)
         {
@@ -60,7 +60,7 @@ namespace NVOS.Core.Services
             logger.Info($"[ServiceManager] Starting service {type.Name}");
             unit.Start();
             logger.Info($"[ServiceManager] Service {type.Name} init finished");
-            OnServiceStarted?.Invoke(this, new ServiceEventArgs(type, unit.Domain));
+            ServiceStarted?.Invoke(this, new ServiceEventArgs(type, unit.Domain));
         }
 
         private void StopUnit(Type type, ServiceStopReason reason = ServiceStopReason.Normal)
@@ -72,7 +72,7 @@ namespace NVOS.Core.Services
             logger.Info($"[ServiceManager] Stopping service {type.Name}");
             unit.Stop(reason);
             logger.Info($"[ServiceManager] Service {type.Name} shutdown finished");
-            OnServiceStopped?.Invoke(this, new ServiceEventArgs(type, unit.Domain));
+            ServiceStopped?.Invoke(this, new ServiceEventArgs(type, unit.Domain));
         }
 
         private void StartChain(Type type)
@@ -155,7 +155,7 @@ namespace NVOS.Core.Services
             serviceUnits.Add(type, unit);
             resolver.Register(type);
             logger.Info($"[ServiceManager] Service {type.Name} registered");
-            OnServiceRegistered?.Invoke(this, new ServiceEventArgs(type, domain));
+            ServiceRegistered?.Invoke(this, new ServiceEventArgs(type, domain));
         }
 
         public void Unregister<T>() where T : IService
@@ -175,7 +175,7 @@ namespace NVOS.Core.Services
             serviceUnits.Remove(type);
             resolver.Unregister(type);
             logger.Info($"[ServiceManager] Service {type.Name} unregistered");
-            OnServiceUnregistered?.Invoke(this, new ServiceEventArgs(type, unit.Domain));
+            ServiceUnregistered?.Invoke(this, new ServiceEventArgs(type, unit.Domain));
         }
 
         public T Resolve<T>() where T : class

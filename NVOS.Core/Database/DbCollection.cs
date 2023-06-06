@@ -1,17 +1,45 @@
-﻿using System;
+﻿using NVOS.Core.Database.EventArgs;
+using System;
 using System.Collections.Generic;
 
 namespace NVOS.Core.Database
 {
-    public class DbCollection
+    public class DbCollection : IDisposable
     {
+        private bool isDisposed;
         private IDatabaseService databaseService;
         public string Name { get; private set; }
+        public EventHandler<DbRecordEventArgs> RecordRead;
+        public EventHandler<DbRecordEventArgs> RecordWritten;
 
         public DbCollection(string name, IDatabaseService service)
         {
             Name = name;
             databaseService = service;
+            databaseService.RecordRead += DatabaseService_RecordRead;
+            databaseService.RecordWritten += DatabaseService_RecordWritten;
+        }
+
+        private void DatabaseService_RecordRead(object sender, DbRecordEventArgs e)
+        {
+            if (e.CollectionName == Name)
+                RecordRead?.Invoke(this, e);
+        }
+
+        private void DatabaseService_RecordWritten(object sender, DbRecordEventArgs e)
+        {
+            if (e.CollectionName == Name)
+                RecordWritten?.Invoke(this, e);
+        }
+
+        public void Dispose()
+        {
+            if (isDisposed)
+                return;
+
+            databaseService.RecordRead -= DatabaseService_RecordRead;
+            databaseService.RecordWritten -= DatabaseService_RecordWritten;
+            isDisposed = true;
         }
 
         public object Read(string key)

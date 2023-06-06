@@ -1,4 +1,6 @@
 ﻿using LiteDB;
+using NVOS.Core.Database.EventArgs;
+using NVOS.Core.Database.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,8 +13,18 @@ namespace NVOS.Core.Database
     public class LiteDbService : IDatabaseService
     {
         private LiteDatabase db;
+        private IDbValueSerializer serializer;
+        public event EventHandler<DbCollectionEventArgs> CollectionCreated;
+        public event EventHandler<DbCollectionEventArgs> CollectionDropped;
+        public event EventHandler<DbRecordEventArgs> RecordRead;
+        public event EventHandler<DbRecordEventArgs> RecordWritten;
 
         public DbCollection this[string collectionName] => GetCollection(collectionName);
+
+        public LiteDbService(IDbValueSerializer serializer)
+        {
+            this.serializer = serializer;
+        }
 
         public bool Init()
         {
@@ -39,6 +51,7 @@ namespace NVOS.Core.Database
         {
             ILiteCollection<LiteDbRecord> collection = db.GetCollection<LiteDbRecord>(collectionName);
             collection.EnsureIndex("keyIndex", x => x.Key, unique: true);
+            CollectionCreated?.Invoke(this, new DbCollectionEventArgs(collectionName));
         }
 
         public DbCollection GetCollection(string collectionName)
@@ -48,7 +61,11 @@ namespace NVOS.Core.Database
 
         public bool DropCollection(string collectionName)
         {
-            return db.DropCollection(collectionName);
+            bool result = db.DropCollection(collectionName);
+            if (result)
+                CollectionDropped?.Invoke(this, new DbCollectionEventArgs(collectionName));
+
+            return result;
         }
 
         public IEnumerable<string> ListCollections()
@@ -87,6 +104,8 @@ namespace NVOS.Core.Database
 
         public object Read(string collectionName, string key)
         {
+            RecordRead?.Invoke(this, new DbRecordEventArgs(collectionName, key));
+
             if (!CollectionExists(collectionName))
                 return null;
 
@@ -95,7 +114,8 @@ namespace NVOS.Core.Database
             if (record == null)
                 throw new KeyNotFoundException(nameof(key));
 
-            return record.Value;
+            object value = serializer.Deserialize(record.Value);
+            return value;
         }
 
         public bool Write(string collectionName, string key, object value)
@@ -103,14 +123,19 @@ namespace NVOS.Core.Database
             if (!CollectionExists(collectionName))
                 CreateCollection(collectionName);
 
+            string valueSerialized = serializer.Serialize(value);
             ILiteCollection<LiteDbRecord> collection = db.GetCollection<LiteDbRecord>(collectionName);
             LiteDbRecord record = collection.Query().Where(x => x.Key == key).FirstOrDefault();
             if (record == null)
-                record = new LiteDbRecord(key, value);
+                record = new LiteDbRecord(key, valueSerialized);
             else
-                record.Value = value;
+                record.Value = valueSerialized;
 
-            return collection.Upsert(record);
+            bool result = collection.Upsert(record);
+            if (result)
+                RecordWritten?.Invoke(this, new DbRecordEventArgs(collectionName, key));
+
+            return result;
         }
     }
 }

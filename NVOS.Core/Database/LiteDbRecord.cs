@@ -14,9 +14,9 @@ namespace NVOS.Core.Database
         [BsonField("Key")]
         public string Key { get; set; }
         [BsonField("Value")]
-        public object Value { get; set; }
+        public string Value { get; set; }
 
-        public LiteDbRecord(string key, object value)
+        public LiteDbRecord(string key, string value)
         {
             Key = key ?? throw new ArgumentNullException(nameof(key));
             Value = value;
