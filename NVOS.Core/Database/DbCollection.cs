@@ -47,6 +47,11 @@ namespace NVOS.Core.Database
             return databaseService.Read(Name, key);
         }
 
+        public object ReadOrDefault(string key, object defaultValue)
+        {
+            return databaseService.ReadOrDefault(Name, key, defaultValue);
+        }
+
         public void Write(string key, object value)
         {
             databaseService.Write(Name, key, value);

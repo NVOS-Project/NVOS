@@ -107,15 +107,29 @@ namespace NVOS.Core.Database
             RecordRead?.Invoke(this, new DbRecordEventArgs(collectionName, key));
 
             if (!CollectionExists(collectionName))
-                return null;
+                throw new KeyNotFoundException(key);
 
             ILiteCollection<LiteDbRecord> collection = db.GetCollection<LiteDbRecord>(collectionName);
             LiteDbRecord record = collection.Query().Where(x => x.Key == key).FirstOrDefault();
             if (record == null)
-                throw new KeyNotFoundException(nameof(key));
+                throw new KeyNotFoundException(key);
 
             object value = serializer.Deserialize(record.Value);
             return value;
+        }
+
+        public object ReadOrDefault(string collectionName, string key, object defaultValue)
+        {
+            try
+            {
+                object value = Read(collectionName, key);
+                return value;
+            }
+            catch(KeyNotFoundException)
+            {
+                Write(collectionName, key, defaultValue);
+                return defaultValue;
+            }
         }
 
         public bool Write(string collectionName, string key, object value)
