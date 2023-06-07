@@ -94,7 +94,7 @@
     <Compile Include="Database\EventArgs\DbRecordEventArgs.cs" />
     <Compile Include="Database\LiteDbRecord.cs" />
     <Compile Include="Database\LiteDbService.cs" />
-    <Compile Include="Database\Serialization\EnumValueWrapper.cs" />
+    <Compile Include="Database\Serialization\PrimitiveValueWrapper.cs" />
     <Compile Include="Database\Serialization\IDbValueSerializer.cs" />
     <Compile Include="Database\Serialization\JsonDbValueSerializer.cs" />
     <Compile Include="Logger\Enums\LogLevel.cs" />

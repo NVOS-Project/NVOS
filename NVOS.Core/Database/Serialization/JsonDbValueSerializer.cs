@@ -26,10 +26,10 @@ namespace NVOS.Core.Database.Serialization
         public object Deserialize(string obj)
         {
             object deserialized = JsonConvert.DeserializeObject(obj, settings);
-            if (deserialized.GetType() == typeof(EnumValueWrapper))
+            if (deserialized.GetType() == typeof(PrimitiveValueWrapper))
             {
-                // Unwrap the enum
-                return ((EnumValueWrapper)deserialized).GetInstance();
+                // Unwrap the primitive
+                return ((PrimitiveValueWrapper)deserialized).GetInstance();
             }
 
             return deserialized;
@@ -38,10 +38,10 @@ namespace NVOS.Core.Database.Serialization
         public string Serialize(object obj)
         {
             Type type = obj.GetType();
-            if (type.IsEnum)
+            if (type.IsPrimitive || type.IsEnum)
             {
-                // Gotta wrap the enum
-                obj = new EnumValueWrapper(obj);
+                // Gotta wrap the primitive value
+                obj = new PrimitiveValueWrapper(obj);
             }
 
             return JsonConvert.SerializeObject(obj, settings);
