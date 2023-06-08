@@ -21,8 +21,6 @@ namespace NVOS.Core.Logger
         private string logDirectory;
         private string filePath;
 
-        public EventHandler<DbRecordEventArgs> RecordWritten;
-
         public BufferingLogger(IDatabaseService database)
         {
             collection = database.GetCollection("logger");
