@@ -30,10 +30,12 @@ namespace Test
 
             serviceManager.Start<ServiceF>();
 
-            logger.SetLevel(LogLevel.WARN);
             logger.Info("i on został poinformowany");
             logger.Info("i on został poinformowany");
             logger.Debug("i on został zdebugowany");
+
+            database.Write("logger", "logDirectory", "logs2");
+
             logger.Warn("i on został ostrzeżony");
             logger.Error("i on został zabłądzony");
 

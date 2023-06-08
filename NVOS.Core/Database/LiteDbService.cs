@@ -146,10 +146,9 @@ namespace NVOS.Core.Database
                 record.Value = valueSerialized;
 
             bool result = collection.Upsert(record);
-            if (result)
-                RecordWritten?.Invoke(this, new DbRecordEventArgs(collectionName, key));
+            RecordWritten?.Invoke(this, new DbRecordEventArgs(collectionName, key));
 
-            return result;
+            return true;
         }
     }
 }
