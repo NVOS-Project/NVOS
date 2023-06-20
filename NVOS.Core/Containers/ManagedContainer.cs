@@ -13,15 +13,15 @@ namespace NVOS.Core.Containers
         private IContainer container;
         private ILifetimeScope rootScope;
 
-        public ManagedContainer(params IComponentRegistry[] registries)
+        public ManagedContainer(params ICoreComponentRegistry[] registries)
         {
             Init(registries);
         }
 
-        private void Init(IComponentRegistry[] registries)
+        private void Init(ICoreComponentRegistry[] registries)
         {
             ContainerBuilder builder = new ContainerBuilder();
-            foreach (IComponentRegistry registry in registries)
+            foreach (ICoreComponentRegistry registry in registries)
                 registry.Register(builder);
 
             container = builder.Build();

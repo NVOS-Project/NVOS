@@ -3,10 +3,13 @@ using NVOS.Core.Database;
 using NVOS.Core.Database.Serialization;
 using NVOS.Core.Logger;
 using NVOS.Core.Logger.Enums;
+using NVOS.Core.Modules;
 using NVOS.Core.Services;
 using QuikGraph;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
+using TestModule;
 
 namespace Test
 {
@@ -21,31 +24,15 @@ namespace Test
             ManagedContainer container = new ManagedContainer();
             ServiceDependencyResolver resolver = new ServiceDependencyResolver();
             ServiceManager serviceManager = new ServiceManager(container, resolver, logger);
-            serviceManager.Register<ServiceA>();
-            serviceManager.Register<ServiceB>();
-            serviceManager.Register<ServiceC>();
-            serviceManager.Register<ServiceD>();
-            serviceManager.Register<ServiceE>();
-            serviceManager.Register<ServiceF>();
+            ModuleManager moduleManager = new ModuleManager(logger, serviceManager);
 
-            serviceManager.Start<ServiceF>();
+            logger.SetLevel(LogLevel.INFO);
 
-            logger.SetLevel(LogLevel.WARN);
-            logger.Info("i on został poinformowany");
-            logger.Info("i on został poinformowany");
-            logger.Debug("i on został zdebugowany");
-            logger.Warn("i on został ostrzeżony");
-            logger.Error("i on został zabłądzony");
-
-            foreach (string log in logger.ReadLogs())
-            {
-                Console.WriteLine(log);
-            }
-
-            serviceManager.Dispose();
-            container.Dispose();
-            logger.Dispose();
-
+            Assembly testModule = Assembly.Load("TestModule");
+            moduleManager.Load(testModule);
+            serviceManager.Start<TestService>();
+            serviceManager.Stop<TestService>();
+            moduleManager.Unload(testModule);
             Console.ReadLine();
         }
     }

@@ -178,6 +178,16 @@ namespace NVOS.Core.Services
             ServiceUnregistered?.Invoke(this, new ServiceEventArgs(type, unit.Domain));
         }
 
+        public bool IsRegistered<T>() where T : IService
+        {
+            return IsRegistered(typeof(T));
+        }
+
+        public bool IsRegistered(Type type)
+        {
+            return serviceUnits.ContainsKey(type);
+        }
+
         public T Resolve<T>() where T : class
         {
             return (T)Resolve(typeof(T));

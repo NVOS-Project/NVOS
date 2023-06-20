@@ -81,6 +81,7 @@ namespace NVOS.Core.Services
 
         private void BuildType(Type type)
         {
+            graph.AddVertex(type);
             foreach(Type dependency in GetRawDependencies(type))
             {
                 graph.AddVerticesAndEdge(new Edge<Type>(type, dependency));

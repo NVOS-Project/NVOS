@@ -20,6 +20,8 @@ namespace NVOS.Core.Services
         void Register(Type type, string domain = null);
         void Unregister<T>() where T : IService;
         void Unregister(Type type);
+        bool IsRegistered<T>() where T : IService;
+        bool IsRegistered(Type type);
         ServiceState GetServiceState<T>() where T : IService;
         ServiceState GetServiceState(Type type);
         ServiceStopReason GetStopReason<T>() where T : IService;

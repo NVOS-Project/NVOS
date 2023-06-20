@@ -99,6 +99,8 @@
     <Compile Include="Database\Serialization\JsonDbValueSerializer.cs" />
     <Compile Include="Logger\Enums\LogLevel.cs" />
     <Compile Include="Logger\ILogger.cs" />
+    <Compile Include="Modules\EventArgs\ModuleEventArgs.cs" />
+    <Compile Include="Modules\Extensions\ModuleExtensions.cs" />
     <Compile Include="Services\EventArgs\ServiceEventArgs.cs" />
     <Compile Include="Services\IService.cs" />
     <Compile Include="Database\DbCollection.cs" />
@@ -116,6 +118,9 @@
     <Compile Include="Logger\BufferingLogger.cs" />
     <Compile Include="Services\ServiceManager.cs" />
     <Compile Include="Services\ServiceUnit.cs" />
+    <Compile Include="Modules\IModule.cs" />
+    <Compile Include="Modules\IModuleManager.cs" />
+    <Compile Include="Modules\ModuleManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

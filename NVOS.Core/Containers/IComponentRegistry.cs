@@ -2,7 +2,7 @@
 
 namespace NVOS.Core.Containers
 {
-    public interface IComponentRegistry
+    public interface ICoreComponentRegistry
     {
         void Register(ContainerBuilder builder);
     }
