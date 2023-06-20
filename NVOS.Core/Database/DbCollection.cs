@@ -9,8 +9,8 @@ namespace NVOS.Core.Database
         private bool isDisposed;
         private IDatabaseService databaseService;
         public string Name { get; private set; }
-        public EventHandler<DbRecordEventArgs> RecordRead;
-        public EventHandler<DbRecordEventArgs> RecordWritten;
+        public event EventHandler<DbRecordEventArgs> RecordRead;
+        public event EventHandler<DbRecordEventArgs> RecordWritten;
 
         public DbCollection(string name, IDatabaseService service)
         {

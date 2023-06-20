@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CircularBuffer;
+using NVOS.Core.Database.EventArgs;
 
 namespace NVOS.Core.Logger
 {
@@ -27,7 +28,17 @@ namespace NVOS.Core.Logger
             logLevel = (LogLevel)collection.ReadOrDefault("logLevel", LogLevel.INFO);
             logDirectory = (string)collection.ReadOrDefault("logDirectory", "logs");
             buffer = new CircularBuffer<string>(bufferSize);
+            collection.RecordWritten += Collection_RecordWritten;
             Init();
+        }
+
+        private void Collection_RecordWritten(object sender, DbRecordEventArgs e)
+        {
+            if (e.Key == "logDirectory")
+            {
+                logDirectory = (string)collection.Read(e.Key);
+                Init();
+            }
         }
 
         private void Init()
