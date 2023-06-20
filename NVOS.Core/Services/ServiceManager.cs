@@ -7,8 +7,6 @@ using NVOS.Core.Services.EventArgs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NVOS.Core.Services
 {
@@ -44,7 +42,7 @@ namespace NVOS.Core.Services
 
         private void AssertChainDependenciesMet(List<Type> chain)
         {
-            foreach(Type type in chain)
+            foreach (Type type in chain)
             {
                 if (!serviceUnits.ContainsKey(type))
                     throw new InvalidOperationException($"Missing dependency: {type.FullName}");
@@ -80,13 +78,13 @@ namespace NVOS.Core.Services
             List<Type> chain = resolver.ResolveDependencyOrder(type);
             List<Type> started = new List<Type>();
             AssertChainDependenciesMet(chain);
-            foreach(Type dependency in chain)
+            foreach (Type dependency in chain)
             {
                 try
                 {
                     StartUnit(dependency);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     logger.Error($"[ServiceManager] Service chain start failed. Unit {dependency.Name} reported an error: {ex}");
                     break;
@@ -94,11 +92,11 @@ namespace NVOS.Core.Services
 
                 started.Add(dependency);
             }
-                
+
             if (chain.Count != started.Count)
             {
                 // Error must have occurred
-                foreach(Type dependency in started.Reverse<Type>())
+                foreach (Type dependency in started.Reverse<Type>())
                 {
                     try
                     {
@@ -128,7 +126,7 @@ namespace NVOS.Core.Services
                     else
                         StopUnit(dependency, ServiceStopReason.Dependency);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     logger.Warn($"[ServiceManager] Unit {dependency.Name} reported an error while stopping {type.Name}'s chain: {ex}");
                 }
@@ -202,7 +200,7 @@ namespace NVOS.Core.Services
                 {
                     return service.Resolve();
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     throw new DependencyResolutionException($"Failed to resolve dynamic dependency {type.Name}", e);
                 }
@@ -294,13 +292,13 @@ namespace NVOS.Core.Services
             if (isDisposed)
                 return;
 
-            foreach(Type type in serviceUnits.Keys)
+            foreach (Type type in serviceUnits.Keys)
             {
                 try
                 {
                     StopUnit(type, ServiceStopReason.Shutdown);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     logger.Warn($"Failed to gracefully stop service {type.Name} while shutting down service manager: {ex}");
                 }

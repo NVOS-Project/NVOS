@@ -2,10 +2,7 @@
 using QuikGraph;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NVOS.Core.Services
 {
@@ -29,7 +26,7 @@ namespace NVOS.Core.Services
 
         private IEnumerable<Type> GetRawDependencies(Type type)
         {
-            foreach(ServiceDependencyAttribute attr in type.GetCustomAttributes<ServiceDependencyAttribute>())
+            foreach (ServiceDependencyAttribute attr in type.GetCustomAttributes<ServiceDependencyAttribute>())
             {
                 if (attr.Type == type)
                     throw new Exception($"Self-referential dependency detected: {attr.Type.Name}");
@@ -63,7 +60,7 @@ namespace NVOS.Core.Services
         private void RecursiveResolveDependent(List<Type> resolved, List<Type> unresolved, Type source)
         {
             unresolved.Add(source);
-            foreach(Edge<Type> edge in graph.InEdges(source))
+            foreach (Edge<Type> edge in graph.InEdges(source))
             {
                 Type dependent = edge.Source;
                 if (!resolved.Contains(dependent))
@@ -82,7 +79,7 @@ namespace NVOS.Core.Services
         private void BuildType(Type type)
         {
             graph.AddVertex(type);
-            foreach(Type dependency in GetRawDependencies(type))
+            foreach (Type dependency in GetRawDependencies(type))
             {
                 graph.AddVerticesAndEdge(new Edge<Type>(type, dependency));
 
@@ -103,7 +100,7 @@ namespace NVOS.Core.Services
 
         public void Register(params Type[] types)
         {
-            foreach(Type type in types)
+            foreach (Type type in types)
             {
                 if (!knownTypes.Contains(type))
                     knownTypes.Add(type);

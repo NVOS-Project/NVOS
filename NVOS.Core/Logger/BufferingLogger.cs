@@ -1,13 +1,10 @@
-﻿using NVOS.Core.Database;
+﻿using CircularBuffer;
+using NVOS.Core.Database;
+using NVOS.Core.Database.EventArgs;
 using NVOS.Core.Logger.Enums;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CircularBuffer;
-using NVOS.Core.Database.EventArgs;
 
 namespace NVOS.Core.Logger
 {

@@ -3,10 +3,7 @@ using NVOS.Core.Database.EventArgs;
 using NVOS.Core.Database.Serialization;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NVOS.Core.Database
 {
@@ -82,7 +79,7 @@ namespace NVOS.Core.Database
         {
             ILiteCollection<LiteDbRecord> collection = db.GetCollection<LiteDbRecord>(collectionName);
             IBsonDataReader reader = collection.Query().ExecuteReader();
-            while(reader.Read())
+            while (reader.Read())
             {
                 yield return new KeyValuePair<string, object>(reader["Key"], reader["Value"]);
             }
@@ -111,7 +108,7 @@ namespace NVOS.Core.Database
                 object value = Read(collectionName, key);
                 return value;
             }
-            catch(KeyNotFoundException)
+            catch (KeyNotFoundException)
             {
                 Write(collectionName, key, defaultValue);
                 return defaultValue;

@@ -6,8 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NVOS.Core.Modules
 {
@@ -84,7 +82,7 @@ namespace NVOS.Core.Modules
                     if (serviceManager.IsRegistered(service))
                         serviceManager.Unregister(service);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     logger.Warn($"[ModuleManager] Failed to unregister service {service.FullName}: {ex}");
                 }
