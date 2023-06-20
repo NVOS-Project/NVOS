@@ -1,4 +1,5 @@
-﻿using NVOS.Core.Containers;
+﻿using NVOS.Core;
+using NVOS.Core.Containers;
 using NVOS.Core.Database;
 using NVOS.Core.Database.Serialization;
 using NVOS.Core.Logger;
@@ -17,17 +18,9 @@ namespace Test
     {
         static void Main(string[] args)
         {
-            JsonDbValueSerializer serializer = new JsonDbValueSerializer();
-            LiteDbService database = new LiteDbService(serializer);
-            database.Open("./database.db");
-            BufferingLogger logger = new BufferingLogger(database);
-            ManagedContainer container = new ManagedContainer();
-            ServiceDependencyResolver resolver = new ServiceDependencyResolver();
-            ServiceManager serviceManager = new ServiceManager(container, resolver, logger);
-            ModuleManager moduleManager = new ModuleManager(logger, serviceManager);
-
-            logger.SetLevel(LogLevel.INFO);
-
+            Bootstrap.Init();
+            IServiceManager serviceManager = ServiceLocator.Resolve<ServiceManager>();
+            IModuleManager moduleManager = ServiceLocator.Resolve<ModuleManager>();
             Assembly testModule = Assembly.Load("TestModule");
             moduleManager.Load(testModule);
             serviceManager.Start<TestService>();

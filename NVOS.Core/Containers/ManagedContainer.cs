@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Autofac.Builder;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +25,7 @@ namespace NVOS.Core.Containers
             foreach (ICoreComponentRegistry registry in registries)
                 registry.Register(builder);
 
+            builder.RegisterInstance(this).SingleInstance().ExternallyOwned();
             container = builder.Build();
             BeginRootScope();
         }

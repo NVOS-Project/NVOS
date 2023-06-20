@@ -21,30 +21,16 @@ namespace NVOS.Core.Database
 
         public DbCollection this[string collectionName] => GetCollection(collectionName);
 
-        public LiteDbService(IDbValueSerializer serializer)
+        public LiteDbService(IDbValueSerializer serializer, string dbPath)
         {
             this.serializer = serializer;
-        }
-
-        public bool Init()
-        {
-            return true;
-        }
-
-        public void Open(string file)
-        {
-            db = new LiteDatabase(file);
-        }
-
-        public void Close()
-        {
-            db?.Dispose();
-            db = null;
+            db = new LiteDatabase(dbPath);
         }
 
         public void Dispose()
         {
-            Close();
+            db?.Dispose();
+            db = null;
         }
 
         private void CreateCollection(string collectionName)

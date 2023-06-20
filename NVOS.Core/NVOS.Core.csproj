@@ -101,13 +101,18 @@
     <Compile Include="Logger\ILogger.cs" />
     <Compile Include="Modules\EventArgs\ModuleEventArgs.cs" />
     <Compile Include="Modules\Extensions\ModuleExtensions.cs" />
+    <Compile Include="Bootstrap.cs" />
+    <Compile Include="Registries\LiteDbRegistry.cs" />
+    <Compile Include="Registries\LoggerRegistry.cs" />
+    <Compile Include="Registries\ModuleRegistry.cs" />
+    <Compile Include="Registries\ServiceRegistry.cs" />
     <Compile Include="Services\EventArgs\ServiceEventArgs.cs" />
     <Compile Include="Services\IService.cs" />
     <Compile Include="Database\DbCollection.cs" />
     <Compile Include="Database\IDatabaseService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\IServiceManager.cs" />
-    <Compile Include="Containers\IComponentRegistry.cs" />
+    <Compile Include="Containers\ICoreComponentRegistry.cs" />
     <Compile Include="Services\IServiceResolver.cs" />
     <Compile Include="Services\Attributes\ServiceDependencyAttribute.cs" />
     <Compile Include="Services\Enums\ServiceState.cs" />
@@ -116,6 +121,7 @@
     <Compile Include="Services\Attributes\ServiceTypeAttribute.cs" />
     <Compile Include="Services\ServiceDependencyResolver.cs" />
     <Compile Include="Logger\BufferingLogger.cs" />
+    <Compile Include="Services\ServiceLocator.cs" />
     <Compile Include="Services\ServiceManager.cs" />
     <Compile Include="Services\ServiceUnit.cs" />
     <Compile Include="Modules\IModule.cs" />
