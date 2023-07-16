@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace NVOS.UI
 {
-    public class WristUIService : IUIService
+    public class WristUIService
     {
         public Window CreateWindow(string title)
         {

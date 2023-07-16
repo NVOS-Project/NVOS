@@ -15,6 +15,36 @@ namespace NVOS.UI.Models
         private Button minimizeButton;
         private Button closeButton;
 
+        private bool showControls;
+        private string title;
+
+        public bool ShowControls
+        {
+            get
+            {
+                return showControls;
+            }
+            set
+            {
+                showControls = value;
+                minimizeButton.IsVisible = value;
+                closeButton.IsVisible = value;
+            }
+        }
+
+        public string Title
+        {
+            get
+            {
+                return title;
+            }
+            set
+            {
+                title = value;
+                titleLabel.Text = value;
+            }
+        }
+
         public Window3D() : this("Window") { }
 
         public Window3D(string title) : base(title)
@@ -25,14 +55,16 @@ namespace NVOS.UI.Models
             rectTransform.sizeDelta = new Vector2(1.5f, 1f);
 
             titleBar = new HorizontalLayoutPanel("TitleBar");
+            showControls = true;
             titleBar.GetRootObject().transform.SetParent(root.transform);
             titleBar.BackgroundColor = Color.black;
-            titleBar.PreferredHeight = rectTransform.sizeDelta.y * 0.1f;
+            titleBar.PreferredHeight = 0.1f;
 
             titleLabel = new Label("TitleLabel");
             titleBar.AddChild(titleLabel);
             titleLabel.PreferredWidth = rectTransform.sizeDelta.x * 0.7f;
             titleLabel.Text = title;
+            this.title = title;
             titleLabel.TextColor = Color.white;
             titleLabel.FontSize = 0.05f;
 
@@ -52,12 +84,31 @@ namespace NVOS.UI.Models
             closeButton.Label.TextColor = Color.white;
             closeButton.Label.FontSize = 0.05f;
 
-            content.PreferredHeight = rectTransform.sizeDelta.y * 0.9f;
+            content.PreferredHeight = rectTransform.sizeDelta.y - titleBar.PreferredHeight;
+
+            minimizeButton.OnClick += MinimizeButton_OnClick;
+            closeButton.OnClick += CloseButton_OnClick;
+        }
+
+        private void MinimizeButton_OnClick(object sender, System.EventArgs e)
+        {
+            Hide();
+        }
+
+        private void CloseButton_OnClick(object sender, System.EventArgs e)
+        {
+            Close();
         }
 
         public Canvas GetCanvas()
         {
             return canvas;
+        }
+
+        public override void Update()
+        {
+            base.Update();
+            content.PreferredHeight = rectTransform.sizeDelta.y - titleBar.PreferredHeight;
         }
     }
 }

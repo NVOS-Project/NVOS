@@ -8,7 +8,7 @@ namespace NVOS.UI.Models.Enums
 {
     public enum WindowState
     {
-        Open,
+        Normal,
         Hidden
     }
 }

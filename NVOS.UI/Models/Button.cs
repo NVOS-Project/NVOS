@@ -15,7 +15,7 @@ namespace NVOS.UI.Models
         private UnityEngine.UI.Button button;
         private Image backgroundImage;
 
-        public event EventHandler<EventArgs> OnClick;
+        public event EventHandler<System.EventArgs> OnClick;
 
         public Label Label { get; }
         public Color BackgroundColor 
@@ -61,7 +61,7 @@ namespace NVOS.UI.Models
 
         private void HandleClick()
         {
-            OnClick?.Invoke(this, EventArgs.Empty);
+            OnClick?.Invoke(this, System.EventArgs.Empty);
         }
     }
 }

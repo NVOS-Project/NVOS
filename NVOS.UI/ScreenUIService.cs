@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace NVOS.UI
 {
-    internal class ScreenUIService : IUIService
+    internal class ScreenUIService
     {
         public Window CreateWindow(string title)
         {

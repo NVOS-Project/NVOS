@@ -59,10 +59,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IUIService.cs" />
     <Compile Include="Models\Button.cs" />
     <Compile Include="Models\Control.cs" />
     <Compile Include="Models\Enums\WindowState.cs" />
+    <Compile Include="Models\EventArgs\WindowEventArgs.cs" />
+    <Compile Include="Models\EventArgs\WindowStateChangedEventArgs.cs" />
     <Compile Include="Models\VerticalLayoutPanel.cs" />
     <Compile Include="Models\HorizontalLayoutPanel.cs" />
     <Compile Include="Models\Label.cs" />

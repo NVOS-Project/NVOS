@@ -7,20 +7,25 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using NVOS.UI.Models.Enums;
+using NVOS.UI.Models.EventArgs;
 
 namespace NVOS.UI.Models
 {
-    public abstract class Window : IDisposable
+    public class Window : IDisposable
     {
         private Outline outline;
         protected Panel content;
         protected GameObject root;
         protected RectTransform rectTransform;
+        private WindowState state;
 
         private float outlineThickness;
         private float width;
         private float height;
         private bool renderOutline;
+
+        public event EventHandler<WindowStateChangedEventArgs> OnWindowStateChanged;
+        public event EventHandler<WindowEventArgs> OnClose;
 
         public float OutlineThickness
         {
@@ -81,6 +86,8 @@ namespace NVOS.UI.Models
             }
         }
 
+        public WindowState State { get { return state; } }
+
         public Window() : this("Window") { } 
 
         public Window(string name)
@@ -93,7 +100,6 @@ namespace NVOS.UI.Models
             height = 1f;
 
             root.AddComponent<VerticalLayoutGroup>();
-            root.AddComponent<Image>();
 
             outline = root.AddComponent<Outline>();
             outline.effectDistance = new Vector2(0.01f, 0.01f);
@@ -105,14 +111,48 @@ namespace NVOS.UI.Models
             content.GetRootObject().transform.SetParent(root.transform);
             content.BackgroundColor = Color.white;
         }
+
+        private void SetVisible(bool visible)
+        {
+            if (visible)
+                state = WindowState.Normal;
+            else
+                state = WindowState.Hidden;
+
+            root.SetActive(visible);
+        }
         
-        public void Update()
+        public virtual void Update()
         {
             foreach (Control child in content.controls)
             {
                 if (child.IsVisible)
                     child.Update();
             }
+        }
+
+        public void Show()
+        {
+            if (state == WindowState.Normal)
+                throw new InvalidOperationException("Window is already open!");
+
+            SetVisible(true);
+            OnWindowStateChanged?.Invoke(this, new WindowStateChangedEventArgs(this, state));
+        }
+
+        public void Hide()
+        {
+            if (state == WindowState.Hidden)
+                throw new InvalidOperationException("Window is already minimized!");
+
+            SetVisible(false);
+            OnWindowStateChanged?.Invoke(this, new WindowStateChangedEventArgs(this, state));
+        }
+
+        public void Close()
+        {
+            OnClose?.Invoke(this, new WindowEventArgs(this));
+            Dispose();
         }
 
         public void Dispose()
