@@ -11,101 +11,26 @@ using NVOS.UI.Models.EventArgs;
 
 namespace NVOS.UI.Models
 {
-    public class Window : IDisposable
+    public abstract class Window : IDisposable
     {
-        private Outline outline;
         protected Panel content;
         protected GameObject root;
         protected RectTransform rectTransform;
         private WindowState state;
 
-        private float outlineThickness;
-        private float width;
-        private float height;
-        private bool renderOutline;
-
         public event EventHandler<WindowStateChangedEventArgs> OnWindowStateChanged;
         public event EventHandler<WindowEventArgs> OnClose;
 
-        public float OutlineThickness
-        {
-            get
-            {
-                return outlineThickness;
-            }
-            set
-            {
-                outline.effectDistance = new Vector2(value, value);
-                outlineThickness = value;
-            }
-        }
-
-        public bool RenderOutline
-        {
-            get
-            {
-                return renderOutline;
-            }
-            set
-            {
-                if (value)
-                {
-                    outline.effectColor = Color.clear;
-                }
-                else
-                {
-                    outline.effectColor = Color.black;
-                }
-                renderOutline = value;
-            }
-        }
-
-        public float Width
-        {
-            get
-            {
-                return width;
-            }
-            set
-            {
-                width = value;
-                rectTransform.sizeDelta = new Vector2(value, rectTransform.sizeDelta.y);
-            }
-        }
-
-        public float Height
-        {
-            get
-            {
-                return height;
-            }
-            set
-            {
-                height = value;
-                rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, value);
-            }
-        }
-
         public WindowState State { get { return state; } }
 
-        public Window() : this("Window") { } 
-
-        public Window(string name)
+        public Window(string title)
         {
-            root = new GameObject(name);
+            root = new GameObject(title);
             rectTransform = root.AddComponent<RectTransform>();
             rectTransform.pivot = new Vector2(0.5f, 0.5f);
             rectTransform.sizeDelta = new Vector2(1f, 1f);
-            width = 1f;
-            height = 1f;
 
             root.AddComponent<VerticalLayoutGroup>();
-
-            outline = root.AddComponent<Outline>();
-            outline.effectDistance = new Vector2(0.01f, 0.01f);
-            outlineThickness = 0.01f;
-            outline.effectColor = Color.black;
-            renderOutline = true;
 
             content = new Panel("Content");
             content.GetRootObject().transform.SetParent(root.transform);

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace NVOS.UI.Models
 {
@@ -14,9 +15,74 @@ namespace NVOS.UI.Models
         private Label titleLabel;
         private Button minimizeButton;
         private Button closeButton;
+        private Outline outline;
 
         private bool showControls;
         private string title;
+        private float outlineThickness;
+        private bool renderOutline;
+
+        private float width;
+        private float height;
+
+        public float Width
+        {
+            get
+            {
+                return width;
+            }
+            set
+            {
+                width = value;
+                rectTransform.sizeDelta = new Vector2(value, rectTransform.sizeDelta.y);
+            }
+        }
+
+        public float Height
+        {
+            get
+            {
+                return height;
+            }
+            set
+            {
+                height = value;
+                rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, value);
+            }
+        }
+
+        public float OutlineThickness
+        {
+            get
+            {
+                return outlineThickness;
+            }
+            set
+            {
+                outline.effectDistance = new Vector2(value, value);
+                outlineThickness = value;
+            }
+        }
+
+        public bool RenderOutline
+        {
+            get
+            {
+                return renderOutline;
+            }
+            set
+            {
+                if (value)
+                {
+                    outline.effectColor = Color.clear;
+                }
+                else
+                {
+                    outline.effectColor = Color.black;
+                }
+                renderOutline = value;
+            }
+        }
 
         public bool ShowControls
         {
@@ -45,14 +111,16 @@ namespace NVOS.UI.Models
             }
         }
 
-        public Window3D() : this("Window") { }
+        public Window3D() : this("Window", 1.5f, 1f) { }
 
-        public Window3D(string title) : base(title)
+        public Window3D(string title, float width, float height) : base(title)
         {
             canvas = root.AddComponent<Canvas>();
             canvas.renderMode = RenderMode.WorldSpace;
             canvas.worldCamera = Camera.main;
-            rectTransform.sizeDelta = new Vector2(1.5f, 1f);
+            rectTransform.sizeDelta = new Vector2(width, height);
+            this.width = width;
+            this.height = height;
 
             titleBar = new HorizontalLayoutPanel("TitleBar");
             showControls = true;
@@ -83,6 +151,12 @@ namespace NVOS.UI.Models
             closeButton.Label.Text = "X";
             closeButton.Label.TextColor = Color.white;
             closeButton.Label.FontSize = 0.05f;
+
+            outline = root.AddComponent<Outline>();
+            outline.effectDistance = new Vector2(0.01f, 0.01f);
+            outlineThickness = 0.01f;
+            outline.effectColor = Color.black;
+            renderOutline = true;
 
             content.PreferredHeight = rectTransform.sizeDelta.y - titleBar.PreferredHeight;
 

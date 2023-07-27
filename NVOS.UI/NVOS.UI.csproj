@@ -59,6 +59,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IUIService.cs" />
     <Compile Include="Models\Button.cs" />
     <Compile Include="Models\Control.cs" />
     <Compile Include="Models\Enums\WindowState.cs" />
