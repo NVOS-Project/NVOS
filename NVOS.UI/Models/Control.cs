@@ -12,6 +12,9 @@ namespace NVOS.UI.Models
     {
         private string name;
 
+        private float width = 0;
+        private float height = 0;
+
         private float positionOffsetX = 0;
         private float positionOffsetY = 0;
         private float positionScaleX = 0;
@@ -49,6 +52,22 @@ namespace NVOS.UI.Models
                 root.name = value;
                 name = value;
             } 
+        }
+
+        public float Width
+        {
+            get
+            {
+                return width;
+            }
+        }
+
+        public float Height
+        {
+            get
+            {
+                return height;
+            }
         }
 
         public float PositionOffsetX
@@ -264,21 +283,17 @@ namespace NVOS.UI.Models
 
         public List<Control> controls = new List<Control>();
 
-        public Control()
-        {
-            root = new GameObject("Control");
-            rectTransform = root.AddComponent<RectTransform>();
-            rectTransform.pivot = new Vector2(0.5f, 0.5f);
-            layoutElement = root.AddComponent<LayoutElement>();
-        }
+        public Control() : this("Control") { }
 
         public Control(string name)
         {
             root = new GameObject(name);
             rectTransform = root.AddComponent<RectTransform>();
-            rectTransform.pivot = new Vector2(0.5f, 0.5f);
+            rectTransform.pivot = new Vector2(0f, 1f);
+            rectTransform.anchorMin = new Vector2(0f, 1f);
+            rectTransform.anchorMax = new Vector2(0f, 1f);
             layoutElement = root.AddComponent<LayoutElement>();
-        }  
+        }
 
         protected virtual void UpdateDirtyTransform()
         {
@@ -287,6 +302,8 @@ namespace NVOS.UI.Models
             rectTransform.anchorMax = new Vector2(positionScaleX + sizeScaleX, 1f - positionScaleY);
             rectTransform.anchoredPosition = new Vector2(positionOffsetX, -positionOffsetY);
             rectTransform.sizeDelta = new Vector2(sizeOffsetX, sizeOffsetY);
+            width = rectTransform.rect.width;
+            height = rectTransform.rect.height;
         }
 
         public virtual void Update()
@@ -304,7 +321,7 @@ namespace NVOS.UI.Models
         public void AddChild(Control child)
         {
             isTransformDirty = true;
-            child.root.transform.SetParent(root.transform);
+            child.root.transform.SetParent(root.transform, false);
             controls.Add(child);
         }
 

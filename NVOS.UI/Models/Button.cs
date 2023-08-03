@@ -11,39 +11,45 @@ namespace NVOS.UI.Models
 {
     public class Button : Control
     {
-        private Color backgroundColor;
         private UnityEngine.UI.Button button;
-        private Image backgroundImage;
+        private Image buttonImage;
+
+        private Color highlightColor;
+        private Color backgroundColor;
 
         public event EventHandler<System.EventArgs> OnClick;
 
         public Label Label { get; }
-        public Color BackgroundColor 
+        public Color HighlightColor 
         { 
             get 
             { 
-                return backgroundColor; 
+                return highlightColor; 
             } 
             set 
             {
-                backgroundImage.color = value;
-                backgroundColor = value;
+                ColorBlock colorBlock = button.colors;
+                colorBlock.highlightedColor = value;
+                button.colors = colorBlock;
+                highlightColor = value;
             } 
         }
-
-        public Button() : base("Button")
+        public Color BackgroundColor
         {
-            Label = new Label("ButtonLabel");
-            AddChild(Label);
-            root.AddComponent<HorizontalLayoutGroup>();
-            button = root.AddComponent<UnityEngine.UI.Button>();
-            button.onClick.AddListener(new UnityEngine.Events.UnityAction(HandleClick));
-            backgroundImage = root.AddComponent<Image>();
-            backgroundImage.color = Color.gray;
-
-            SizeOffsetX = 0.4f;
-            SizeOffsetY = 0.15f;
+            get
+            {
+                return backgroundColor;
+            }
+            set
+            {
+                ColorBlock colorBlock = button.colors;
+                colorBlock.normalColor = value;
+                button.colors = colorBlock;
+                backgroundColor = value;
+            }
         }
+
+        public Button() : this("Button") { }
 
         public Button(string name) : base(name)
         {
@@ -52,8 +58,21 @@ namespace NVOS.UI.Models
             root.AddComponent<HorizontalLayoutGroup>();
             button = root.AddComponent<UnityEngine.UI.Button>();
             button.onClick.AddListener(new UnityEngine.Events.UnityAction(HandleClick));
-            backgroundImage = root.AddComponent<Image>();
-            backgroundImage.color = Color.gray;
+            buttonImage = root.AddComponent<Image>();
+            buttonImage.color = Color.white;
+            button.targetGraphic = buttonImage;
+
+            Navigation navigation = button.navigation;
+            navigation.mode = Navigation.Mode.None;
+            button.navigation = navigation;
+
+            ColorBlock colorBlock = button.colors;
+            colorBlock.normalColor = Color.gray;
+            colorBlock.highlightedColor = Color.white;
+            button.colors = colorBlock;
+            
+            backgroundColor = Color.gray;
+            highlightColor = Color.white;
 
             SizeOffsetX = 0.4f;
             SizeOffsetY = 0.15f;

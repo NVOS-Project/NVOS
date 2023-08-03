@@ -67,21 +67,7 @@ namespace NVOS.UI.Models
             } 
         }
 
-        public Label()
-        {
-            textComponent = root.AddComponent<TextMeshProUGUI>();
-            textComponent.text = "Label";
-            text = "Label";
-            textComponent.fontSize = 0.05f;
-            fontSize = 0.05f;
-            textComponent.alignment = TextAlignmentOptions.Center;
-            textAlignment = TextAlignmentOptions.Center;
-            textComponent.color = Color.black;
-            textColor = Color.black;
-
-            SizeOffsetX = 0.4f;
-            SizeOffsetY = 0.15f;
-        }
+        public Label() : this("Label") { }
 
         public Label(string name) : base(name)
         {

@@ -11,6 +11,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestModule", "TestModule\Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NVOS.UI", "NVOS.UI\NVOS.UI.csproj", "{526E08B3-EC03-4B56-8620-739BB4CA9132}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Elementy rozwiązania", "Elementy rozwiązania", "{691B4B05-9F6F-4C0C-980E-2B02AD41F6BF}"
+	ProjectSection(SolutionItems) = preProject
+		Graph3.dgml = Graph3.dgml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

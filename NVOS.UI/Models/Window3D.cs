@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.XR.Interaction.Toolkit;
 
 namespace NVOS.UI.Models
 {
@@ -16,6 +17,7 @@ namespace NVOS.UI.Models
         private Button minimizeButton;
         private Button closeButton;
         private Outline outline;
+        private BoxCollider collider;
 
         private bool showControls;
         private string title;
@@ -116,6 +118,7 @@ namespace NVOS.UI.Models
         public Window3D(string title, float width, float height) : base(title)
         {
             canvas = root.AddComponent<Canvas>();
+            root.AddComponent<GraphicRaycaster>();
             canvas.renderMode = RenderMode.WorldSpace;
             canvas.worldCamera = Camera.main;
             rectTransform.sizeDelta = new Vector2(width, height);
@@ -126,20 +129,36 @@ namespace NVOS.UI.Models
             showControls = true;
             titleBar.GetRootObject().transform.SetParent(root.transform);
             titleBar.BackgroundColor = Color.black;
-            titleBar.PreferredHeight = 0.1f;
+            titleBar.PreferredHeight = height * 0.1f;
 
             titleLabel = new Label("TitleLabel");
             titleBar.AddChild(titleLabel);
-            titleLabel.PreferredWidth = rectTransform.sizeDelta.x * 0.7f;
+            titleLabel.PreferredWidth = width * 0.7f;
             titleLabel.Text = title;
             this.title = title;
             titleLabel.TextColor = Color.white;
             titleLabel.FontSize = 0.05f;
 
+            collider = root.AddComponent<BoxCollider>();
+            float colliderX = (width - titleLabel.PreferredWidth) / -2;
+            float colliderY = (height - titleBar.PreferredHeight) / -2;
+            float colliderSize = titleLabel.PreferredWidth;
+            collider.center = new Vector3(colliderX, colliderY, 0);
+            collider.size = new Vector3(colliderSize, 0.1f, 0.1f);
+
+            Rigidbody rigidbody = root.AddComponent<Rigidbody>();
+            rigidbody.isKinematic = true;
+            rigidbody.useGravity = false;
+
+            XRGrabInteractable grab = root.AddComponent<XRGrabInteractable>();
+            grab.throwOnDetach = false;
+            grab.useDynamicAttach = true;
+
             minimizeButton = new Button("Minimize");
             titleBar.AddChild(minimizeButton);
             minimizeButton.BackgroundColor = Color.black;
-            minimizeButton.PreferredWidth = rectTransform.sizeDelta.x * 0.15f;
+            minimizeButton.HighlightColor = Color.gray;
+            minimizeButton.PreferredWidth = width * 0.15f;
             minimizeButton.Label.Text = "-";
             minimizeButton.Label.TextColor = Color.white;
             minimizeButton.Label.FontSize = 0.05f;
@@ -147,7 +166,8 @@ namespace NVOS.UI.Models
             closeButton = new Button("Close");
             titleBar.AddChild(closeButton);
             closeButton.BackgroundColor = Color.black;
-            closeButton.PreferredWidth = rectTransform.sizeDelta.x * 0.15f;
+            closeButton.HighlightColor = Color.gray;
+            closeButton.PreferredWidth = width * 0.15f;
             closeButton.Label.Text = "X";
             closeButton.Label.TextColor = Color.white;
             closeButton.Label.FontSize = 0.05f;
@@ -158,7 +178,7 @@ namespace NVOS.UI.Models
             outline.effectColor = Color.black;
             renderOutline = true;
 
-            content.PreferredHeight = rectTransform.sizeDelta.y - titleBar.PreferredHeight;
+            content.PreferredHeight = width - titleBar.PreferredHeight;
 
             minimizeButton.OnClick += MinimizeButton_OnClick;
             closeButton.OnClick += CloseButton_OnClick;
@@ -183,6 +203,13 @@ namespace NVOS.UI.Models
         {
             base.Update();
             content.PreferredHeight = rectTransform.sizeDelta.y - titleBar.PreferredHeight;
+
+            float colliderX = (width - titleLabel.PreferredWidth) / -2;
+            float colliderY = (height - titleBar.PreferredHeight) / -2;
+            float colliderSize = 0.025f * titleLabel.Text.Length + 0.1f;
+
+            collider.center = new Vector3(colliderX, colliderY, 0);
+            collider.size = new Vector3(colliderSize, 0.1f, 0.1f);
         }
     }
 }

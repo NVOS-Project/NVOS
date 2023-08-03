@@ -8,6 +8,7 @@ using UnityEngine.UI;
 using TMPro;
 using NVOS.UI.Models.Enums;
 using NVOS.UI.Models.EventArgs;
+using UnityEngine.XR.Interaction.Toolkit.UI;
 
 namespace NVOS.UI.Models
 {
@@ -35,6 +36,8 @@ namespace NVOS.UI.Models
             content = new Panel("Content");
             content.GetRootObject().transform.SetParent(root.transform);
             content.BackgroundColor = Color.white;
+
+            root.AddComponent<TrackedDeviceGraphicRaycaster>();
         }
 
         private void SetVisible(bool visible)
