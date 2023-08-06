@@ -65,8 +65,8 @@ namespace NVOS.UI.Models
 
         public Toggle(string name) : base(name)
         {
-            SizeOffsetX = 0.1f;
-            SizeOffsetY = 0.1f;
+            SizeOffsetX = 10f;
+            SizeOffsetY = 10f;
 
             backgroundImage = root.AddComponent<Image>();
             backgroundImage.color = Color.gray;

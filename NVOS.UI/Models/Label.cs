@@ -74,15 +74,15 @@ namespace NVOS.UI.Models
             textComponent = root.AddComponent<TextMeshProUGUI>();
             textComponent.text = name;
             text = name;
-            textComponent.fontSize = 0.05f;
-            fontSize = 0.05f;
+            textComponent.fontSize = 1f;
+            fontSize = 1f;
             textComponent.alignment = TextAlignmentOptions.Center;
             textAlignment = TextAlignmentOptions.Center;
             textComponent.color = Color.black;
             textColor = Color.black;
 
-            SizeOffsetX = 0.4f;
-            SizeOffsetY = 0.15f;
+            SizeOffsetX = 15f;
+            SizeOffsetY = 5f;
         }
     }
 }

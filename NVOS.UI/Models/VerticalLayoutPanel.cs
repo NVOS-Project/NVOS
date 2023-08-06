@@ -140,13 +140,7 @@ namespace NVOS.UI.Models
             }
         }
 
-        public VerticalLayoutPanel() : base("LayoutPanel")
-        {
-            layoutGroup = root.AddComponent<VerticalLayoutGroup>();
-            backgroundImage = root.AddComponent<Image>();
-            backgroundImage.color = Color.clear;
-            backgroundColor = Color.clear;
-        }
+        public VerticalLayoutPanel() : this("LayoutPanel") { }
 
         public VerticalLayoutPanel(string name) : base(name)
         {

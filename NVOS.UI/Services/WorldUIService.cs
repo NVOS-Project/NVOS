@@ -45,7 +45,7 @@ namespace NVOS.UI.Services
             Transform cameraTransform = Camera.main.transform;
             GameObject windowObject = window.GetRootObject();
 
-            Vector3 windowPosition = (cameraTransform.forward * 3f) + cameraTransform.position;
+            Vector3 windowPosition = (cameraTransform.forward * 0.5f) + cameraTransform.position;
             windowObject.transform.position = windowPosition;
 
             Vector3 directionVector = (windowObject.transform.position - cameraTransform.position).normalized;
@@ -78,14 +78,16 @@ namespace NVOS.UI.Services
 
                 float distance = Vector3.Distance(windowPosition, Vector3.zero);
 
-                if (distance > 5f)
+                if (distance > 3f)
                 {
-                    Vector3 centerVector = windowPosition.normalized * 5f;
+                    Vector3 centerVector = windowPosition.normalized * 3f;
                     windowObject.transform.position = centerVector;
                 }
+
+                Vector3 windowVector = windowPosition.normalized;
+                windowObject.transform.rotation = Quaternion.LookRotation(windowVector, Vector3.up);
+                windowObject.transform.eulerAngles = new Vector3(0f, windowObject.transform.eulerAngles.y, windowObject.transform.eulerAngles.z);
             }
         }
-
-
     }
 }

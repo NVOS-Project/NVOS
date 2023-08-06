@@ -31,18 +31,20 @@ namespace NVOS.UI.Services
             // get values from db??
             gridWidth = 8;
             gridHeight = 5;
-            hudWidth = 1.5f;
-            hudHeight = 1.2f;
+            hudWidth = 120f;
+            hudHeight = 90f;
             grid = new bool[gridWidth, gridHeight];
 
             canvas = new GameObject("HUD").AddComponent<Canvas>();
             Transform canvasTransform = canvas.gameObject.transform;
             canvasTransform.SetParent(Camera.main.transform);
+            canvasTransform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
             canvas.gameObject.AddComponent<CanvasRenderer>();
             canvas.renderMode = RenderMode.WorldSpace;
             canvas.worldCamera = Camera.main;
+            canvas.sortingOrder = 1;
             canvasTransform.localPosition = new Vector3(0, 0, 1);
-            canvas.GetComponent<RectTransform>().sizeDelta = new Vector2(1.5f, 1.2f);
+            canvas.GetComponent<RectTransform>().sizeDelta = new Vector2(hudWidth, hudHeight);
 
             tileWidth = hudWidth / gridWidth;
             tileHeight = hudHeight / gridHeight;
@@ -68,6 +70,12 @@ namespace NVOS.UI.Services
 
         public Window2D CreateWindow(string title, int widthCount, int heightCount, int columnIndex, int rowIndex)
         {
+            if (columnIndex > gridWidth - 1 || rowIndex > gridHeight - 1)
+                throw new IndexOutOfRangeException("Window index out of range of screen grid!");
+
+            if (columnIndex + widthCount > gridWidth || rowIndex + heightCount > gridHeight)
+                throw new Exception("Invalid screen window size!");
+
             Window2D window = new Window2D(title, widthCount, heightCount);
             window.GetRootObject().transform.SetParent(canvas.gameObject.transform, false);
 

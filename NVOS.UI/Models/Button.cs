@@ -55,6 +55,7 @@ namespace NVOS.UI.Models
         {
             Label = new Label($"{name}Label");
             AddChild(Label);
+            Label.FontSize = 2f;
             root.AddComponent<HorizontalLayoutGroup>();
             button = root.AddComponent<UnityEngine.UI.Button>();
             button.onClick.AddListener(new UnityEngine.Events.UnityAction(HandleClick));
@@ -74,8 +75,8 @@ namespace NVOS.UI.Models
             backgroundColor = Color.gray;
             highlightColor = Color.white;
 
-            SizeOffsetX = 0.4f;
-            SizeOffsetY = 0.15f;
+            SizeOffsetX = 15f;
+            SizeOffsetY = 5f;
         }
 
         private void HandleClick()

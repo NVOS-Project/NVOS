@@ -34,7 +34,7 @@ namespace NVOS.UI.Models
             root.AddComponent<VerticalLayoutGroup>();
 
             content = new Panel("Content");
-            content.GetRootObject().transform.SetParent(root.transform);
+            content.GetRootObject().transform.SetParent(root.transform, false);
             content.BackgroundColor = Color.white;
 
             root.AddComponent<TrackedDeviceGraphicRaycaster>();

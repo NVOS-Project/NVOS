@@ -19,6 +19,8 @@ namespace NVOS.UI.Models
         private Outline outline;
         private BoxCollider collider;
 
+        private XRGrabInteractable grab;
+
         private bool showControls;
         private string title;
         private float outlineThickness;
@@ -113,12 +115,13 @@ namespace NVOS.UI.Models
             }
         }
 
-        public Window3D() : this("Window", 1.5f, 1f) { }
+        public Window3D() : this("Window", 100f, 60f) { }
 
         public Window3D(string title, float width, float height) : base(title)
         {
             canvas = root.AddComponent<Canvas>();
             root.AddComponent<GraphicRaycaster>();
+            root.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
             canvas.renderMode = RenderMode.WorldSpace;
             canvas.worldCamera = Camera.main;
             rectTransform.sizeDelta = new Vector2(width, height);
@@ -127,7 +130,7 @@ namespace NVOS.UI.Models
 
             titleBar = new HorizontalLayoutPanel("TitleBar");
             showControls = true;
-            titleBar.GetRootObject().transform.SetParent(root.transform);
+            titleBar.GetRootObject().transform.SetParent(root.transform, false);
             titleBar.BackgroundColor = Color.black;
             titleBar.PreferredHeight = height * 0.1f;
 
@@ -137,22 +140,24 @@ namespace NVOS.UI.Models
             titleLabel.Text = title;
             this.title = title;
             titleLabel.TextColor = Color.white;
-            titleLabel.FontSize = 0.05f;
+            titleLabel.FontSize = titleBar.PreferredHeight / 2;
 
             collider = root.AddComponent<BoxCollider>();
             float colliderX = (width - titleLabel.PreferredWidth) / -2;
             float colliderY = (height - titleBar.PreferredHeight) / -2;
-            float colliderSize = titleLabel.PreferredWidth;
+            float colliderWidth = titleLabel.PreferredWidth;
+            float colliderHeight = titleLabel.PreferredHeight;
             collider.center = new Vector3(colliderX, colliderY, 0);
-            collider.size = new Vector3(colliderSize, 0.1f, 0.1f);
+            collider.size = new Vector3(colliderWidth, colliderHeight, 0.1f);
 
             Rigidbody rigidbody = root.AddComponent<Rigidbody>();
             rigidbody.isKinematic = true;
             rigidbody.useGravity = false;
 
-            XRGrabInteractable grab = root.AddComponent<XRGrabInteractable>();
+            grab = root.AddComponent<XRGrabInteractable>();
             grab.throwOnDetach = false;
             grab.useDynamicAttach = true;
+            grab.trackRotation = false;
 
             minimizeButton = new Button("Minimize");
             titleBar.AddChild(minimizeButton);
@@ -161,7 +166,7 @@ namespace NVOS.UI.Models
             minimizeButton.PreferredWidth = width * 0.15f;
             minimizeButton.Label.Text = "-";
             minimizeButton.Label.TextColor = Color.white;
-            minimizeButton.Label.FontSize = 0.05f;
+            minimizeButton.Label.FontSize = titleBar.PreferredHeight / 2;
 
             closeButton = new Button("Close");
             titleBar.AddChild(closeButton);
@@ -170,7 +175,7 @@ namespace NVOS.UI.Models
             closeButton.PreferredWidth = width * 0.15f;
             closeButton.Label.Text = "X";
             closeButton.Label.TextColor = Color.white;
-            closeButton.Label.FontSize = 0.05f;
+            closeButton.Label.FontSize = titleBar.PreferredHeight / 2;
 
             outline = root.AddComponent<Outline>();
             outline.effectDistance = new Vector2(0.01f, 0.01f);
@@ -206,8 +211,7 @@ namespace NVOS.UI.Models
 
             float colliderX = (width - titleLabel.PreferredWidth) / -2;
             float colliderY = (height - titleBar.PreferredHeight) / -2;
-            float colliderSize = 0.025f * titleLabel.Text.Length + 0.1f;
-
+            float colliderSize = titleLabel.PreferredWidth;
             collider.center = new Vector3(colliderX, colliderY, 0);
             collider.size = new Vector3(colliderSize, 0.1f, 0.1f);
         }
