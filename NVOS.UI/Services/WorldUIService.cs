@@ -39,6 +39,11 @@ namespace NVOS.UI.Services
             windows = null;
         }
 
+        public Window3D CreateWindow()
+        {
+            return CreateWindow("Window", 100f, 60f);
+        }
+
         public Window3D CreateWindow(string title, float width, float height)
         {
             Window3D window = new Window3D(title, width, height);

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.UI.ContentSizeFitter;
 
 namespace NVOS.UI.Models
 {
@@ -33,6 +34,9 @@ namespace NVOS.UI.Models
         private float flexibleHeight = 0;
         private int layoutPriority = 1;
 
+        private ContentSizeFitter contentSizeFitter;
+        private FitMode verticalFit = FitMode.Unconstrained;
+        private FitMode horizontalFit = FitMode.Unconstrained;
 
         private bool isTransformDirty = false;
         private bool isVisible = true;
@@ -281,6 +285,32 @@ namespace NVOS.UI.Models
             }
         }
 
+        public FitMode VerticalFit
+        {
+            get
+            {
+                return verticalFit;
+            }
+            set
+            {
+                verticalFit = value;
+                contentSizeFitter.verticalFit = value;
+            }
+        }
+
+        public FitMode HorizontalFit
+        {
+            get
+            {
+                return horizontalFit;
+            }
+            set
+            {
+                horizontalFit = value;
+                contentSizeFitter.horizontalFit = value;
+            }
+        }
+
         public List<Control> controls = new List<Control>();
 
         public Control() : this("Control") { }
@@ -293,6 +323,7 @@ namespace NVOS.UI.Models
             rectTransform.anchorMin = new Vector2(0f, 1f);
             rectTransform.anchorMax = new Vector2(0f, 1f);
             layoutElement = root.AddComponent<LayoutElement>();
+            contentSizeFitter = root.AddComponent<ContentSizeFitter>();
         }
 
         protected virtual void UpdateDirtyTransform()

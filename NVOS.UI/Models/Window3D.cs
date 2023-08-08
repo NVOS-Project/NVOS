@@ -115,8 +115,6 @@ namespace NVOS.UI.Models
             }
         }
 
-        public Window3D() : this("Window", 100f, 60f) { }
-
         public Window3D(string title, float width, float height) : base(title)
         {
             canvas = root.AddComponent<Canvas>();
