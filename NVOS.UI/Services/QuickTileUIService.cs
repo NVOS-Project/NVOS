@@ -25,11 +25,6 @@ namespace NVOS.UI.Services
         private GameTickProvider gameTickProvider;
 
         private Window3D tileWindow;
-        private GridLayoutPanel tilePanel;
-
-        private int gridColumns;
-        private int gridRows;
-        private float tileSize;
 
         public bool Init()
         {
@@ -39,10 +34,6 @@ namespace NVOS.UI.Services
 
             leftWristAnchor = new GameObject("Left Wrist");
             rightWristAnchor = new GameObject("Right Wrist");
-
-            gridColumns = 3;
-            gridRows = 3;
-            tileSize = 2f;
 
             WristWindowSetup();
 
@@ -161,11 +152,14 @@ namespace NVOS.UI.Services
             }
         }
 
-        public void Test()
+        public ButtonTile CreateButtonTile()
         {
-            Panel panel = new Panel();
-            tilePanel.AddChild(panel);
-            panel.BackgroundColor = Color.black;
+            throw new NotImplementedException();
+        }
+
+        public ToggleTile CreateToggleTile()
+        {
+            throw new NotImplementedException();
         }
 
         public void Dispose()

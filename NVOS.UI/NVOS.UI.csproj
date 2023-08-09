@@ -77,8 +77,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\ButtonTile.cs" />
+    <Compile Include="Models\EventArgs\ToggleTileValueChangedEventArgs.cs" />
     <Compile Include="Models\GridLayoutPanel.cs" />
     <Compile Include="Models\ScrollView.cs" />
+    <Compile Include="Models\ToggleTile.cs" />
     <Compile Include="Scripts\GameTickProvider.cs" />
     <Compile Include="Models\Button.cs" />
     <Compile Include="Models\Control.cs" />
@@ -95,6 +98,7 @@
     <Compile Include="Models\Window2D.cs" />
     <Compile Include="Models\Window3D.cs" />
     <Compile Include="Module.cs" />
+    <Compile Include="Scripts\PointerHandler.cs" />
     <Compile Include="Services\ScreenUIService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\WorldUIService.cs" />

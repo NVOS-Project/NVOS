@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace NVOS.UI.Models.EventArgs
 {
-    public class ToggleValueChangedEventArgs
+    public class ToggleTileValueChangedEventArgs
     {
-        public Toggle Toggle;
+        public ToggleTile ToggleTile;
         public bool IsChecked;
 
-        public ToggleValueChangedEventArgs(Toggle toggle, bool isChecked)
+        public ToggleTileValueChangedEventArgs(ToggleTile toggleTile, bool isChecked)
         {
-            Toggle = toggle ?? throw new ArgumentNullException();
+            ToggleTile = toggleTile ?? throw new ArgumentNullException();
             IsChecked = isChecked;
         }
     }

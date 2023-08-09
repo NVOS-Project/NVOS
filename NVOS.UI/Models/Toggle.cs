@@ -19,6 +19,8 @@ namespace NVOS.UI.Models
         private Color backgroundColor;
         private Color checkColor;
         private Color uncheckColor;
+        private Color highlightColor;
+        private Color pressedColor;
 
         public event EventHandler<ToggleValueChangedEventArgs> OnValueChanged;
 
@@ -57,7 +59,39 @@ namespace NVOS.UI.Models
             set
             {
                 uncheckColor = value;
-                uncheck.BackgroundColor = value;
+                ColorBlock colorBlock = toggle.colors;
+                colorBlock.normalColor = value;
+                toggle.colors = colorBlock;
+            }
+        }
+
+        public Color HighlightColor
+        {
+            get
+            {
+                return highlightColor;
+            }
+            set
+            {
+                highlightColor = value;
+                ColorBlock colorBlock = toggle.colors;
+                colorBlock.highlightedColor = value;
+                toggle.colors = colorBlock;
+            }
+        }
+
+        public Color PressedColor
+        {
+            get
+            {
+                return pressedColor;
+            }
+            set
+            {
+                pressedColor = value;
+                ColorBlock colorBlock = toggle.colors;
+                colorBlock.pressedColor = value;
+                toggle.colors = colorBlock;
             }
         }
 
@@ -75,7 +109,6 @@ namespace NVOS.UI.Models
             uncheck = new Panel("Uncheck");
             AddChild(uncheck);
             uncheck.BackgroundColor = Color.white;
-            uncheckColor = Color.white;
 
             uncheck.SizeScaleX = 0.7f;
             uncheck.SizeScaleY = 0.7f;
@@ -96,6 +129,19 @@ namespace NVOS.UI.Models
             toggle.image = uncheck.GetRootObject().GetComponent<Image>();
             toggle.graphic = check.GetRootObject().GetComponent<Image>();
             toggle.onValueChanged.AddListener(new UnityEngine.Events.UnityAction<bool>(HandleClick));
+
+            Navigation navigation = toggle.navigation;
+            navigation.mode = Navigation.Mode.None;
+            toggle.navigation = navigation;
+
+            ColorBlock colorBlock = toggle.colors;
+            colorBlock.highlightedColor = Color.gray;
+            colorBlock.pressedColor = Color.white;
+            colorBlock.normalColor = Color.white;
+            toggle.colors = colorBlock;
+            highlightColor = Color.gray;
+            pressedColor = Color.white;
+            uncheck.BackgroundColor = Color.white;
         }
 
         private void HandleClick(bool isChecked)

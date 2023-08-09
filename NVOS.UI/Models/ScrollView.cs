@@ -130,6 +130,7 @@ namespace NVOS.UI.Models
             scrollRect.verticalScrollbar = verticalScrollbar;
             scrollRect.horizontalScrollbarVisibility = ScrollRect.ScrollbarVisibility.AutoHideAndExpandViewport;
             scrollRect.verticalScrollbarVisibility = ScrollRect.ScrollbarVisibility.AutoHideAndExpandViewport;
+            scrollRect.movementType = ScrollRect.MovementType.Clamped;
         }
 
         public override void Update()

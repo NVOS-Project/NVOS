@@ -15,6 +15,7 @@ namespace NVOS.UI.Models
         private Image buttonImage;
 
         private Color highlightColor;
+        private Color pressedColor;
         private Color backgroundColor;
 
         public event EventHandler<System.EventArgs> OnClick;
@@ -34,6 +35,22 @@ namespace NVOS.UI.Models
                 highlightColor = value;
             } 
         }
+
+        public Color PressedColor
+        {
+            get
+            {
+                return pressedColor;
+            }
+            set
+            {
+                ColorBlock colorBlock = button.colors;
+                colorBlock.pressedColor = value;
+                button.colors = colorBlock;
+                pressedColor = value;
+            }
+        }
+
         public Color BackgroundColor
         {
             get
@@ -56,6 +73,13 @@ namespace NVOS.UI.Models
             Label = new Label($"{name}Label");
             AddChild(Label);
             Label.FontSize = 2f;
+            Label.TextColor = Color.white;
+
+            Label.SizeOffsetX = 0f;
+            Label.SizeOffsetY = 0f;
+            Label.SizeScaleX = 1f;
+            Label.SizeScaleY = 1f;
+
             root.AddComponent<HorizontalLayoutGroup>();
             button = root.AddComponent<UnityEngine.UI.Button>();
             button.onClick.AddListener(new UnityEngine.Events.UnityAction(HandleClick));
@@ -68,12 +92,14 @@ namespace NVOS.UI.Models
             button.navigation = navigation;
 
             ColorBlock colorBlock = button.colors;
-            colorBlock.normalColor = Color.gray;
-            colorBlock.highlightedColor = Color.white;
+            colorBlock.normalColor = Color.black;
+            colorBlock.highlightedColor = Color.gray;
+            colorBlock.pressedColor = Color.white;
             button.colors = colorBlock;
             
-            backgroundColor = Color.gray;
-            highlightColor = Color.white;
+            backgroundColor = Color.black;
+            highlightColor = Color.gray;
+            pressedColor = Color.white;
 
             SizeOffsetX = 15f;
             SizeOffsetY = 5f;

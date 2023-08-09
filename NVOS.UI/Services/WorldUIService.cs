@@ -89,8 +89,6 @@ namespace NVOS.UI.Services
                     windowObject.transform.position = centerVector;
                 }
 
-                Vector3 windowVector = windowPosition.normalized;
-                windowObject.transform.rotation = Quaternion.LookRotation(windowVector, Vector3.up);
                 windowObject.transform.eulerAngles = new Vector3(0f, windowObject.transform.eulerAngles.y, windowObject.transform.eulerAngles.z);
             }
         }
