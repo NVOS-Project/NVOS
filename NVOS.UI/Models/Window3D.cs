@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NVOS.UI.Models.EventArgs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,7 @@ namespace NVOS.UI.Models
         private Label titleLabel;
         private Button minimizeButton;
         private Button closeButton;
+        private SwitchButton lockButton;
         private Outline outline;
         private BoxCollider collider;
 
@@ -28,6 +30,8 @@ namespace NVOS.UI.Models
 
         private float width;
         private float height;
+
+        private bool isLocked;
 
         public float Width
         {
@@ -99,6 +103,7 @@ namespace NVOS.UI.Models
                 showControls = value;
                 minimizeButton.IsVisible = value;
                 closeButton.IsVisible = value;
+                lockButton.IsVisible = value;
             }
         }
 
@@ -112,6 +117,14 @@ namespace NVOS.UI.Models
             {
                 title = value;
                 titleLabel.Text = value;
+            }
+        }
+
+        public bool IsLocked
+        {
+            get
+            {
+                return isLocked;
             }
         }
 
@@ -156,11 +169,21 @@ namespace NVOS.UI.Models
             grab.throwOnDetach = false;
             grab.useDynamicAttach = true;
 
+            lockButton = new SwitchButton("Lock");
+            titleBar.AddChild(lockButton);
+            lockButton.DeactivatedColor = Color.black;
+            lockButton.ActivatedColor = new Color32(50, 50, 50, 255);
+            lockButton.HighlightColor = Color.gray;
+            lockButton.PreferredWidth = width * 0.1f;
+            lockButton.Label.Text = "L";
+            lockButton.Label.TextColor = Color.white;
+            lockButton.Label.FontSize = titleBar.PreferredHeight / 2;
+
             minimizeButton = new Button("Minimize");
             titleBar.AddChild(minimizeButton);
             minimizeButton.BackgroundColor = Color.black;
             minimizeButton.HighlightColor = Color.gray;
-            minimizeButton.PreferredWidth = width * 0.15f;
+            minimizeButton.PreferredWidth = width * 0.1f;
             minimizeButton.Label.Text = "-";
             minimizeButton.Label.TextColor = Color.white;
             minimizeButton.Label.FontSize = titleBar.PreferredHeight / 2;
@@ -169,7 +192,7 @@ namespace NVOS.UI.Models
             titleBar.AddChild(closeButton);
             closeButton.BackgroundColor = Color.black;
             closeButton.HighlightColor = Color.gray;
-            closeButton.PreferredWidth = width * 0.15f;
+            closeButton.PreferredWidth = width * 0.1f;
             closeButton.Label.Text = "X";
             closeButton.Label.TextColor = Color.white;
             closeButton.Label.FontSize = titleBar.PreferredHeight / 2;
@@ -184,6 +207,12 @@ namespace NVOS.UI.Models
 
             minimizeButton.OnClick += MinimizeButton_OnClick;
             closeButton.OnClick += CloseButton_OnClick;
+            lockButton.OnValueChanged += LockButton_OnValueChanged;
+        }
+
+        private void LockButton_OnValueChanged(object sender, SwitchButtonValueChangedEventArgs e)
+        {
+            isLocked = e.IsOn;
         }
 
         private void MinimizeButton_OnClick(object sender, System.EventArgs e)

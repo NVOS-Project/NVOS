@@ -78,12 +78,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\ButtonTile.cs" />
+    <Compile Include="Models\EventArgs\SwitchButtonValueChangedEventArgs.cs" />
+    <Compile Include="Models\SwitchButton.cs" />
+    <Compile Include="Models\SwitchTile.cs" />
     <Compile Include="Models\VerticalSlider.cs" />
-    <Compile Include="Models\EventArgs\ToggleTileValueChangedEventArgs.cs" />
+    <Compile Include="Models\EventArgs\SwitchTileValueChangedEventArgs.cs" />
     <Compile Include="Models\GridLayoutPanel.cs" />
     <Compile Include="Models\HorizontalSlider.cs" />
     <Compile Include="Models\ScrollView.cs" />
-    <Compile Include="Models\ToggleTile.cs" />
     <Compile Include="Scripts\GameTickProvider.cs" />
     <Compile Include="Models\Button.cs" />
     <Compile Include="Models\Control.cs" />

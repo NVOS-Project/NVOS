@@ -16,12 +16,29 @@ namespace NVOS.UI.Services
     public class WorldUIService : IService, IDisposable
     {
         private List<Window3D> windows;
+        private GameObject worldAnchor;
+
         private GameObject tickerObject;
         private GameTickProvider gameTickProvider;
 
+        private bool isMoving;
+        private float moveWaitTime;
+        private float moveWaitTimePassed;
+        private float windowSpeed;
+        private float walkSpeed;
+        private float windowSpawnDistance;
+        private float windowBubbleRadius;
+
         public bool Init()
         {
+            worldAnchor = new GameObject("WorldUIAnchor");
+            worldAnchor.transform.position = Vector3.zero;
             tickerObject = new GameObject("WorldUITicker");
+            moveWaitTime = 5f;
+            windowSpeed = 2f;
+            walkSpeed = 0.7f;
+            windowSpawnDistance = 1f;
+            windowBubbleRadius = 3f;
             gameTickProvider = tickerObject.AddComponent<GameTickProvider>();
             gameTickProvider.OnLateUpdate += GameTickProvider_OnLateUpdate;
 
@@ -42,6 +59,9 @@ namespace NVOS.UI.Services
                 window.Dispose();
             }
             windows = null;
+
+            GameObject.Destroy(worldAnchor);
+            worldAnchor = null;
         }
 
         public Window3D CreateWindow(string name, float width, float height)
@@ -50,10 +70,12 @@ namespace NVOS.UI.Services
                 throw new Exception($"Window of name '{name}' already exists!");
 
             Window3D window = new Window3D(name, width, height);
+
             Transform cameraTransform = Camera.main.transform;
             GameObject windowObject = window.GetRootObject();
+            windowObject.transform.SetParent(worldAnchor.transform, true);
 
-            Vector3 windowPosition = (cameraTransform.forward * 0.5f) + cameraTransform.position;
+            Vector3 windowPosition = (cameraTransform.forward * windowSpawnDistance) + cameraTransform.position;
             windowObject.transform.position = windowPosition;
 
             Vector3 directionVector = (windowObject.transform.position - cameraTransform.position).normalized;
@@ -83,6 +105,9 @@ namespace NVOS.UI.Services
 
         private void GameTickProvider_OnLateUpdate(object sender, EventArgs e)
         {
+            Transform worldAnchorTransform = worldAnchor.transform;
+            Transform cameraTransform = Camera.main.transform;
+
             foreach (Window3D window in windows)
             {
                 window.Update();
@@ -90,15 +115,56 @@ namespace NVOS.UI.Services
                 GameObject windowObject = window.GetRootObject();
                 Vector3 windowPosition = windowObject.transform.position;
 
-                float distance = Vector3.Distance(windowPosition, Vector3.zero);
+                float distance = Vector3.Distance(windowPosition, worldAnchorTransform.position);
 
-                if (distance > 3f)
+                if (distance > windowBubbleRadius)
                 {
-                    Vector3 centerVector = windowPosition.normalized * 3f;
-                    windowObject.transform.position = centerVector;
+                    Vector3 vector = (windowPosition - worldAnchorTransform.position).normalized * windowBubbleRadius;
+                    windowObject.transform.position = vector;
                 }
 
                 windowObject.transform.eulerAngles = new Vector3(0f, windowObject.transform.eulerAngles.y, 0f);
+            }
+
+            if (!isMoving)
+            {
+                if (Vector3.Distance(cameraTransform.position, worldAnchorTransform.position) > 3f)
+                {
+                    isMoving = true;
+                    moveWaitTimePassed = 0f;
+
+                    foreach (Window3D window in windows)
+                    {
+                        if (!window.IsLocked)
+                            window.GetRootObject().SetActive(false);
+                    }
+                }
+            }
+
+            if (isMoving)
+            {
+                float step = windowSpeed * Time.deltaTime;
+                worldAnchorTransform.position = Vector3.MoveTowards(worldAnchorTransform.position, cameraTransform.position, step);
+                worldAnchorTransform.position = new Vector3(worldAnchorTransform.position.x, 0, worldAnchorTransform.position.z);
+                if (Vector3.Distance(worldAnchorTransform.position, cameraTransform.position) < 1f)
+                {
+                    if (Camera.main.velocity.magnitude < walkSpeed)
+                        moveWaitTimePassed += Time.deltaTime;
+                    else
+                        moveWaitTimePassed = 0f;
+                }
+
+                if (moveWaitTimePassed > moveWaitTime)
+                {
+                    isMoving = false;
+                    moveWaitTimePassed = 0f;
+                    
+                    foreach (Window3D window in windows)
+                    {
+                        if (!window.IsLocked)
+                            window.GetRootObject().SetActive(true);
+                    }
+                }
             }
         }
     }

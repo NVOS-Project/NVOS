@@ -1,4 +1,5 @@
-﻿using NVOS.UI.Scripts;
+﻿using NVOS.UI.Models.EventArgs;
+using NVOS.UI.Scripts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,29 +10,44 @@ using UnityEngine.UI;
 
 namespace NVOS.UI.Models
 {
-    public class ButtonTile : Control
+    public class SwitchTile : Control
     {
-        private Button button;
+        private SwitchButton button;
 
-        private Color backgroundColor;
+        private Color deactivatedColor;
+        private Color activatedColor;
         private Color highlightColor;
         private Color pressedColor;
         private Color textColor;
 
         private string text;
+        private bool isOn;
 
-        public event EventHandler<System.EventArgs> OnClick;
-        
-        public Color BackgroundColor
+        public event EventHandler<SwitchTileValueChangedEventArgs> OnValueChanged;
+
+        public Color DeactivatedColor
         {
             get
             {
-                return backgroundColor;
+                return deactivatedColor;
             }
             set
             {
-                backgroundColor = value;
-                button.BackgroundColor = value;
+                deactivatedColor = value;
+                button.DeactivatedColor = value;
+            }
+        }
+
+        public Color ActivatedColor
+        {
+            get
+            {
+                return activatedColor;
+            }
+            set
+            {
+                activatedColor = value;
+                button.ActivatedColor = value;
             }
         }
 
@@ -87,11 +103,24 @@ namespace NVOS.UI.Models
             }
         }
 
-        public ButtonTile() : this("Tile") { }
-
-        public ButtonTile(string name) : base(name)
+        public bool IsOn
         {
-            button = new Button();
+            get
+            {
+                return isOn;
+            }
+            set
+            {
+                isOn = value;
+                button.IsOn = value;
+            }
+        }
+
+        public SwitchTile() : this("Tile") { }
+
+        public SwitchTile(string name) : base(name)
+        {
+            button = new SwitchButton();
             button.SizeScaleX = 1f;
             button.SizeScaleY = 1f;
             AddChild(button);
@@ -112,14 +141,16 @@ namespace NVOS.UI.Models
             textColor = Color.white;
             button.Label.IsVisible = false;
 
-            button.BackgroundColor = Color.black;
-            backgroundColor = Color.black;
-            button.HighlightColor = new Color32(10, 10, 10, 255);
-            highlightColor = new Color32(10, 10, 10, 255);
+            button.DeactivatedColor = Color.black;
+            deactivatedColor = Color.black;
+            button.ActivatedColor = new Color32(50, 50, 50, 255);
+            activatedColor = new Color32(50, 50, 50, 255);
+            button.HighlightColor = Color.gray;
+            highlightColor = Color.gray;
             button.PressedColor = Color.white;
             pressedColor = Color.white;
 
-            button.OnClick += Button_OnClick;
+            button.OnValueChanged += Button_OnValueChanged;
         }
 
         private void PointerHandler_PointerEnter(object sender, System.EventArgs e)
@@ -132,9 +163,9 @@ namespace NVOS.UI.Models
             button.Label.IsVisible = false;
         }
 
-        private void Button_OnClick(object sender, System.EventArgs e)
+        private void Button_OnValueChanged(object sender, SwitchButtonValueChangedEventArgs e)
         {
-            OnClick?.Invoke(this, System.EventArgs.Empty);
+            OnValueChanged?.Invoke(this, new SwitchTileValueChangedEventArgs(this, e.IsOn));
         }
     }
 }

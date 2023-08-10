@@ -95,7 +95,7 @@ namespace NVOS.UI.Services
             RectTransform windowRect = window.GetRectTransform();
             windowRect.anchorMin = Vector2.zero;
             windowRect.anchorMax = Vector2.zero;
-            windowRect.pivot = Vector2.zero;
+            windowRect.pivot = new Vector2(0, 1);
             windowRect.anchoredPosition = new Vector2(posX, posY);
             windowRect.sizeDelta = new Vector2(tileWidth * widthCount, tileHeight * heightCount);
 

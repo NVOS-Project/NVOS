@@ -137,7 +137,7 @@ namespace NVOS.UI.Services
             {
                 Transform tileWindowTransform = tileWindow.GetRootObject().transform;
                 tileWindowTransform.SetParent(leftWristAnchor.transform, false);
-                tileWindowTransform.localPosition = new Vector3(-0.1f, -0.1f, 0.05f);
+                tileWindowTransform.localPosition = new Vector3(0, -0.1f, 0.05f);
                 tileWindowTransform.localEulerAngles = new Vector3(-90f, 0f, -180f);
                 tileWindow.Show();
             }
@@ -146,7 +146,7 @@ namespace NVOS.UI.Services
             {
                 Transform tileWindowTransform = tileWindow.GetRootObject().transform;
                 tileWindowTransform.SetParent(rightWristAnchor.transform, false);
-                tileWindowTransform.localPosition = new Vector3(0.1f, -0.1f, 0.05f);
+                tileWindowTransform.localPosition = new Vector3(0, -0.1f, 0.05f);
                 tileWindowTransform.localEulerAngles = new Vector3(-90f, 0f, -180f);
                 tileWindow.Show();
             }
@@ -210,12 +210,12 @@ namespace NVOS.UI.Services
             return buttonTile;
         }
 
-        public ToggleTile CreateToggleTile(string name)
+        public SwitchTile CreateSwitchTile(string name)
         {
             if (tiles.Where(x => x.Name == name).Count() > 0)
                 throw new Exception($"Tile of name '{name}' already exists!");
 
-            ToggleTile toggleTile = new ToggleTile(name);
+            SwitchTile toggleTile = new SwitchTile(name);
             tileGrid.AddChild(toggleTile);
 
             tiles.Add(toggleTile);

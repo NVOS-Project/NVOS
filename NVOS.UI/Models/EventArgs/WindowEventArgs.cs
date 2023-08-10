@@ -12,7 +12,7 @@ namespace NVOS.UI.Models.EventArgs
 
         public WindowEventArgs(Window window)
         {
-            Window = window ?? throw new ArgumentNullException();
+            Window = window ?? throw new ArgumentNullException(nameof(window));
         }
     }
 }

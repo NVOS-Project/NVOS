@@ -70,13 +70,11 @@ namespace NVOS.UI.Models
 
         public Button(string name) : base(name)
         {
-            Label = new Label($"{name}Label");
+            Label = new Label($"{name}");
             AddChild(Label);
             Label.FontSize = 2f;
             Label.TextColor = Color.white;
 
-            Label.SizeOffsetX = 0f;
-            Label.SizeOffsetY = 0f;
             Label.SizeScaleX = 1f;
             Label.SizeScaleY = 1f;
 

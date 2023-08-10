@@ -68,7 +68,7 @@ namespace NVOS.UI.Models
             scrollRect = root.AddComponent<ScrollRect>();
 
             Panel viewport = new Panel("Viewport");
-            viewport.BackgroundColor = new Color(255, 255, 255, 1);
+            viewport.BackgroundColor = new Color32(255, 255, 255, 1);
             viewport.GetRootObject().AddComponent<Mask>().showMaskGraphic = false;
 
             viewport.SizeScaleX = 1f;
