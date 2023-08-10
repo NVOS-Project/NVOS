@@ -30,8 +30,9 @@ This repository contains the NVOS framework running on the headset as well as (c
       - Label: ✔️
       - Panel: ✔️
       - ScrollView: ✔️
+      - SwitchButton: ✔️
+      - SwitchTile: ✔️
       - Toggle: ✔️
-      - ToggleTile: ✔️
       - VerticalLayoutPanel: ✔️
       - VerticalSlider: ✔️
   - ### NVOS.Network
