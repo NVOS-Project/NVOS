@@ -20,7 +20,7 @@ This repository contains the NVOS framework running on the headset as well as (c
     - Quick tiles: ✔️
     - Window interactions: ✔️
     - World anchor reset: ❌
-    - World 
+    - World anchor movement: ✔️
     - Controls:
       - Button: ✔️
       - ButtonTile: ✔️
