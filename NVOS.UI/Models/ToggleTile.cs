@@ -145,7 +145,7 @@ namespace NVOS.UI.Models
             label.PositionScaleY = 0.05f;
             label.TextColor = Color.white;
             textColor = Color.white;
-            label.FontSize = 2f;
+            label.FontSize = 0.5f;
             label.IsVisible = false;
 
             activatedPanel.SizeScaleX = 1f;
@@ -161,7 +161,7 @@ namespace NVOS.UI.Models
             toggle.navigation = navigation;
 
             ColorBlock colorBlock = toggle.colors;
-            colorBlock.highlightedColor = Color.gray;
+            colorBlock.highlightedColor = new Color(130f, 0, 0);
             colorBlock.pressedColor = Color.white;
             colorBlock.normalColor = Color.red;
             toggle.colors = colorBlock;
@@ -183,11 +183,6 @@ namespace NVOS.UI.Models
         private void HandleClick(bool isActivated)
         {
             OnValueChanged?.Invoke(this, new ToggleTileValueChangedEventArgs(this, isActivated));
-        }
-
-        public override void Update()
-        {
-            base.Update();
         }
     }
 }

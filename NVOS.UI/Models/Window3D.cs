@@ -115,7 +115,7 @@ namespace NVOS.UI.Models
             }
         }
 
-        public Window3D(string title, float width, float height) : base(title)
+        public Window3D(string name, float width, float height) : base(name)
         {
             canvas = root.AddComponent<Canvas>();
             root.AddComponent<GraphicRaycaster>();
@@ -135,8 +135,8 @@ namespace NVOS.UI.Models
             titleLabel = new Label("TitleLabel");
             titleBar.AddChild(titleLabel);
             titleLabel.PreferredWidth = width * 0.7f;
-            titleLabel.Text = title;
-            this.title = title;
+            titleLabel.Text = name;
+            title = name;
             titleLabel.TextColor = Color.white;
             titleLabel.FontSize = titleBar.PreferredHeight / 2;
 
@@ -155,7 +155,6 @@ namespace NVOS.UI.Models
             grab = root.AddComponent<XRGrabInteractable>();
             grab.throwOnDetach = false;
             grab.useDynamicAttach = true;
-            grab.trackRotation = false;
 
             minimizeButton = new Button("Minimize");
             titleBar.AddChild(minimizeButton);

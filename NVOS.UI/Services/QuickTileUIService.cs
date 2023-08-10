@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.XR.Hands;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.UI;
@@ -25,15 +26,20 @@ namespace NVOS.UI.Services
         private GameTickProvider gameTickProvider;
 
         private Window3D tileWindow;
+        private GridLayoutPanel tileGrid;
+
+        private List<Control> tiles;
 
         public bool Init()
         {
-            tickerObject = new GameObject("WristUITicker");
+            tickerObject = new GameObject("QuickTileUITicker");
             gameTickProvider = tickerObject.AddComponent<GameTickProvider>();
             gameTickProvider.OnLateUpdate += GameTickProvider_OnLateUpdate;
 
             leftWristAnchor = new GameObject("Left Wrist");
             rightWristAnchor = new GameObject("Right Wrist");
+
+            tiles = new List<Control>();
 
             WristWindowSetup();
 
@@ -57,7 +63,7 @@ namespace NVOS.UI.Services
 
             GameObject interactableObject = new GameObject("Gaze Interactable");
             interactableObject.transform.SetParent(Camera.main.transform);
-            interactableObject.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+            interactableObject.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
             interactableObject.AddComponent<SphereCollider>().radius = 0.5f;
 
             XRSimpleInteractable gazeInteractable = interactableObject.AddComponent<XRSimpleInteractable>();
@@ -72,13 +78,53 @@ namespace NVOS.UI.Services
             return true;
         }
 
+        public void Dispose()
+        {
+            gameTickProvider = null;
+            GameObject.Destroy(tickerObject);
+            tickerObject = null;
+
+            GameObject.Destroy(leftWristAnchor);
+            leftWristAnchor = null;
+            GameObject.Destroy(rightWristAnchor);
+            rightWristAnchor = null;
+            GameObject.Destroy(tileWindow.GetRootObject());
+            tileWindow = null;
+
+            foreach (Control tile in tiles)
+            {
+                tile.Dispose();
+            }
+            tiles = null;
+        }
+
         private void WristWindowSetup()
         {
-            tileWindow = new Window3D("Quick Tiles", 10f, 10f);
-            tileWindow.Hide();
+            tileWindow = new Window3D("Quick Tiles", 20f, 20f);
             tileWindow.GetContent().BackgroundColor = Color.gray;
 
+            tileGrid = new GridLayoutPanel("Tile Grid");
+            tileGrid.CellSize = new Vector2(5f, 5f);
+            tileGrid.Spacing = new Vector2(0.5f, 0.5f);
+            tileGrid.PaddingLeft = 1;
+            tileGrid.PaddingRight = 1;
+            tileGrid.PaddingTop = 1;
+            tileGrid.PaddingBottom = 1;
+            tileGrid.VerticalFit = ContentSizeFitter.FitMode.PreferredSize;
+            tileGrid.SizeScaleX = 1f;
+
+            ScrollView scrollView = new ScrollView("Scroll View", tileGrid);
+            scrollView.SizeOffsetX = 0f;
+            scrollView.SizeOffsetY = 0f;
+            scrollView.VerticalScroll = true;
+            scrollView.HorizontalScroll = false;
+            scrollView.SizeScaleX = 1f;
+            scrollView.SizeScaleY = 1f;
+
+            tileWindow.GetContent().AddChild(scrollView);
             tileWindow.ShowControls = false;
+
+            tileWindow.Hide();
             GameObject.Destroy(tileWindow.GetRootObject().GetComponent<XRGrabInteractable>());
         }
 
@@ -152,19 +198,34 @@ namespace NVOS.UI.Services
             }
         }
 
-        public ButtonTile CreateButtonTile()
+        public ButtonTile CreateButtonTile(string name)
         {
-            throw new NotImplementedException();
+            if (tiles.Where(x => x.Name == name).Count() > 0)
+                throw new Exception($"Tile of name '{name}' already exists!");
+
+            ButtonTile buttonTile = new ButtonTile(name);
+            tileGrid.AddChild(buttonTile);
+
+            tiles.Add(buttonTile);
+            return buttonTile;
         }
 
-        public ToggleTile CreateToggleTile()
+        public ToggleTile CreateToggleTile(string name)
         {
-            throw new NotImplementedException();
+            if (tiles.Where(x => x.Name == name).Count() > 0)
+                throw new Exception($"Tile of name '{name}' already exists!");
+
+            ToggleTile toggleTile = new ToggleTile(name);
+            tileGrid.AddChild(toggleTile);
+
+            tiles.Add(toggleTile);
+            return toggleTile;
         }
 
-        public void Dispose()
+        public Control GetTileByName(string name)
         {
-
+            Control tile = tiles.Where(x => x.Name == name).FirstOrDefault();
+            return tile;
         }
 
         private void GameTickProvider_OnLateUpdate(object sender, EventArgs e)

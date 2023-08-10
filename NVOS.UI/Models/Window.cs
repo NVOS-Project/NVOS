@@ -19,14 +19,19 @@ namespace NVOS.UI.Models
         protected RectTransform rectTransform;
         private WindowState state;
 
+        private string name;
+
         public event EventHandler<WindowStateChangedEventArgs> OnWindowStateChanged;
         public event EventHandler<WindowEventArgs> OnClose;
 
         public WindowState State { get { return state; } }
 
-        public Window(string title)
+        public string Name { get { return name; } set { name = value; } }
+
+        public Window(string name)
         {
-            root = new GameObject(title);
+            root = new GameObject(name);
+            this.name = name;
             rectTransform = root.AddComponent<RectTransform>();
             rectTransform.pivot = new Vector2(0.5f, 0.5f);
             rectTransform.sizeDelta = new Vector2(1f, 1f);

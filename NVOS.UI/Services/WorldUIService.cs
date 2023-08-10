@@ -32,6 +32,11 @@ namespace NVOS.UI.Services
 
         public void Dispose()
         {
+            gameTickProvider.OnLateUpdate -= GameTickProvider_OnLateUpdate;
+            gameTickProvider = null;
+            GameObject.Destroy(tickerObject);
+            tickerObject = null;
+
             foreach (Window3D window in windows)
             {
                 window.Dispose();
@@ -39,14 +44,12 @@ namespace NVOS.UI.Services
             windows = null;
         }
 
-        public Window3D CreateWindow()
+        public Window3D CreateWindow(string name, float width, float height)
         {
-            return CreateWindow("Window", 100f, 60f);
-        }
+            if (windows.Where(x => x.Name == name).Count() > 0)
+                throw new Exception($"Window of name '{name}' already exists!");
 
-        public Window3D CreateWindow(string title, float width, float height)
-        {
-            Window3D window = new Window3D(title, width, height);
+            Window3D window = new Window3D(name, width, height);
             Transform cameraTransform = Camera.main.transform;
             GameObject windowObject = window.GetRootObject();
 
@@ -65,6 +68,12 @@ namespace NVOS.UI.Services
         public List<Window3D> GetWindows()
         {
             return windows;
+        }
+
+        public Window3D GetWindowByName(string name)
+        {
+            Window3D window = windows.Where(x => x.Name == name).FirstOrDefault();
+            return window;
         }
 
         private void Window_OnClose(object sender, WindowEventArgs e)
@@ -89,7 +98,7 @@ namespace NVOS.UI.Services
                     windowObject.transform.position = centerVector;
                 }
 
-                windowObject.transform.eulerAngles = new Vector3(0f, windowObject.transform.eulerAngles.y, windowObject.transform.eulerAngles.z);
+                windowObject.transform.eulerAngles = new Vector3(0f, windowObject.transform.eulerAngles.y, 0f);
             }
         }
     }

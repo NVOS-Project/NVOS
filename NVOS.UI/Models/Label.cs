@@ -80,9 +80,6 @@ namespace NVOS.UI.Models
             textAlignment = TextAlignmentOptions.Center;
             textComponent.color = Color.black;
             textColor = Color.black;
-
-            SizeOffsetX = 15f;
-            SizeOffsetY = 5f;
         }
     }
 }

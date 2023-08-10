@@ -66,8 +66,6 @@ namespace NVOS.UI.Models
             backgroundImage = root.AddComponent<Image>();
             backgroundImage.color = Color.gray;
             scrollRect = root.AddComponent<ScrollRect>();
-            SizeOffsetX = 30f;
-            SizeOffsetY = 30f;
 
             Panel viewport = new Panel("Viewport");
             viewport.BackgroundColor = new Color(255, 255, 255, 1);

@@ -100,9 +100,6 @@ namespace NVOS.UI.Models
             backgroundColor = Color.black;
             highlightColor = Color.gray;
             pressedColor = Color.white;
-
-            SizeOffsetX = 15f;
-            SizeOffsetY = 5f;
         }
 
         private void HandleClick()

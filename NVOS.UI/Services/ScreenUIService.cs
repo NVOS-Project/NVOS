@@ -17,6 +17,9 @@ namespace NVOS.UI.Services
         private Canvas canvas;
         private Dictionary<Window2D, Vector2Int> windows;
 
+        private GameObject tickerObject;
+        private GameTickProvider gameTickProvider;
+
         private int gridWidth;
         private int gridHeight;
         private float tileWidth;
@@ -28,6 +31,10 @@ namespace NVOS.UI.Services
 
         public bool Init()
         {
+            tickerObject = new GameObject("ScreenUITicker");
+            gameTickProvider = tickerObject.AddComponent<GameTickProvider>();
+            gameTickProvider.OnLateUpdate += GameTickProvider_OnLateUpdate;
+
             // get values from db??
             gridWidth = 8;
             gridHeight = 5;
@@ -68,15 +75,18 @@ namespace NVOS.UI.Services
             grid = null;
         }
 
-        public Window2D CreateWindow(string title, int widthCount, int heightCount, int columnIndex, int rowIndex)
+        public Window2D CreateWindow(string name, int widthCount, int heightCount, int columnIndex, int rowIndex)
         {
+            if (windows.Keys.Where(x => x.Name == name).Count() > 0)
+                throw new Exception($"Window of name '{name}' already exsits!");
+
             if (columnIndex > gridWidth - 1 || rowIndex > gridHeight - 1)
                 throw new IndexOutOfRangeException("Window index out of range of screen grid!");
 
             if (columnIndex + widthCount > gridWidth || rowIndex + heightCount > gridHeight)
                 throw new Exception("Invalid screen window size!");
 
-            Window2D window = new Window2D(title, widthCount, heightCount);
+            Window2D window = new Window2D(name, widthCount, heightCount);
             window.GetRootObject().transform.SetParent(canvas.gameObject.transform, false);
 
             float posX = columnIndex * tileWidth;
@@ -124,6 +134,26 @@ namespace NVOS.UI.Services
         public Vector2Int GetWindowPosition(Window2D window)
         {
             return windows[window];
+        }
+
+        public Window2D GetWindowByName(string name)
+        {
+            Window2D window = windows.Keys.Where(x => x.Name == name).FirstOrDefault();
+            return window;
+        }
+
+        public Vector2Int GetGridSize()
+        {
+            Vector2Int gridSize = new Vector2Int(gridWidth, gridHeight);
+            return gridSize;
+        }
+
+        private void GameTickProvider_OnLateUpdate(object sender, EventArgs e)
+        {
+            foreach (Window2D window in windows.Keys)
+            {
+                window.Update();
+            }
         }
     }
 }

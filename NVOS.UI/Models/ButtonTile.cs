@@ -110,12 +110,13 @@ namespace NVOS.UI.Models
             button.Label.PositionScaleX = 0.05f;
             button.Label.PositionScaleY = 0.05f;
             button.Label.TextColor = Color.white;
+            button.Label.FontSize = 0.5f;
             textColor = Color.white;
             button.Label.IsVisible = false;
 
             button.BackgroundColor = Color.black;
             BackgroundColor = Color.black;
-            button.HighlightColor = Color.gray;
+            button.HighlightColor = new Color(10f, 10f, 10f);
             HighlightColor = Color.gray;
             button.PressedColor = Color.white;
             PressedColor = Color.white;
