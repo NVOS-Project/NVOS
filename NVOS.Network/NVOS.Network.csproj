@@ -89,6 +89,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <Protobuf Include="Protos\gps.proto" AdditionalImportDirs="Protos\" />
+    <Protobuf Include="Protos\led.proto" AdditionalImportDirs="Protos\" />
+    <Protobuf Include="Protos\network.proto" AdditionalImportDirs="Protos\" />
     <Protobuf Include="Protos\heartbeat.proto" AdditionalImportDirs="Protos\" />
     <Protobuf Include="Protos\reflection.proto" AdditionalImportDirs="Protos\" />
     <Protobuf Include="Protos\void.proto" AdditionalImportDirs="Protos\" />
