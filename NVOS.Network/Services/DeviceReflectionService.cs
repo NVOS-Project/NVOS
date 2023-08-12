@@ -4,14 +4,16 @@ using NVOS.Core;
 using NVOS.Core.Services;
 using NVOS.Core.Services.Attributes;
 using NVOS.Network.gRPC;
+using NVOS.Network.Structs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Device = NVOS.Network.Structs.Device;
 
-namespace NVOS.Network.Device
+namespace NVOS.Network.Services
 {
     [ServiceType(Core.Services.Enums.ServiceType.Singleton)]
     [ServiceDependency(typeof(RpcConnectionService))]
@@ -127,6 +129,8 @@ namespace NVOS.Network.Device
 
         public int GetDeviceCount()
         {
+            AssertClient();
+
             ListDevicesResponse response = client.ListDevices(new gRPC.Void());
 
             return (int)response.Count;
@@ -134,6 +138,8 @@ namespace NVOS.Network.Device
 
         public async Task<int> GetDeviceCountAsync()
         {
+            AssertClient();
+
             ListDevicesResponse response = await client.ListDevicesAsync(new gRPC.Void());
 
             return (int)response.Count;
