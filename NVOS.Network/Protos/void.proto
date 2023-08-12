@@ -1,0 +1,6 @@
+syntax = "proto3";
+package void;
+
+option csharp_namespace = "NVOS.Network.gRPC";
+
+message Void { }

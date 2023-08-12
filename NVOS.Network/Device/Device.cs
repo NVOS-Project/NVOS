@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NVOS.Network.gRPC;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,9 +10,9 @@ namespace NVOS.Network.Device
     public class Device
     {
         public Guid Address { get; set; }
-        public List<int> Capabilities { get; set; }
+        public List<CapabilityId> Capabilities { get; set; }
 
-        public Device(Guid address, List<int> capabilities) 
+        public Device(Guid address, List<CapabilityId> capabilities) 
         {
             Address = address;
             Capabilities = capabilities;

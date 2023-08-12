@@ -6,6 +6,7 @@ using NVOS.Network.gRPC;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -43,6 +44,84 @@ namespace NVOS.Network.Device
             client = null;
         }
 
+        public IEnumerable<Device> GetDevices()
+        {
+            AssertClient();
 
+            ListDevicesResponse response = client.ListDevices(new gRPC.Void());
+            
+            foreach (gRPC.Device responseDevice in response.Devices)
+            {
+                yield return ConvertDevice(responseDevice);
+            }
+        }
+
+        public Device GetDeviceByAddress(Guid address)
+        {
+            AssertClient();
+
+            ListDevicesResponse response = client.ListDevices(new gRPC.Void());
+            gRPC.Device responseDevice = response.Devices.FirstOrDefault(x => x.Address == address.ToString());
+
+            if (responseDevice == null)
+                return null;
+
+            return ConvertDevice(responseDevice);
+        }
+
+        public IEnumerable<Device> GetDevicesWithCapability(CapabilityId capabilityId)
+        {
+            AssertClient();
+
+            ListDevicesResponse response = client.ListDevices(new gRPC.Void());
+
+            foreach (gRPC.Device responseDevice in response.Devices.Where(x => x.Capabilities.Contains(capabilityId)))
+            {
+                yield return ConvertDevice(responseDevice);
+            }
+        }
+
+        public int GetDeviceCount()
+        {
+            ListDevicesResponse response = client.ListDevices(new gRPC.Void());
+
+            return (int)response.Count;
+        }
+
+        public IEnumerable<string> GetBusControllers()
+        {
+            AssertClient();
+
+            ListControllersResponse response = client.ListControllers(new gRPC.Void());
+
+            foreach (BusController controller in response.Controllers)
+            {
+                yield return controller.Name;
+            }
+        }
+
+        public int GetBusControllerCount()
+        {
+            AssertClient();
+
+            ListControllersResponse response = client.ListControllers(new gRPC.Void());
+
+            return (int)response.Count;
+        }
+
+        private Device ConvertDevice(gRPC.Device responseDevice)
+        {
+            List<CapabilityId> capabilities = new List<CapabilityId>();
+            foreach (CapabilityId capability in responseDevice.Capabilities)
+                capabilities.Add(capability);
+
+            return new Device(Guid.Parse(responseDevice.Address), capabilities);
+        }
+
+        private void AssertClient()
+        {
+            if (client == null)
+                throw new InvalidOperationException("DeviceReflectionService is not connected to the server!");
+        }
     }
 }

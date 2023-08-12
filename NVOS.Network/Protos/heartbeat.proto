@@ -1,0 +1,10 @@
+syntax = "proto3";
+package heartbeat;
+
+import "void.proto";
+
+option csharp_namespace = "NVOS.Network.gRPC";
+
+service Heartbeat {
+    rpc Ping (void.Void) returns (void.Void);
+}
