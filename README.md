@@ -40,7 +40,7 @@ This repository contains the NVOS framework running on the headset as well as (c
     - RPC heartbeat service: ✔️
     - Capability / management APIs
       - Device reflection: ✔️
-      - Network management: ❌
-      - GPS: ❌
+      - Network management: ✔️
+      - GPS: ✔️
       - Compass: ❌
-      - LED: ❌
+      - LED: ✔️
