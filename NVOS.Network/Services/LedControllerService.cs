@@ -25,8 +25,10 @@ namespace NVOS.Network.Services
         public bool Init()
         {
             rpcConnectionService = ServiceLocator.Resolve<RpcConnectionService>();
+
             channel = rpcConnectionService.GetChannel();
-            client = new LEDController.LEDControllerClient(channel);
+            if (channel != null)
+                client = new LEDController.LEDControllerClient(channel);
 
             rpcConnectionService.ChannelConnected += RpcConnectionService_ChannelConnected;
             rpcConnectionService.ChannelLost += RpcConnectionService_ChannelLost;

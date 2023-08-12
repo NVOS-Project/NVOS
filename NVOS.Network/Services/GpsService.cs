@@ -25,7 +25,9 @@ namespace NVOS.Network.Services
         {
             rpcConnectionService = ServiceLocator.Resolve<RpcConnectionService>();
             channel = rpcConnectionService.GetChannel();
-            client = new Gps.GpsClient(channel);
+
+            if (channel != null)
+                client = new Gps.GpsClient(channel);
 
             rpcConnectionService.ChannelConnected += RpcConnectionService_ChannelConnected;
             rpcConnectionService.ChannelLost += RpcConnectionService_ChannelLost;

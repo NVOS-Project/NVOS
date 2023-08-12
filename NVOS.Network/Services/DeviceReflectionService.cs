@@ -27,8 +27,10 @@ namespace NVOS.Network.Services
         public bool Init()
         {
             rpcConnectionService = ServiceLocator.Resolve<RpcConnectionService>();
+
             channel = rpcConnectionService.GetChannel();
-            client = new DeviceReflection.DeviceReflectionClient(channel);
+            if (channel != null)
+                client = new DeviceReflection.DeviceReflectionClient(channel);
 
             rpcConnectionService.ChannelConnected += RpcConnectionService_ChannelConnected;
             rpcConnectionService.ChannelLost += RpcConnectionService_ChannelLost;
