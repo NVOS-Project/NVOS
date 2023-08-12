@@ -35,11 +35,11 @@ This repository contains the NVOS framework running on the headset as well as (c
       - VerticalLayoutPanel: ✔️
       - VerticalSlider: ✔️
   - ### NVOS.Network
-    - RPC client: ❌
-    - RPC client error recovery: ❌
-    - RPC heartbeat service: ❌
+    - RPC client: ✔️
+    - RPC client error recovery: ✔️
+    - RPC heartbeat service: ✔️
     - Capability / management APIs
-      - Device reflection: ❌
+      - Device reflection: ✔️
       - Network management: ❌
       - GPS: ❌
       - Compass: ❌
