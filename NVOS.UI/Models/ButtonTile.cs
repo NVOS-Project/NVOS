@@ -112,12 +112,9 @@ namespace NVOS.UI.Models
             textColor = Color.white;
             button.Label.IsVisible = false;
 
-            button.BackgroundColor = Color.black;
-            backgroundColor = Color.black;
-            button.HighlightColor = new Color32(10, 10, 10, 255);
-            highlightColor = new Color32(10, 10, 10, 255);
-            button.PressedColor = Color.white;
-            pressedColor = Color.white;
+            backgroundColor = button.BackgroundColor;
+            highlightColor = button.HighlightColor;
+            pressedColor = button.PressedColor;
 
             button.OnClick += Button_OnClick;
         }

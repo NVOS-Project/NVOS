@@ -141,8 +141,6 @@ namespace NVOS.UI.Models
         {
             slider = root.AddComponent<Slider>();
             slider.direction = Slider.Direction.BottomToTop;
-            SizeOffsetX = 2f;
-            SizeOffsetY = 30f;
 
             backgroundPanel = new Panel("Background");
             AddChild(backgroundPanel);
@@ -181,10 +179,17 @@ namespace NVOS.UI.Models
             slider.targetGraphic = handle.GetRootObject().GetComponent<Image>();
         }
 
-        public override void Update()
+        protected override void UpdateDirtyTransform()
         {
-            base.Update();
+            base.UpdateDirtyTransform();
             value = slider.value;
+            fillArea.SizeOffsetY = Height;
+            fill.SizeOffsetX = Width;
+            handleArea.SizeOffsetY = Height;
+            handle.SizeOffsetX = Width * 1.5f;
+            handle.SizeOffsetY = Width * 1.5f;
+            handle.PositionOffsetX = (Width - handle.SizeOffsetX) / 2;
+            handle.PositionOffsetY = handle.SizeOffsetX / -2;
         }
     }
 }

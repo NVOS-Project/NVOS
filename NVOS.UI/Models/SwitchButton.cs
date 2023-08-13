@@ -18,6 +18,11 @@ namespace NVOS.UI.Models
         private Color highlightColor;
         private Color pressedColor;
 
+        private string deactivatedText;
+        private string activatedText;
+        private Color deactivatedTextColor;
+        private Color activatedTextColor;
+
         private bool isOn;
 
         public event EventHandler<SwitchButtonValueChangedEventArgs> OnValueChanged;
@@ -76,6 +81,100 @@ namespace NVOS.UI.Models
             }
         }
 
+        public string DeactivatedText
+        {
+            get
+            {
+                return deactivatedText;
+            }
+            set
+            {
+                deactivatedText = value;
+                if (!isOn)
+                    button.Label.Text = value;
+            }
+        }
+
+        public string ActivatedText
+        {
+            get
+            {
+                return activatedText;
+            }
+            set
+            {
+                activatedText = value;
+                if (isOn)
+                    button.Label.Text = value;
+            }
+        }
+
+        public Color DeactivatedTextColor
+        {
+            get
+            {
+                return deactivatedTextColor;
+            }
+            set
+            {
+                deactivatedTextColor = value;
+                if (!isOn)
+                    button.Label.TextColor = value;
+            }
+        }
+
+        public Color ActivatedTextColor
+        {
+            get
+            {
+                return activatedTextColor;
+            }
+            set
+            {
+                activatedTextColor = value;
+                if (isOn)
+                    button.Label.TextColor = value;
+            }
+        }
+
+        public string Text
+        {
+            get
+            {
+                return button.Label.Text;
+            }
+            set
+            {
+                ActivatedText = value;
+                DeactivatedText = value;
+            }
+        }
+
+        public Color TextColor
+        {
+            get
+            {
+                return button.Label.TextColor;
+            }
+            set
+            {
+                ActivatedTextColor = value;
+                DeactivatedTextColor = value;
+            }
+        }
+
+        public float FontSize
+        {
+            get
+            {
+                return button.Label.FontSize;
+            }
+            set
+            {
+                button.Label.FontSize = value;
+            }
+        }
+
         public bool IsOn
         {
             get
@@ -90,25 +189,33 @@ namespace NVOS.UI.Models
 
         public Label Label { get; }
 
-        public SwitchButton() : this("Switch Button") { }
+        public SwitchButton() : this("SwitchButton") { }
 
         public SwitchButton(string name) : base(name)
         {
-            button = new Button("Switch Button");
+            button = new Button(name);
+            Label = button.Label;
             button.SizeScaleX = 1f;
             button.SizeScaleY = 1f;
             AddChild(button);
             root.AddComponent<HorizontalLayoutGroup>();
-            Label = button.Label;
+
             deactivatedColor = button.BackgroundColor;
-            activatedColor = new Color32(50, 50, 50, 255);
+            activatedColor = Color.gray;
             highlightColor = button.HighlightColor;
             pressedColor = button.PressedColor;
+
+            deactivatedText = button.Label.Text;
+            activatedText = button.Label.Text;
+            deactivatedTextColor = button.Label.TextColor;
+            activatedTextColor = button.Label.TextColor;
+
             isOn = false;
 
             button.OnClick += Button_OnClick;
         }
 
+        
         private void Button_OnClick(object sender, System.EventArgs e)
         {
             SetActivated(!isOn);
@@ -119,9 +226,17 @@ namespace NVOS.UI.Models
         {
             isOn = value;
             if (value)
+            {
                 button.BackgroundColor = activatedColor;
+                button.Label.Text = activatedText;
+                button.Label.TextColor = activatedTextColor;
+            }
             else
+            {
                 button.BackgroundColor = deactivatedColor;
+                button.Label.Text = deactivatedText;
+                button.Label.TextColor = deactivatedTextColor;
+            }
         }
     }
 }

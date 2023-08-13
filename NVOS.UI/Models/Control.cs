@@ -204,6 +204,7 @@ namespace NVOS.UI.Models
             {
                 layoutElement.minWidth = value;
                 minWidth = value;
+                isTransformDirty = true;
             }
         }
 
@@ -217,6 +218,7 @@ namespace NVOS.UI.Models
             {
                 layoutElement.minHeight = value;
                 minHeight = value;
+                isTransformDirty = true;
             }
         }
 
@@ -230,6 +232,7 @@ namespace NVOS.UI.Models
             {
                 layoutElement.preferredWidth = value;
                 preferredWidth = value;
+                isTransformDirty = true;
             }
         }
 
@@ -243,6 +246,7 @@ namespace NVOS.UI.Models
             {
                 layoutElement.preferredHeight = value;
                 preferredHeight = value;
+                isTransformDirty = true;
             }
         }
 
@@ -256,6 +260,7 @@ namespace NVOS.UI.Models
             {
                 layoutElement.flexibleWidth = value;
                 flexibleWidth = value;
+                isTransformDirty = true;
             }
         }
 
@@ -269,6 +274,7 @@ namespace NVOS.UI.Models
             {
                 layoutElement.flexibleHeight = value;
                 flexibleHeight = value;
+                isTransformDirty = true;
             }
         }
 
@@ -282,6 +288,7 @@ namespace NVOS.UI.Models
             {
                 layoutElement.layoutPriority = value;
                 layoutPriority = value;
+                isTransformDirty = true;
             }
         }
 
@@ -295,6 +302,7 @@ namespace NVOS.UI.Models
             {
                 verticalFit = value;
                 contentSizeFitter.verticalFit = value;
+                isTransformDirty = true;
             }
         }
 
@@ -308,6 +316,7 @@ namespace NVOS.UI.Models
             {
                 horizontalFit = value;
                 contentSizeFitter.horizontalFit = value;
+                isTransformDirty = true;
             }
         }
 

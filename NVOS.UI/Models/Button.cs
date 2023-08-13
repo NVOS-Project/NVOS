@@ -70,7 +70,7 @@ namespace NVOS.UI.Models
 
         public Button(string name) : base(name)
         {
-            Label = new Label($"{name}");
+            Label = new Label(name);
             AddChild(Label);
             Label.FontSize = 2f;
             Label.TextColor = Color.white;
@@ -91,13 +91,13 @@ namespace NVOS.UI.Models
 
             ColorBlock colorBlock = button.colors;
             colorBlock.normalColor = Color.black;
-            colorBlock.highlightedColor = Color.gray;
-            colorBlock.pressedColor = Color.white;
+            colorBlock.highlightedColor = new Color32(70, 70, 70, 255);
+            colorBlock.pressedColor = new Color32(170, 170, 170, 255);
             button.colors = colorBlock;
             
             backgroundColor = Color.black;
-            highlightColor = Color.gray;
-            pressedColor = Color.white;
+            highlightColor = new Color32(70, 70, 70, 255);
+            pressedColor = new Color32(170, 170, 170, 255);
         }
 
         private void HandleClick()

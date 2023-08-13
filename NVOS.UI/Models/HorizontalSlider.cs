@@ -78,7 +78,7 @@ namespace NVOS.UI.Models
                 if (value != Slider.Direction.LeftToRight && value != Slider.Direction.RightToLeft)
                     throw new Exception("Horizontal slider only accepts a LeftToRight/RightToLeft direction!");
 
-                    direction = value;
+                direction = value;
                 slider.direction = value;
             }
         }
@@ -141,8 +141,6 @@ namespace NVOS.UI.Models
         {
             slider = root.AddComponent<Slider>();
             slider.direction = Slider.Direction.LeftToRight;
-            SizeOffsetX = 30f;
-            SizeOffsetY = 2f;
 
             backgroundPanel = new Panel("Background");
             AddChild(backgroundPanel);
@@ -181,10 +179,17 @@ namespace NVOS.UI.Models
             slider.targetGraphic = handle.GetRootObject().GetComponent<Image>();
         }
 
-        public override void Update()
+        protected override void UpdateDirtyTransform()
         {
-            base.Update();
+            base.UpdateDirtyTransform();
             value = slider.value;
+            fillArea.SizeOffsetX = Width;
+            fill.SizeOffsetY = Height;
+            handleArea.SizeOffsetX = Width;
+            handle.SizeOffsetX = Height * 1.5f;
+            handle.SizeOffsetY = Height * 1.5f;
+            handle.PositionOffsetX = handle.SizeOffsetX / -2;
+            handle.PositionOffsetY = (SizeOffsetY - handle.SizeOffsetY) / 2;
         }
     }
 }

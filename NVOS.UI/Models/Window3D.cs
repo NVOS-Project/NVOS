@@ -175,9 +175,9 @@ namespace NVOS.UI.Models
             lockButton.ActivatedColor = new Color32(50, 50, 50, 255);
             lockButton.HighlightColor = Color.gray;
             lockButton.PreferredWidth = width * 0.1f;
-            lockButton.Label.Text = "L";
-            lockButton.Label.TextColor = Color.white;
-            lockButton.Label.FontSize = titleBar.PreferredHeight / 2;
+            lockButton.Text = "L";
+            lockButton.TextColor = Color.white;
+            lockButton.FontSize = titleBar.PreferredHeight / 2;
 
             minimizeButton = new Button("Minimize");
             titleBar.AddChild(minimizeButton);

@@ -18,9 +18,12 @@ namespace NVOS.UI.Models
         private Color activatedColor;
         private Color highlightColor;
         private Color pressedColor;
-        private Color textColor;
 
-        private string text;
+        private string deactivatedText;
+        private string activatedText;
+        private Color deactivatedTextColor;
+        private Color activatedTextColor;
+
         private bool isOn;
 
         public event EventHandler<SwitchTileValueChangedEventArgs> OnValueChanged;
@@ -77,29 +80,55 @@ namespace NVOS.UI.Models
             }
         }
 
-        public Color TextColor
+        public string DeactivatedText
         {
             get
             {
-                return textColor;
+                return deactivatedText;
             }
             set
             {
-                textColor = value;
-                button.Label.TextColor = value;
+                deactivatedText = value;
+                button.DeactivatedText = value;
             }
         }
 
-        public string Text
+        public string ActivatedText
         {
             get
             {
-                return text;
+                return activatedText;
             }
             set
             {
-                text = value;
-                button.Label.Text = value;
+                activatedText = value;
+                button.ActivatedText = value;
+            }
+        }
+
+        public Color DeactivatedTextColor
+        {
+            get
+            {
+                return deactivatedTextColor;
+            }
+            set
+            {
+                deactivatedTextColor = value;
+                button.DeactivatedTextColor = value;
+            }
+        }
+
+        public Color ActivatedTextColor
+        {
+            get
+            {
+                return activatedTextColor;
+            }
+            set
+            {
+                activatedTextColor = value;
+                button.ActivatedTextColor = value;
             }
         }
 
@@ -116,11 +145,49 @@ namespace NVOS.UI.Models
             }
         }
 
+        public string Text
+        {
+            get
+            {
+                return button.Label.Text;
+            }
+            set
+            {
+                ActivatedText = value;
+                DeactivatedText = value;
+            }
+        }
+
+        public Color TextColor
+        {
+            get
+            {
+                return button.Label.TextColor;
+            }
+            set
+            {
+                ActivatedTextColor = value;
+                DeactivatedTextColor = value;
+            }
+        }
+
+        public float FontSize
+        {
+            get
+            {
+                return button.Label.FontSize;
+            }
+            set
+            {
+                button.Label.FontSize = value;
+            }
+        }
+
         public SwitchTile() : this("Tile") { }
 
         public SwitchTile(string name) : base(name)
         {
-            button = new SwitchButton();
+            button = new SwitchButton(name);
             button.SizeScaleX = 1f;
             button.SizeScaleY = 1f;
             AddChild(button);
@@ -129,26 +196,22 @@ namespace NVOS.UI.Models
             pointerHandler.PointerEnter += PointerHandler_PointerEnter;
             pointerHandler.PointerExit += PointerHandler_PointerExit;
 
-            button.Label.Text = name;
-            text = name;
             GameObject.Destroy(button.GetRootObject().GetComponent<HorizontalLayoutGroup>());
             button.Label.SizeScaleX = 0.9f;
             button.Label.SizeScaleY = 0.9f;
             button.Label.PositionScaleX = 0.05f;
             button.Label.PositionScaleY = 0.05f;
-            button.Label.TextColor = Color.white;
-            button.Label.FontSize = 0.5f;
-            textColor = Color.white;
             button.Label.IsVisible = false;
 
-            button.DeactivatedColor = Color.black;
-            deactivatedColor = Color.black;
-            button.ActivatedColor = new Color32(50, 50, 50, 255);
-            activatedColor = new Color32(50, 50, 50, 255);
-            button.HighlightColor = Color.gray;
-            highlightColor = Color.gray;
-            button.PressedColor = Color.white;
-            pressedColor = Color.white;
+            deactivatedColor = button.DeactivatedColor;
+            activatedColor = button.ActivatedColor;
+            highlightColor = button.HighlightColor;
+            pressedColor = button.PressedColor;
+
+            deactivatedText = name;
+            activatedText = name;
+            deactivatedTextColor = button.DeactivatedTextColor;
+            activatedTextColor = button.ActivatedTextColor;
 
             button.OnValueChanged += Button_OnValueChanged;
         }
