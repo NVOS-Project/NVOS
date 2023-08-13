@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace NVOS.Network.Structs
 {
-    public class DeviceState
+    public class LEDState
     {
         public bool PoweredOn;
         public float Brightness;
         public LEDMode Mode;
 
-        public DeviceState(bool poweredOn, float brightness, LEDMode mode)
+        public LEDState(bool poweredOn, float brightness, LEDMode mode)
         {
             PoweredOn = poweredOn;
             Brightness = brightness;

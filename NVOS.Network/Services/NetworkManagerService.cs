@@ -10,6 +10,7 @@ using System.Linq;
 using System.Runtime.Remoting.Channels;
 using System.Text;
 using System.Threading.Tasks;
+using NVOS.Network.EventArgs;
 
 namespace NVOS.Network.Services
 {
@@ -21,6 +22,11 @@ namespace NVOS.Network.Services
 
         private GrpcChannel channel;
         private NetworkManager.NetworkManagerClient client;
+
+        public event EventHandler<OnForwardPortAddedEventArgs> OnForwardPortAdded;
+        public event EventHandler<OnReversePortAddedEventArgs> OnReversePortAdded;
+        public event EventHandler<OnForwardPortRemovedEventArgs> OnForwardPortRemoved;
+        public event EventHandler<OnReversePortRemovedEventArgs> OnReversePortRemoved;
 
         public bool Init()
         {
@@ -35,13 +41,13 @@ namespace NVOS.Network.Services
             return true;
         }
 
-        private void RpcConnectionService_ChannelConnected(object sender, EventArgs e)
+        private void RpcConnectionService_ChannelConnected(object sender, System.EventArgs e)
         {
             channel = rpcConnectionService.GetChannel();
             client = new NetworkManager.NetworkManagerClient(channel);
         }
 
-        private void RpcConnectionService_ChannelLost(object sender, EventArgs e)
+        private void RpcConnectionService_ChannelLost(object sender, System.EventArgs e)
         {
             channel = null;
             client = null;
@@ -83,6 +89,7 @@ namespace NVOS.Network.Services
             request.DevicePort = devicePort;
 
             client.AddForwardPort(request);
+            OnForwardPortAdded?.Invoke(this, new OnForwardPortAddedEventArgs(serverPort, devicePort));
         }
 
         public async Task AddForwardPortAsync(ushort serverPort, ushort devicePort)
@@ -94,6 +101,7 @@ namespace NVOS.Network.Services
             request.DevicePort = devicePort;
 
             await client.AddForwardPortAsync(request);
+            OnForwardPortAdded?.Invoke(this, new OnForwardPortAddedEventArgs(serverPort, devicePort));
         }
 
         public void AddReversePort(ushort serverPort, ushort devicePort)
@@ -105,6 +113,7 @@ namespace NVOS.Network.Services
             request.DevicePort = devicePort;
 
             client.AddReversePort(request);
+            OnReversePortAdded?.Invoke(this, new OnReversePortAddedEventArgs(serverPort, devicePort));
         }
 
         public async Task AddReversePortAsync(ushort serverPort, ushort devicePort)
@@ -116,6 +125,7 @@ namespace NVOS.Network.Services
             request.DevicePort = devicePort;
 
             await client.AddReversePortAsync(request);
+            OnReversePortAdded?.Invoke(this, new OnReversePortAddedEventArgs(serverPort, devicePort));
         }
 
         public void RemoveForwardPort(ushort serverPort)
@@ -126,6 +136,7 @@ namespace NVOS.Network.Services
             request.ServerPort = serverPort;
 
             client.RemoveForwardPort(request);
+            OnForwardPortRemoved?.Invoke(this, new OnForwardPortRemovedEventArgs(serverPort));
         }
 
         public async Task RemoveForwardPortAsync(ushort serverPort)
@@ -136,6 +147,7 @@ namespace NVOS.Network.Services
             request.ServerPort = serverPort;
 
             await client.RemoveForwardPortAsync(request);
+            OnForwardPortRemoved?.Invoke(this, new OnForwardPortRemovedEventArgs(serverPort));
         }
 
         public void RemoveReversePort(ushort devicePort)
@@ -146,6 +158,7 @@ namespace NVOS.Network.Services
             request.DevicePort = devicePort;
 
             client.RemoveReversePort(request);
+            OnReversePortRemoved?.Invoke(this, new OnReversePortRemovedEventArgs(devicePort));
         }
 
         public async Task RemoveReversePortAsync(ushort devicePort)
@@ -156,6 +169,7 @@ namespace NVOS.Network.Services
             request.DevicePort = devicePort;
 
             await client.RemoveReversePortAsync(request);
+            OnReversePortRemoved?.Invoke(this, new OnReversePortRemovedEventArgs(devicePort));
         }
 
         private void AssertClient()

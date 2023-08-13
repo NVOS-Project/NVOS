@@ -102,7 +102,7 @@ namespace NVOS.Network
                     isConnected = false;
                     mutex.ReleaseMutex();
 
-                    ChannelLost?.Invoke(this, EventArgs.Empty);
+                    ChannelLost?.Invoke(this, System.EventArgs.Empty);
                 }
             }
 
@@ -142,7 +142,7 @@ namespace NVOS.Network
                     isConnected = true;
                     mutex.ReleaseMutex();
 
-                    ChannelConnected?.Invoke(this, EventArgs.Empty);
+                    ChannelConnected?.Invoke(this, System.EventArgs.Empty);
                     return;
                 }
                 catch(Exception ex)

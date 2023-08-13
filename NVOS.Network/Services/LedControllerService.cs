@@ -1,7 +1,9 @@
 ﻿using Grpc.Net.Client;
 using NVOS.Core;
+using NVOS.Core.Logger;
 using NVOS.Core.Services;
 using NVOS.Core.Services.Attributes;
+using NVOS.Network.EventArgs;
 using NVOS.Network.gRPC;
 using NVOS.Network.Structs;
 using System;
@@ -22,6 +24,10 @@ namespace NVOS.Network.Services
         private GrpcChannel channel;
         private LEDController.LEDControllerClient client;
 
+        public event EventHandler<OnPowerStateChangedEventArgs> OnPowerStateChanged;
+        public event EventHandler<OnBrightnessChangedEventArgs> OnBrightnessChanged;
+        public event EventHandler<OnModeChangedEventArgs> OnModeChanged;
+
         public bool Init()
         {
             rpcConnectionService = ServiceLocator.Resolve<RpcConnectionService>();
@@ -35,19 +41,19 @@ namespace NVOS.Network.Services
             return true;
         }
 
-        private void RpcConnectionService_ChannelConnected(object sender, EventArgs e)
+        private void RpcConnectionService_ChannelConnected(object sender, System.EventArgs e)
         {
             channel = rpcConnectionService.GetChannel();
             client = new LEDController.LEDControllerClient(channel);
         }
 
-        private void RpcConnectionService_ChannelLost(object sender, EventArgs e)
+        private void RpcConnectionService_ChannelLost(object sender, System.EventArgs e)
         {
             channel = null;
             client = null;
         }
 
-        public DeviceState GetState(Guid address)
+        public LEDState GetState(Guid address)
         {
             AssertClient();
 
@@ -55,11 +61,11 @@ namespace NVOS.Network.Services
             request.Address = address.ToString();
             GetStateResponse response = client.GetState(request);
 
-            DeviceState state = new DeviceState(response.PoweredOn, response.Brightness, response.Mode);
+            LEDState state = new LEDState(response.PoweredOn, response.Brightness, response.Mode);
             return state;
         }
 
-        public async Task<DeviceState> GetStateAsync(Guid address)
+        public async Task<LEDState> GetStateAsync(Guid address)
         {
             AssertClient();
 
@@ -67,7 +73,7 @@ namespace NVOS.Network.Services
             request.Address = address.ToString();
             GetStateResponse response = await client.GetStateAsync(request);
 
-            DeviceState state = new DeviceState(response.PoweredOn, response.Brightness, response.Mode);
+            LEDState state = new LEDState(response.PoweredOn, response.Brightness, response.Mode);
             return state;
         }
 
@@ -80,6 +86,7 @@ namespace NVOS.Network.Services
             request.Brightness = brightness;
 
             client.SetBrightness(request);
+            OnBrightnessChanged?.Invoke(this, new OnBrightnessChangedEventArgs(address, brightness));
         }
 
         public async Task SetBrightnessAsync(Guid address, float brightness)
@@ -91,6 +98,7 @@ namespace NVOS.Network.Services
             request.Brightness = brightness;
 
             await client.SetBrightnessAsync(request);
+            OnBrightnessChanged?.Invoke(this, new OnBrightnessChangedEventArgs(address, brightness));
         }
 
         public void SetMode(Guid address, LEDMode mode)
@@ -102,6 +110,7 @@ namespace NVOS.Network.Services
             request.Mode = mode;
 
             client.SetMode(request);
+            OnModeChanged?.Invoke(this, new OnModeChangedEventArgs(address, mode));
         }
 
         public async Task SetModeAsync(Guid address, LEDMode mode)
@@ -113,6 +122,7 @@ namespace NVOS.Network.Services
             request.Mode = mode;
 
             await client.SetModeAsync(request);
+            OnModeChanged?.Invoke(this, new OnModeChangedEventArgs(address, mode));
         }
 
         public void SetPowerState(Guid address, bool poweredOn)
@@ -124,6 +134,7 @@ namespace NVOS.Network.Services
             request.PoweredOn = poweredOn;
 
             client.SetPowerState(request);
+            OnPowerStateChanged?.Invoke(this, new OnPowerStateChangedEventArgs(address, poweredOn));
         }
 
         public async Task SetPowerStateAsync(Guid address, bool poweredOn)
@@ -135,6 +146,7 @@ namespace NVOS.Network.Services
             request.PoweredOn = poweredOn;
 
             await client.SetPowerStateAsync(request);
+            OnPowerStateChanged?.Invoke(this, new OnPowerStateChangedEventArgs(address, poweredOn));
         }
 
         private void AssertClient()

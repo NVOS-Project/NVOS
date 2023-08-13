@@ -37,13 +37,13 @@ namespace NVOS.Network.Services
             return true;
         }
 
-        private void RpcConnectionService_ChannelConnected(object sender, EventArgs e)
+        private void RpcConnectionService_ChannelConnected(object sender, System.EventArgs e)
         {
             channel = rpcConnectionService.GetChannel();
             client = new DeviceReflection.DeviceReflectionClient(channel);
         }
 
-        private void RpcConnectionService_ChannelLost(object sender, EventArgs e)
+        private void RpcConnectionService_ChannelLost(object sender, System.EventArgs e)
         {
             channel = null;
             client = null;

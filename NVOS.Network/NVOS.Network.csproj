@@ -82,6 +82,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EventArgs\OnBrightnessChangedEventArgs.cs" />
+    <Compile Include="EventArgs\OnForwardPortAddedEventArgs.cs" />
+    <Compile Include="EventArgs\OnForwardPortRemovedEventArgs.cs" />
+    <Compile Include="EventArgs\OnModeChangedEventArgs.cs" />
+    <Compile Include="EventArgs\OnPowerStateChangedEventArgs.cs" />
+    <Compile Include="EventArgs\OnReversePortAddedEventArgs.cs" />
+    <Compile Include="EventArgs\OnReversePortRemovedEventArgs.cs" />
     <Compile Include="Services\GpsService.cs" />
     <Compile Include="Services\NetworkManagerService.cs" />
     <Compile Include="Structs\Device.cs" />
@@ -90,7 +97,7 @@
     <Compile Include="Structs\GpsLocation.cs" />
     <Compile Include="Structs\GpsReport.cs" />
     <Compile Include="Structs\Port.cs" />
-    <Compile Include="Structs\DeviceState.cs" />
+    <Compile Include="Structs\LEDState.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="RpcConnectionService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
