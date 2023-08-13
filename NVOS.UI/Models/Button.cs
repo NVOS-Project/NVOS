@@ -18,6 +18,8 @@ namespace NVOS.UI.Models
         private Color pressedColor;
         private Color backgroundColor;
 
+        private bool interactable;
+
         public event EventHandler<System.EventArgs> OnClick;
 
         public Label Label { get; }
@@ -66,6 +68,19 @@ namespace NVOS.UI.Models
             }
         }
 
+        public bool Interactable
+        {
+            get
+            {
+                return interactable;
+            }
+            set
+            {
+                interactable = value;
+                button.interactable = value;
+            }
+        }
+
         public Button() : this("Button") { }
 
         public Button(string name) : base(name)
@@ -98,6 +113,8 @@ namespace NVOS.UI.Models
             backgroundColor = Color.black;
             highlightColor = new Color32(70, 70, 70, 255);
             pressedColor = new Color32(170, 170, 170, 255);
+
+            interactable = true;
         }
 
         private void HandleClick()

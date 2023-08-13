@@ -25,6 +25,7 @@ namespace NVOS.UI.Models
         private Color activatedTextColor;
 
         private bool isOn;
+        private bool interactable;
 
         public event EventHandler<SwitchTileValueChangedEventArgs> OnValueChanged;
 
@@ -183,6 +184,19 @@ namespace NVOS.UI.Models
             }
         }
 
+        public bool Interactable
+        {
+            get
+            {
+                return interactable;
+            }
+            set
+            {
+                interactable = value;
+                button.Interactable = value;
+            }
+        }
+
         public SwitchTile() : this("Tile") { }
 
         public SwitchTile(string name) : base(name)
@@ -214,6 +228,7 @@ namespace NVOS.UI.Models
             activatedTextColor = button.ActivatedTextColor;
 
             button.OnValueChanged += Button_OnValueChanged;
+            interactable = true;
         }
 
         private void PointerHandler_PointerEnter(object sender, System.EventArgs e)

@@ -27,6 +27,7 @@ namespace NVOS.UI.Models
         private float maxValue;
 
         private bool wholeNumbers;
+        private bool interactable;
 
         public Color BackgroundColor
         {
@@ -135,6 +136,19 @@ namespace NVOS.UI.Models
             }
         }
 
+        public bool Interactable
+        {
+            get
+            {
+                return interactable;
+            }
+            set
+            {
+                interactable = value;
+                slider.interactable = value;
+            }
+        }
+
         public VerticalSlider() : this("Slider") { }
 
         public VerticalSlider(string name) : base(name)
@@ -177,6 +191,8 @@ namespace NVOS.UI.Models
             slider.fillRect = fill.GetRootObject().GetComponent<RectTransform>();
             slider.handleRect = handle.GetRootObject().GetComponent<RectTransform>();
             slider.targetGraphic = handle.GetRootObject().GetComponent<Image>();
+
+            interactable = true;
         }
 
         protected override void UpdateDirtyTransform()

@@ -22,6 +22,8 @@ namespace NVOS.UI.Models
         private Color highlightColor;
         private Color pressedColor;
 
+        private bool interactable;
+
         public event EventHandler<ToggleValueChangedEventArgs> OnValueChanged;
 
         public Color BackgroundColor
@@ -95,6 +97,19 @@ namespace NVOS.UI.Models
             }
         }
 
+        public bool Interactable
+        {
+            get
+            {
+                return interactable;
+            }
+            set
+            {
+                interactable = value;
+                toggle.interactable = value;
+            }
+        }
+
         public Toggle() : this("Toggle") { }
 
         public Toggle(string name) : base(name)
@@ -139,6 +154,8 @@ namespace NVOS.UI.Models
             highlightColor = Color.gray;
             pressedColor = Color.white;
             uncheck.BackgroundColor = Color.white;
+
+            interactable = true;
         }
 
         private void HandleClick(bool isChecked)

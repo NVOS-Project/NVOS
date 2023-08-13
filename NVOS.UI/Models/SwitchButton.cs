@@ -24,6 +24,7 @@ namespace NVOS.UI.Models
         private Color activatedTextColor;
 
         private bool isOn;
+        private bool interactable;
 
         public event EventHandler<SwitchButtonValueChangedEventArgs> OnValueChanged;
 
@@ -187,6 +188,19 @@ namespace NVOS.UI.Models
             }
         }
 
+        public bool Interactable
+        {
+            get
+            {
+                return interactable;
+            }
+            set
+            {
+                interactable = value;
+                button.Interactable = value;
+            }
+        }
+
         public Label Label { get; }
 
         public SwitchButton() : this("SwitchButton") { }
@@ -213,6 +227,7 @@ namespace NVOS.UI.Models
             isOn = false;
 
             button.OnClick += Button_OnClick;
+            interactable = true;
         }
 
         

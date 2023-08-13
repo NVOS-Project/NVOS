@@ -18,6 +18,8 @@ namespace NVOS.UI.Models
         private Color pressedColor;
         private Color textColor;
 
+        private bool interactable;
+
         private string text;
 
         public event EventHandler<System.EventArgs> OnClick;
@@ -87,6 +89,19 @@ namespace NVOS.UI.Models
             }
         }
 
+        public bool Interactable
+        {
+            get
+            {
+                return interactable;
+            }
+            set
+            {
+                interactable = value;
+                button.Interactable = value;
+            }
+        }
+
         public ButtonTile() : this("Tile") { }
 
         public ButtonTile(string name) : base(name)
@@ -117,6 +132,7 @@ namespace NVOS.UI.Models
             pressedColor = button.PressedColor;
 
             button.OnClick += Button_OnClick;
+            interactable = true;
         }
 
         private void PointerHandler_PointerEnter(object sender, System.EventArgs e)
