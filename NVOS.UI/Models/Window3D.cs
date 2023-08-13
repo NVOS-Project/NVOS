@@ -203,7 +203,7 @@ namespace NVOS.UI.Models
             outline.effectColor = Color.black;
             renderOutline = true;
 
-            content.PreferredHeight = width - titleBar.PreferredHeight;
+            content.PreferredHeight = height * 0.9f;
 
             minimizeButton.OnClick += MinimizeButton_OnClick;
             closeButton.OnClick += CloseButton_OnClick;
