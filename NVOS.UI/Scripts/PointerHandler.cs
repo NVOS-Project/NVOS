@@ -8,19 +8,13 @@ using UnityEngine.EventSystems;
 
 namespace NVOS.UI.Scripts
 {
-    public class PointerHandler : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+    public class PointerHandler : MonoBehaviour, IPointerUpHandler
     {
-        public event EventHandler<System.EventArgs> PointerEnter;
-        public event EventHandler<System.EventArgs> PointerExit;
+        public event EventHandler PointerUp;
 
-        public void OnPointerEnter(PointerEventData pointerEventData)
+        public void OnPointerUp(PointerEventData eventData)
         {
-            PointerEnter?.Invoke(this, System.EventArgs.Empty);
-        }
-
-        public void OnPointerExit(PointerEventData pointerEventData)
-        {
-            PointerExit?.Invoke(this, System.EventArgs.Empty);
+            PointerUp?.Invoke(this, System.EventArgs.Empty);
         }
     }
 }

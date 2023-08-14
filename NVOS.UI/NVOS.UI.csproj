@@ -87,6 +87,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\ButtonTile.cs" />
+    <Compile Include="Models\EventArgs\SliderValueChangedEventArgs.cs" />
     <Compile Include="Models\EventArgs\SwitchButtonValueChangedEventArgs.cs" />
     <Compile Include="Models\SwitchButton.cs" />
     <Compile Include="Models\SwitchTile.cs" />

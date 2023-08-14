@@ -37,7 +37,7 @@ namespace NVOS.UI.Services
             moveWaitTime = 5f;
             windowSpeed = 2f;
             walkSpeed = 0.7f;
-            windowSpawnDistance = 1f;
+            windowSpawnDistance = 0.5f;
             windowBubbleRadius = 3f;
             gameTickProvider = tickerObject.AddComponent<GameTickProvider>();
             gameTickProvider.OnLateUpdate += GameTickProvider_OnLateUpdate;
@@ -83,6 +83,7 @@ namespace NVOS.UI.Services
 
             windows.Add(window);
             window.OnClose += Window_OnClose;
+            window.OnWindowStateChanged += Window_OnWindowStateChanged;
 
             return window;
         }
@@ -165,6 +166,23 @@ namespace NVOS.UI.Services
                             window.GetRootObject().SetActive(true);
                     }
                 }
+            }
+        }
+
+        private void Window_OnWindowStateChanged(object sender, WindowStateChangedEventArgs e)
+        {
+            if (e.State == Models.Enums.WindowState.Normal)
+            {
+                Window3D window = (Window3D)e.Window;
+
+                Transform cameraTransform = Camera.main.transform;
+                GameObject windowObject = window.GetRootObject();
+
+                Vector3 windowPosition = (cameraTransform.forward * windowSpawnDistance) + cameraTransform.position;
+                windowObject.transform.position = windowPosition;
+
+                Vector3 directionVector = (windowObject.transform.position - cameraTransform.position).normalized;
+                windowObject.transform.rotation = Quaternion.LookRotation(directionVector, Vector3.up);
             }
         }
     }

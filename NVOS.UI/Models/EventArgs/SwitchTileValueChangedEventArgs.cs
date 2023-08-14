@@ -9,12 +9,12 @@ namespace NVOS.UI.Models.EventArgs
     public class SwitchTileValueChangedEventArgs : System.EventArgs
     {
         public SwitchTile SwitchTile;
-        public bool IsChecked;
+        public bool IsOn;
 
-        public SwitchTileValueChangedEventArgs(SwitchTile switchTile, bool isChecked)
+        public SwitchTileValueChangedEventArgs(SwitchTile switchTile, bool isOn)
         {
             SwitchTile = switchTile ?? throw new ArgumentNullException(nameof(switchTile));
-            IsChecked = isChecked;
+            IsOn = isOn;
         }
     }
 }

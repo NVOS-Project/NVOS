@@ -111,10 +111,6 @@ namespace NVOS.UI.Models
             button.SizeScaleY = 1f;
             AddChild(button);
 
-            PointerHandler pointerHandler = root.AddComponent<PointerHandler>();
-            pointerHandler.PointerEnter += PointerHandler_PointerEnter;
-            pointerHandler.PointerExit += PointerHandler_PointerExit;
-
             button.Label.Text = name;
             text = name;
             GameObject.Destroy(button.GetRootObject().GetComponent<HorizontalLayoutGroup>());
@@ -125,7 +121,6 @@ namespace NVOS.UI.Models
             button.Label.TextColor = Color.white;
             button.Label.FontSize = 0.5f;
             textColor = Color.white;
-            button.Label.IsVisible = false;
 
             backgroundColor = button.BackgroundColor;
             highlightColor = button.HighlightColor;
@@ -133,16 +128,6 @@ namespace NVOS.UI.Models
 
             button.OnClick += Button_OnClick;
             interactable = true;
-        }
-
-        private void PointerHandler_PointerEnter(object sender, System.EventArgs e)
-        {
-            button.Label.IsVisible = true;
-        }
-
-        private void PointerHandler_PointerExit(object sender, System.EventArgs e)
-        {
-            button.Label.IsVisible = false;
         }
 
         private void Button_OnClick(object sender, System.EventArgs e)

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using NVOS.UI.Models.EventArgs;
+using NVOS.UI.Scripts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,6 +30,8 @@ namespace NVOS.UI.Models
 
         private bool wholeNumbers;
         private bool interactable;
+
+        public event EventHandler<SliderValueChangedEventArgs> OnValueChanged;
 
         public Color BackgroundColor
         {
@@ -153,6 +157,9 @@ namespace NVOS.UI.Models
 
         public VerticalSlider(string name) : base(name)
         {
+            PointerHandler pointerHandler = root.AddComponent<PointerHandler>();
+            pointerHandler.PointerUp += PointerHandler_PointerUp;
+
             slider = root.AddComponent<Slider>();
             slider.direction = Slider.Direction.BottomToTop;
 
@@ -193,6 +200,12 @@ namespace NVOS.UI.Models
             slider.targetGraphic = handle.GetRootObject().GetComponent<Image>();
 
             interactable = true;
+        }
+
+        private void PointerHandler_PointerUp(object sender, System.EventArgs e)
+        {
+            value = slider.value;
+            OnValueChanged?.Invoke(this, new SliderValueChangedEventArgs(value));
         }
 
         protected override void UpdateDirtyTransform()
