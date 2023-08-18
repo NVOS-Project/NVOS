@@ -42,47 +42,47 @@
     <Reference Include="System.Xml" />
     <Reference Include="Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\UnityDLLs\Unity.TextMeshPro.dll</HintPath>
+      <HintPath>..\References\Mono\Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="Unity.XR.Hands, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\UnityDLLs\Unity.XR.Hands.dll</HintPath>
+      <HintPath>..\References\Mono\Unity.XR.Hands.dll</HintPath>
     </Reference>
     <Reference Include="Unity.XR.Interaction.Toolkit, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\UnityDLLs\Unity.XR.Interaction.Toolkit.dll</HintPath>
+      <HintPath>..\References\Mono\Unity.XR.Interaction.Toolkit.dll</HintPath>
     </Reference>
     <Reference Include="Unity.XR.Management, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\UnityDLLs\Unity.XR.Management.dll</HintPath>
+      <HintPath>..\References\Mono\Unity.XR.Management.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\UnityDLLs\UnityEngine.dll</HintPath>
+      <HintPath>..\References\Mono\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\UnityDLLs\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>..\References\Mono\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.PhysicsModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\UnityDLLs\UnityEngine.PhysicsModule.dll</HintPath>
+      <HintPath>..\References\Mono\UnityEngine.PhysicsModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.SubsystemsModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\UnityDLLs\UnityEngine.SubsystemsModule.dll</HintPath>
+      <HintPath>..\References\Mono\UnityEngine.SubsystemsModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\UnityDLLs\UnityEngine.TextRenderingModule.dll</HintPath>
+      <HintPath>..\References\Mono\UnityEngine.TextRenderingModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\UnityDLLs\UnityEngine.UI.dll</HintPath>
+      <HintPath>..\References\Mono\UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UIModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\UnityDLLs\UnityEngine.UIModule.dll</HintPath>
+      <HintPath>..\References\Mono\UnityEngine.UIModule.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

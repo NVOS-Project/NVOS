@@ -40,10 +40,10 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="Unity.TextMeshPro">
-      <HintPath>..\UnityDLLs\Unity.TextMeshPro.dll</HintPath>
+      <HintPath>..\References\Mono\Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\UnityDLLs\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>..\References\Mono\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
