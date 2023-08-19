@@ -9,6 +9,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using UnhollowerRuntimeLib;
 
 namespace NVOS.Il2CppLoader
 {
@@ -107,6 +108,20 @@ namespace NVOS.Il2CppLoader
                     LoggerInstance.Msg($"Description: {(manifest.Description != null ? manifest.Description : "None")}");
                     LoggerInstance.Msg($"Assembly: {Path.GetFileName(module)}");
                     LoggerInstance.WriteLine();
+
+                    LoggerInstance.Msg("Registering module mono behaviours with IL2CPP reflection");
+                    foreach (Type script in assembly.GetTypes().Where(t => !t.IsAbstract && t.IsClass && t.IsSubclassOf(typeof(UnityEngine.MonoBehaviour))))
+                    {
+                        try
+                        {
+                            ClassInjector.RegisterTypeInIl2Cpp(script, false);
+                            LoggerInstance.Msg($"Successfully registered script {script.FullName}");
+                        }
+                        catch(Exception ex)
+                        {
+                            LoggerInstance.Error($"Failed to register {script.FullName}", ex);
+                        }
+                    }
 
                     LoggerInstance.Msg($"Inserting module {manifest.Name} into NVOS");
                     mm.Load(assembly);

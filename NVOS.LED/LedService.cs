@@ -3,6 +3,7 @@ using NVOS.Core.Services;
 using NVOS.Core.Services.Attributes;
 using NVOS.UI.Models;
 using NVOS.UI.Services;
+using UnityEngine;
 
 namespace NVOS.LED
 {
