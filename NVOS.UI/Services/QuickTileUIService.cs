@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using UnityEngine.XR.Hands;
 using UnityEngine.XR.Interaction.Toolkit;
@@ -69,8 +70,8 @@ namespace NVOS.UI.Services
             XRSimpleInteractable gazeInteractable = interactableObject.AddComponent<XRSimpleInteractable>();
             gazeInteractable.allowGazeInteraction = true;
 
-            gazeInteractable.hoverEntered.AddListener(new UnityEngine.Events.UnityAction<HoverEnterEventArgs>(OnHoverEntered));
-            gazeInteractable.hoverExited.AddListener(new UnityEngine.Events.UnityAction<HoverExitEventArgs>(OnHoverExited));
+            gazeInteractable.hoverEntered.AddListener(new UnityAction<HoverEnterEventArgs>(OnHoverEntered));
+            gazeInteractable.hoverExited.AddListener(new UnityAction<HoverExitEventArgs>(OnHoverExited));
 
             XRHandSubsystem handSubsystem = XRGeneralSettings.Instance.Manager.activeLoader.GetLoadedSubsystem<XRHandSubsystem>();
             handSubsystem.updatedHands += OnHandUpdate;
