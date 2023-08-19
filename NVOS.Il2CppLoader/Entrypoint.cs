@@ -92,7 +92,7 @@ namespace NVOS.Il2CppLoader
                 return;
             }
 
-            string[] modules = Directory.GetFiles(Path.Combine(NVOS_ROOT_PATH, NVOS_MODULES_DIR), "*.dll");
+            string[] modules = Directory.GetFiles(NVOS_MODULES_DIR, "*.dll");
             LoggerInstance.Msg($"Found {modules.Length} candidates");
             int loaded = 0;
 
