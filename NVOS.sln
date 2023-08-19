@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NVOS.LED", "NVOS.LED\NVOS.L
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NVOS.Il2CppLoader", "NVOS.Il2CppLoader\NVOS.Il2CppLoader.csproj", "{5C367746-3DC8-48D3-A102-94E48551DBCE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NVOS.DummyModule", "NVOS.DummyModule\NVOS.DummyModule.csproj", "{BF11C9E9-AB09-4FCF-9FC1-EFFEC9C71735}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{5C367746-3DC8-48D3-A102-94E48551DBCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C367746-3DC8-48D3-A102-94E48551DBCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5C367746-3DC8-48D3-A102-94E48551DBCE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF11C9E9-AB09-4FCF-9FC1-EFFEC9C71735}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF11C9E9-AB09-4FCF-9FC1-EFFEC9C71735}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF11C9E9-AB09-4FCF-9FC1-EFFEC9C71735}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF11C9E9-AB09-4FCF-9FC1-EFFEC9C71735}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
