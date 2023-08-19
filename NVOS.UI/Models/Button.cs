@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -23,19 +18,19 @@ namespace NVOS.UI.Models
         public event EventHandler<System.EventArgs> OnClick;
 
         public Label Label { get; }
-        public Color HighlightColor 
-        { 
-            get 
-            { 
-                return highlightColor; 
-            } 
-            set 
+        public Color HighlightColor
+        {
+            get
+            {
+                return highlightColor;
+            }
+            set
             {
                 ColorBlock colorBlock = button.colors;
                 colorBlock.highlightedColor = value;
                 button.colors = colorBlock;
                 highlightColor = value;
-            } 
+            }
         }
 
         public Color PressedColor
@@ -109,7 +104,7 @@ namespace NVOS.UI.Models
             colorBlock.highlightedColor = new Color32(70, 70, 70, 255);
             colorBlock.pressedColor = new Color32(170, 170, 170, 255);
             button.colors = colorBlock;
-            
+
             backgroundColor = Color.black;
             highlightColor = new Color32(70, 70, 70, 255);
             pressedColor = new Color32(170, 170, 170, 255);

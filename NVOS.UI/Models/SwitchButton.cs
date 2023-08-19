@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using NVOS.UI.Models.EventArgs;
+using System;
 using UnityEngine;
-using NVOS.UI.Models.EventArgs;
 using UnityEngine.UI;
 
 namespace NVOS.UI.Models
@@ -230,7 +226,7 @@ namespace NVOS.UI.Models
             interactable = true;
         }
 
-        
+
         private void Button_OnClick(object sender, System.EventArgs e)
         {
             SetActivated(!isOn);

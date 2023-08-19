@@ -1,15 +1,11 @@
-﻿using Google.Protobuf;
-using Grpc.Net.Client;
+﻿using Grpc.Net.Client;
 using NVOS.Core;
 using NVOS.Core.Services;
 using NVOS.Core.Services.Attributes;
 using NVOS.Network.gRPC;
-using NVOS.Network.Structs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using Device = NVOS.Network.Structs.Device;
 
@@ -189,7 +185,7 @@ namespace NVOS.Network.Services
 
             ListControllersResponse response = await client.ListControllersAsync(new gRPC.Void());
 
-            return (int) response.Count;
+            return (int)response.Count;
         }
 
         private Device ConvertDevice(gRPC.Device responseDevice)

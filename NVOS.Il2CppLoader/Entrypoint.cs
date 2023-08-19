@@ -6,12 +6,9 @@ using NVOS.Core.Modules;
 using NVOS.Core.Modules.Extensions;
 using NVOS.Core.Services;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NVOS.Il2CppLoader
 {
@@ -36,7 +33,7 @@ namespace NVOS.Il2CppLoader
 
                 LoggerInstance.Msg("NVOS root directory OK");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 LoggerInstance.Error("Failed to prepare NVOS root directory", ex); ;
                 return;
@@ -49,7 +46,7 @@ namespace NVOS.Il2CppLoader
                 Bootstrap.Init();
                 LoggerInstance.Msg("Bootstrap OK");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 LoggerInstance.Error("Failed to initialize NVOS", ex);
                 return;
@@ -62,7 +59,7 @@ namespace NVOS.Il2CppLoader
                 logger.OnLog += NVOS_OnLog;
                 LoggerInstance.Msg("Log hook OK");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 LoggerInstance.Warning($"Failed to hook NVOS log stream: {ex}");
             }
@@ -115,7 +112,7 @@ namespace NVOS.Il2CppLoader
                     mm.Load(assembly);
                     loaded++;
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     LoggerInstance.Error($"Failed to load {module}", ex);
                 }

@@ -7,11 +7,7 @@ using NVOS.Core.Services.Attributes;
 using NVOS.Core.Services.Enums;
 using NVOS.Network.gRPC;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -73,7 +69,7 @@ namespace NVOS.Network
                     await DoHeartbeat();
                     await Task.Delay(3000);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     logger.Error($"RpcConnectionService worker crashed: {ex}");
                 }
@@ -89,8 +85,8 @@ namespace NVOS.Network
 
             mutex.ReleaseMutex();
 
-            if (channel != null && heartbeatClient != null && isConnected) 
-            { 
+            if (channel != null && heartbeatClient != null && isConnected)
+            {
                 try
                 {
                     await heartbeatClient.PingAsync(new gRPC.Void());
@@ -115,12 +111,12 @@ namespace NVOS.Network
                 channel = GrpcChannel.ForAddress($"{HOSTNAME}:{PORT}", options);
                 heartbeatClient = new Heartbeat.HeartbeatClient(channel);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 logger.Debug($"Error while building RPC channel (possible issue): {ex}");
                 return;
             }
-            
+
 
             for (int i = 0; i < CONNECT_RETRY_ATTEMPTS; i++)
             {
@@ -145,7 +141,7 @@ namespace NVOS.Network
                     ChannelConnected?.Invoke(this, System.EventArgs.Empty);
                     return;
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     logger.Debug($"Error while raising ChannelConnected event: {ex}");
                     mutex.WaitOne();

@@ -1,10 +1,6 @@
 ﻿using NVOS.UI.Models.EventArgs;
 using NVOS.UI.Scripts;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -83,7 +79,7 @@ namespace NVOS.UI.Models
                 if (value != Slider.Direction.BottomToTop && value != Slider.Direction.TopToBottom)
                     throw new Exception("Vertical slider only accepts a BottomToTop/TopToBottom direction!");
 
-                    direction = value;
+                direction = value;
                 slider.direction = value;
             }
         }

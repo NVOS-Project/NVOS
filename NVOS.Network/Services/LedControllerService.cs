@@ -1,16 +1,11 @@
 ﻿using Grpc.Net.Client;
 using NVOS.Core;
-using NVOS.Core.Logger;
 using NVOS.Core.Services;
 using NVOS.Core.Services.Attributes;
 using NVOS.Network.EventArgs;
 using NVOS.Network.gRPC;
 using NVOS.Network.Structs;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace NVOS.Network.Services

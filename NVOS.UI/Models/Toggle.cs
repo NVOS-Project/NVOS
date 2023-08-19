@@ -1,9 +1,5 @@
 ﻿using NVOS.UI.Models.EventArgs;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -160,7 +156,7 @@ namespace NVOS.UI.Models
 
         private void HandleClick(bool isChecked)
         {
-            OnValueChanged?.Invoke(this, new ToggleValueChangedEventArgs(this, isChecked)); 
+            OnValueChanged?.Invoke(this, new ToggleValueChangedEventArgs(this, isChecked));
         }
     }
 }

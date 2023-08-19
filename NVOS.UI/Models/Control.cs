@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using static UnityEngine.UI.ContentSizeFitter;
@@ -45,17 +42,17 @@ namespace NVOS.UI.Models
         private LayoutElement layoutElement;
         protected GameObject root;
 
-        public string Name 
-        { 
-            get 
-            { 
-                return name; 
-            } 
-            set 
+        public string Name
+        {
+            get
+            {
+                return name;
+            }
+            set
             {
                 root.name = value;
                 name = value;
-            } 
+            }
         }
 
         public float Width
@@ -374,7 +371,7 @@ namespace NVOS.UI.Models
         {
             foreach (Control child in controls)
                 child.Dispose();
-            
+
             rectTransform = null;
             GameObject.Destroy(root);
         }

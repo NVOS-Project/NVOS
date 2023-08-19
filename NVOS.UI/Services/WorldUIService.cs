@@ -6,8 +6,6 @@ using NVOS.UI.Models.EventArgs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace NVOS.UI.Services
@@ -159,7 +157,7 @@ namespace NVOS.UI.Services
                 {
                     isMoving = false;
                     moveWaitTimePassed = 0f;
-                    
+
                     foreach (Window3D window in windows)
                     {
                         if (!window.IsLocked)

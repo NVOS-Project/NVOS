@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace NVOS.UI.Models
 {
@@ -18,53 +12,53 @@ namespace NVOS.UI.Models
 
         private TextMeshProUGUI textComponent;
 
-        public string Text 
-        { 
-            get 
-            { 
-                return text; 
-            } 
-            set 
+        public string Text
+        {
+            get
+            {
+                return text;
+            }
+            set
             {
                 textComponent.text = value;
                 text = value;
-            } 
+            }
         }
-        public float FontSize 
-        { 
-            get 
-            { 
-                return fontSize; 
-            } 
-            set 
+        public float FontSize
+        {
+            get
+            {
+                return fontSize;
+            }
+            set
             {
                 textComponent.fontSize = value;
                 fontSize = value;
-            } 
-        } 
-        public TextAlignmentOptions TextAlignment 
-        { 
-            get 
-            { 
-                return textAlignment; 
-            } 
-            set 
+            }
+        }
+        public TextAlignmentOptions TextAlignment
+        {
+            get
+            {
+                return textAlignment;
+            }
+            set
             {
                 textComponent.alignment = value;
                 textAlignment = value;
-            } 
+            }
         }
-        public Color TextColor 
-        { 
-            get 
-            { 
-                return textColor; 
-            } 
-            set 
+        public Color TextColor
+        {
+            get
+            {
+                return textColor;
+            }
+            set
             {
                 textComponent.color = value;
                 textColor = value;
-            } 
+            }
         }
 
         public Label() : this("Label") { }

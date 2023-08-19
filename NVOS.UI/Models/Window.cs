@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using NVOS.UI.Models.Enums;
+using NVOS.UI.Models.EventArgs;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using NVOS.UI.Models.Enums;
-using NVOS.UI.Models.EventArgs;
 using UnityEngine.XR.Interaction.Toolkit.UI;
 
 namespace NVOS.UI.Models
@@ -54,7 +49,7 @@ namespace NVOS.UI.Models
 
             root.SetActive(visible);
         }
-        
+
         public virtual void Update()
         {
             foreach (Control child in content.controls)

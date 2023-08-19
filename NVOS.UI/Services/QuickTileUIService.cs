@@ -5,14 +5,11 @@ using NVOS.UI.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using UnityEngine.XR.Hands;
 using UnityEngine.XR.Interaction.Toolkit;
-using UnityEngine.XR.Interaction.Toolkit.UI;
 using UnityEngine.XR.Management;
 
 namespace NVOS.UI.Services
@@ -181,7 +178,7 @@ namespace NVOS.UI.Services
             {
                 rightWristAnchor.transform.position = rightHand.rootPose.position;
                 rightWristAnchor.transform.rotation = rightHand.rootPose.rotation;
-            } 
+            }
             else
             {
                 rightWristAnchor.transform.position = Vector3.zero;

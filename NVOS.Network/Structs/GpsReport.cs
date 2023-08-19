@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Device.Location;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace NVOS.Network.Structs
+﻿namespace NVOS.Network.Structs
 {
     public class GpsReport
     {

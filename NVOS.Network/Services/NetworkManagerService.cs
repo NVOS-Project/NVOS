@@ -2,15 +2,12 @@
 using NVOS.Core;
 using NVOS.Core.Services;
 using NVOS.Core.Services.Attributes;
+using NVOS.Network.EventArgs;
 using NVOS.Network.gRPC;
-using Port = NVOS.Network.Structs.Port;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Remoting.Channels;
-using System.Text;
 using System.Threading.Tasks;
-using NVOS.Network.EventArgs;
+using Port = NVOS.Network.Structs.Port;
 
 namespace NVOS.Network.Services
 {
@@ -58,8 +55,8 @@ namespace NVOS.Network.Services
             AssertClient();
 
             GetRunningPortsResponse response = client.GetRunningPorts(new gRPC.Void());
-            
-            foreach (gRPC.Port port in response.Ports) 
+
+            foreach (gRPC.Port port in response.Ports)
             {
                 yield return new Port(port.Type, (ushort)port.LocalPort, (ushort)port.RemotePort);
             }
