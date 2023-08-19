@@ -98,6 +98,7 @@
     <Compile Include="Database\Serialization\IDbValueSerializer.cs" />
     <Compile Include="Database\Serialization\JsonDbValueSerializer.cs" />
     <Compile Include="Logger\Enums\LogLevel.cs" />
+    <Compile Include="Logger\EventArgs\LogEventArgs.cs" />
     <Compile Include="Logger\ILogger.cs" />
     <Compile Include="Modules\EventArgs\ModuleEventArgs.cs" />
     <Compile Include="Modules\Extensions\ModuleExtensions.cs" />

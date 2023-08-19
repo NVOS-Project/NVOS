@@ -2,6 +2,7 @@
 using NVOS.Core.Database;
 using NVOS.Core.Database.EventArgs;
 using NVOS.Core.Logger.Enums;
+using NVOS.Core.Logger.EventArgs;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,12 +19,14 @@ namespace NVOS.Core.Logger
         private string logDirectory;
         private string filePath;
 
+        public event EventHandler<LogEventArgs> OnLog;
+
         public BufferingLogger(IDatabaseService database)
         {
             collection = database.GetCollection("logger");
             int bufferSize = (int)collection.ReadOrDefault("bufferSize", 200);
             logLevel = (LogLevel)collection.ReadOrDefault("logLevel", LogLevel.INFO);
-            logDirectory = (string)collection.ReadOrDefault("logDirectory", "logs");
+            logDirectory = (string)collection.ReadOrDefault("logDirectory", "Logs");
             buffer = new CircularBuffer<string>(bufferSize);
             collection.RecordWritten += Collection_RecordWritten;
             Init();
@@ -87,6 +90,7 @@ namespace NVOS.Core.Logger
             buffer.PushBack(logMessage);
             streamWriter.WriteLine(logMessage);
             streamWriter.Flush();
+            OnLog?.Invoke(this, new LogEventArgs(level, message));
         }
 
         public void Debug(string message)
