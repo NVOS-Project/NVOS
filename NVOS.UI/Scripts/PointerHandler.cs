@@ -8,6 +8,10 @@ namespace NVOS.UI.Scripts
     {
         public event EventHandler PointerUp;
 
+#if IL2CPP_BUILD
+        public PointerHandler(IntPtr ptr) : base(ptr) { }
+#endif
+
         public void OnPointerUp(PointerEventData eventData)
         {
             PointerUp?.Invoke(this, System.EventArgs.Empty);
