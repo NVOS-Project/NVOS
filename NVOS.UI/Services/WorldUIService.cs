@@ -34,7 +34,7 @@ namespace NVOS.UI.Services
         {
             updateProvider = ServiceLocator.Resolve<UpdateProviderService>();
             IDatabaseService db = ServiceLocator.Resolve<IDatabaseService>();
-            DbCollection collection = db.GetCollection("world-ui");
+            DbCollection collection = db.GetCollection("world_ui");
 
             moveWaitTime = (float)collection.ReadOrDefault("moveWaitTime", 5f);
             windowSpeed = (float)collection.ReadOrDefault("windowSpeed", 2f);

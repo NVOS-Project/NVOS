@@ -34,7 +34,7 @@ namespace NVOS.UI.Services
         {
             updateProvider = ServiceLocator.Resolve<UpdateProviderService>();
             IDatabaseService db = ServiceLocator.Resolve<IDatabaseService>();
-            DbCollection collection = db.GetCollection("screen-ui");
+            DbCollection collection = db.GetCollection("screen_ui");
 
             gridWidth = (int)collection.ReadOrDefault("gridWidth", 8);
             gridHeight = (int)collection.ReadOrDefault("gridHeight", 5);
