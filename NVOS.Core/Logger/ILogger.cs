@@ -13,6 +13,8 @@ namespace NVOS.Core.Logger
         void Info(string message);
         void Warn(string message);
         void Error(string message);
+        LogLevel GetLevel();
+        void SetLevel(LogLevel level);
         IEnumerable<string> ReadLogs();
     }
 }

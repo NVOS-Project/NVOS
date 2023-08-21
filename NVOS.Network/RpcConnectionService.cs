@@ -98,13 +98,13 @@ namespace NVOS.Network
                     isConnected = false;
                     mutex.ReleaseMutex();
 
+                    logger.Debug("Lost RPC connection");
                     ChannelLost?.Invoke(this, System.EventArgs.Empty);
                 }
             }
 
             try
             {
-
                 GrpcWebHandler handler = new GrpcWebHandler(new HttpClientHandler());
                 GrpcChannelOptions options = new GrpcChannelOptions { HttpHandler = handler };
 
@@ -124,8 +124,9 @@ namespace NVOS.Network
                 {
                     await heartbeatClient.PingAsync(new gRPC.Void());
                 }
-                catch
+                catch (Exception ex)
                 {
+                    logger.Debug($"Failed to ping heartbeat service: {ex}");
                     await Task.Delay(1000);
                     continue;
                 }
@@ -138,6 +139,7 @@ namespace NVOS.Network
                     isConnected = true;
                     mutex.ReleaseMutex();
 
+                    logger.Debug("Estabilished RPC connection");
                     ChannelConnected?.Invoke(this, System.EventArgs.Empty);
                     return;
                 }
