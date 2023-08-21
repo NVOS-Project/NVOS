@@ -100,7 +100,8 @@ namespace NVOS.Core.Services
                 {
                     try
                     {
-                        StopUnit(dependency, ServiceStopReason.Failure);
+                        if (GetServiceState(dependency) == ServiceState.Running)
+                            StopUnit(dependency, ServiceStopReason.Failure);
                     }
                     catch (Exception ex)
                     {
@@ -149,7 +150,7 @@ namespace NVOS.Core.Services
             if (serviceUnits.ContainsKey(type))
                 throw new InvalidOperationException($"Service type {type.Name} already registered");
 
-            ServiceUnit unit = new ServiceUnit(serviceScope, type, domain);
+            ServiceUnit unit = new ServiceUnit(logger, serviceScope, type, domain);
             serviceUnits.Add(type, unit);
             resolver.Register(type);
             logger.Info($"[ServiceManager] Service {type.Name} registered");

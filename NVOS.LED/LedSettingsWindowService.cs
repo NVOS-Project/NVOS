@@ -38,7 +38,7 @@ namespace NVOS.LED
         private HorizontalSlider brightnessSlider;
         private Panel warningPanel;
 
-        public bool Init()
+        public void Init()
         {
             logger = ServiceLocator.Resolve<Core.Logger.ILogger>();
             worldUIService = ServiceLocator.Resolve<WorldUIService>();
@@ -59,8 +59,6 @@ namespace NVOS.LED
             ledRpcService.OnBrightnessChanged += LedRpcService_OnBrightnessChanged;
             ledRpcService.OnModeChanged += LedRpcService_OnModeChanged;
             ledRpcService.OnPowerStateChanged += LedRpcService_OnPowerStateChanged;
-
-            return true;
         }
 
         public void Dispose()

@@ -2,6 +2,6 @@
 {
     public interface IService
     {
-        bool Init();
+        void Init();
     }
 }

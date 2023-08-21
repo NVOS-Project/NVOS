@@ -13,9 +13,10 @@ namespace NVOS.Network
 {
     [ServiceType(Core.Services.Enums.ServiceType.Singleton)]
     [ServiceDependency(typeof(EmbeddedNetworkService))]
-    public class NetworkManagerService : IService
+    public class NetworkManagerService : IService, IDisposable
     {
         private EmbeddedNetworkService rpcConnectionService;
+        private bool isDisposed;
 
         private GrpcChannel channel;
         private NetworkManager.NetworkManagerClient client;
@@ -25,7 +26,7 @@ namespace NVOS.Network
         public event EventHandler<OnForwardPortRemovedEventArgs> OnForwardPortRemoved;
         public event EventHandler<OnReversePortRemovedEventArgs> OnReversePortRemoved;
 
-        public bool Init()
+        public void Init()
         {
             rpcConnectionService = ServiceLocator.Resolve<EmbeddedNetworkService>();
 
@@ -35,7 +36,16 @@ namespace NVOS.Network
 
             rpcConnectionService.ChannelConnected += RpcConnectionService_ChannelConnected;
             rpcConnectionService.ChannelLost += RpcConnectionService_ChannelLost;
-            return true;
+        }
+
+        public void Dispose()
+        {
+            if (isDisposed)
+                return;
+
+            rpcConnectionService.ChannelConnected -= RpcConnectionService_ChannelConnected;
+            rpcConnectionService.ChannelLost -= RpcConnectionService_ChannelLost;
+            isDisposed = true;
         }
 
         private void RpcConnectionService_ChannelConnected(object sender, System.EventArgs e)

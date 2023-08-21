@@ -37,15 +37,13 @@ namespace NVOS.Network
 
         public bool IsConnected { get { return isConnected; } }
 
-        public bool Init()
+        public void Init()
         {
             mutex = new Mutex();
             isConnected = false;
             logger = ServiceLocator.Resolve<BufferingLogger>();
 
             Task.Run(() => RunWorker());
-
-            return true;
         }
 
         public void Dispose()

@@ -18,11 +18,10 @@ namespace NVOS.Unity
         private GameObject executorObject;
         private MainThreadExecutor executorScript;
 
-        public bool Init()
+        public void Init()
         {
             executorObject = new GameObject();
             executorScript = executorObject.AddComponent<MainThreadExecutor>();
-            return true;
         }
 
         public void Dispose()

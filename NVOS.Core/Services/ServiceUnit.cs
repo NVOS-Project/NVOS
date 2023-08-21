@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using NVOS.Core.Logger;
 using NVOS.Core.Services.Attributes;
 using NVOS.Core.Services.Enums;
 using System;
@@ -9,6 +10,7 @@ namespace NVOS.Core.Services
 {
     public class ServiceUnit
     {
+        private ILogger logger;
         private ILifetimeScope serviceRootScope;
         private List<IService> instances;
         public Type DeclaringType { get; private set; }
@@ -27,8 +29,9 @@ namespace NVOS.Core.Services
         /// </summary>
         /// <param name="rootScope">Root scope</param>
         /// <param name="declaringType">Service type</param>
-        public ServiceUnit(ILifetimeScope rootScope, Type declaringType, string domain = null)
+        public ServiceUnit(ILogger logger, ILifetimeScope rootScope, Type declaringType, string domain = null)
         {
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             serviceRootScope = rootScope ?? throw new ArgumentNullException(nameof(rootScope));
             instances = new List<IService>();
 
@@ -103,7 +106,11 @@ namespace NVOS.Core.Services
                     IDisposable disposableService = instance as IDisposable;
                     disposableService?.Dispose();
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    logger.Warn($"[ServiceUnit] Failed to destroy service instance: {ex}");
+                }
+
                 instances.Remove(instance);
                 return true;
             }
@@ -120,7 +127,16 @@ namespace NVOS.Core.Services
             if (Type == ServiceType.Singleton)
             {
                 // Create and start singleton now
-                GetOrCreateInstance();
+                try
+                {
+                    GetOrCreateInstance();
+                }
+                catch (Exception ex)
+                {
+                    DestroyServiceScope();
+                    StopReason = ServiceStopReason.Failure;
+                    throw ex;
+                }
             }
 
             State = ServiceState.Running;

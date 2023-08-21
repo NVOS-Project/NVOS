@@ -11,14 +11,15 @@ namespace NVOS.Network.Capabilities
 {
     [ServiceType(Core.Services.Enums.ServiceType.Singleton)]
     [ServiceDependency(typeof(EmbeddedNetworkService))]
-    public class GpsRpcService : IService
+    public class GpsRpcService : IService, IDisposable
     {
         private EmbeddedNetworkService rpcConnectionService;
+        private bool isDisposed;
 
         private GrpcChannel channel;
         private Gps.GpsClient client;
 
-        public bool Init()
+        public void Init()
         {
             rpcConnectionService = ServiceLocator.Resolve<EmbeddedNetworkService>();
             channel = rpcConnectionService.GetChannel();
@@ -28,7 +29,16 @@ namespace NVOS.Network.Capabilities
 
             rpcConnectionService.ChannelConnected += RpcConnectionService_ChannelConnected;
             rpcConnectionService.ChannelLost += RpcConnectionService_ChannelLost;
-            return true;
+        }
+
+        public void Dispose()
+        {
+            if (isDisposed)
+                return;
+
+            rpcConnectionService.ChannelConnected -= RpcConnectionService_ChannelConnected;
+            rpcConnectionService.ChannelLost -= RpcConnectionService_ChannelLost;
+            isDisposed = true;
         }
 
         private void RpcConnectionService_ChannelConnected(object sender, System.EventArgs e)

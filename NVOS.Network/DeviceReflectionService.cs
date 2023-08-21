@@ -20,7 +20,7 @@ namespace NVOS.Network
         private GrpcChannel channel;
         private DeviceReflection.DeviceReflectionClient client;
 
-        public bool Init()
+        public void Init()
         {
             rpcConnectionService = ServiceLocator.Resolve<EmbeddedNetworkService>();
 
@@ -30,7 +30,6 @@ namespace NVOS.Network
 
             rpcConnectionService.ChannelConnected += RpcConnectionService_ChannelConnected;
             rpcConnectionService.ChannelLost += RpcConnectionService_ChannelLost;
-            return true;
         }
 
         private void RpcConnectionService_ChannelConnected(object sender, System.EventArgs e)
