@@ -1,4 +1,5 @@
 ﻿using NVOS.Core;
+using NVOS.Core.Database;
 using NVOS.Core.Services;
 using NVOS.Core.Services.Attributes;
 using NVOS.Core.Services.Enums;
@@ -32,17 +33,20 @@ namespace NVOS.UI.Services
         public bool Init()
         {
             updateProvider = ServiceLocator.Resolve<UpdateProviderService>();
+            IDatabaseService db = ServiceLocator.Resolve<IDatabaseService>();
+            DbCollection collection = db.GetCollection("world-ui");
+
+            moveWaitTime = (float)collection.ReadOrDefault("moveWaitTime", 5f);
+            windowSpeed = (float)collection.ReadOrDefault("windowSpeed", 2f);
+            walkSpeed = (float)collection.ReadOrDefault("walkSpeed", 0.7f);
+            windowSpawnDistance = (float)collection.ReadOrDefault("windowSpawnDistance", 0.5f);
+            windowBubbleRadius = (float)collection.ReadOrDefault("windowBubbleRadius", 3f);
+
             worldAnchor = new GameObject("WorldUIAnchor");
             worldAnchor.transform.position = Vector3.zero;
-            moveWaitTime = 5f;
-            windowSpeed = 2f;
-            walkSpeed = 0.7f;
-            windowSpawnDistance = 0.5f;
-            windowBubbleRadius = 3f;
-
-            updateProvider.OnLateUpdate += UpdateProvider_OnLateUpdate;
 
             windows = new List<Window3D>();
+            updateProvider.OnLateUpdate += UpdateProvider_OnLateUpdate;
             return true;
         }
 
