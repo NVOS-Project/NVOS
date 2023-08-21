@@ -10,6 +10,7 @@ using NVOS.Network;
 using System.Linq;
 using NVOS.Network.Structs;
 using static UnityEngine.Scripting.GarbageCollector;
+using NVOS.Unity;
 
 namespace NVOS.LED
 {
@@ -19,6 +20,7 @@ namespace NVOS.LED
     [ServiceDependency(typeof(DeviceReflectionService))]
     [ServiceDependency(typeof(LedControllerRpcService))]
     [ServiceDependency(typeof(EmbeddedNetworkService))]
+    [ServiceDependency(typeof(MainThreadExecutorService))]
     public class LedSettingsWindowService : IService, IDisposable
     {
         private bool isDisposed;
@@ -29,6 +31,7 @@ namespace NVOS.LED
         private DeviceReflectionService deviceReflection;
         private LedControllerRpcService ledRpcService;
         private EmbeddedNetworkService networkService;
+        private MainThreadExecutorService executorService;
         
         private Window3D window;
         private SwitchTile windowTile;
@@ -46,6 +49,7 @@ namespace NVOS.LED
             deviceReflection = ServiceLocator.Resolve<DeviceReflectionService>();
             ledRpcService = ServiceLocator.Resolve<LedControllerRpcService>();
             networkService = ServiceLocator.Resolve<EmbeddedNetworkService>();
+            executorService = ServiceLocator.Resolve<MainThreadExecutorService>();
 
             SetupWindow();
             SetupTile();
@@ -82,6 +86,7 @@ namespace NVOS.LED
             deviceReflection = null;
             ledRpcService = null;
             networkService = null;
+            executorService = null;
             isDisposed = true;
         }
 
@@ -92,13 +97,16 @@ namespace NVOS.LED
             {
                 LEDState state = ledRpcService.GetState(device.Address);
 
-                SetPowerControlValue(state.PoweredOn);
-                SetModeControlValue(state.Mode);
-                SetBrightnessControlValue(state.Brightness);
+                executorService.Execute(() =>
+                {
+                    SetPowerControlValue(state.PoweredOn);
+                    SetModeControlValue(state.Mode);
+                    SetBrightnessControlValue(state.Brightness);
 
-                deviceAddress = device.Address;
-                warningPanel.IsVisible = false;
-                logger.Info("[LEDSettingsWindowService] Controls enabled");
+                    deviceAddress = device.Address;
+                    warningPanel.IsVisible = false;
+                    logger.Info("[LEDSettingsWindowService] Controls enabled");
+                });
             }
             else
             {
@@ -108,9 +116,12 @@ namespace NVOS.LED
 
         private void OnRpcDisconnected()
         {
-            deviceAddress = null;
-            warningPanel.IsVisible = true;
-            logger.Info("[LEDSettingsWindowService] Controls disabled");
+            executorService.Execute(() =>
+            {
+                deviceAddress = null;
+                warningPanel.IsVisible = true;
+                logger.Info("[LEDSettingsWindowService] Controls disabled");
+            });
         }
 
         private void LedRpcService_OnPowerStateChanged(object sender, Network.EventArgs.OnPowerStateChangedEventArgs e)
@@ -237,7 +248,7 @@ namespace NVOS.LED
             warningLabel.TextColor = Color.white;
             warningPanel.AddChild(warningLabel);
 
-            warningPanel.IsVisible = false;
+            warningPanel.IsVisible = true;
             window.Hide();
 
             window.OnWindowStateChanged += Window_OnWindowStateChanged;
