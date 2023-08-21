@@ -8,9 +8,9 @@ namespace NVOS.UI
     {
         public string Name => "NVOS.LED";
 
-        public string Description => "ligt :)";
+        public string Description => "UI for controlling the night vision LED array";
 
-        public string Author => "g";
+        public string Author => "NVOS Project";
 
         public Version Version => Assembly.GetExecutingAssembly().GetName().Version;
     }

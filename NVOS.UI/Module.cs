@@ -8,9 +8,9 @@ namespace NVOS.UI
     {
         public string Name => "NVOS.UI";
 
-        public string Description => "ujaj";
+        public string Description => "A library implementing UI systems in Unity";
 
-        public string Author => "g";
+        public string Author => "NVOS Project";
 
         public Version Version => Assembly.GetExecutingAssembly().GetName().Version;
     }

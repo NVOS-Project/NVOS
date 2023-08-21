@@ -8,9 +8,9 @@ namespace NVOS.UI
     {
         public string Name => "NVOS.Network";
 
-        public string Description => "cool";
+        public string Description => "A library implementing connectivity to NVOS Embedded instances";
 
-        public string Author => "g";
+        public string Author => "NVOS Project";
 
         public Version Version => Assembly.GetExecutingAssembly().GetName().Version;
     }
