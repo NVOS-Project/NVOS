@@ -12,17 +12,17 @@ using Device = NVOS.Network.Structs.Device;
 namespace NVOS.Network
 {
     [ServiceType(Core.Services.Enums.ServiceType.Singleton)]
-    [ServiceDependency(typeof(RpcConnectionService))]
+    [ServiceDependency(typeof(EmbeddedNetworkService))]
     public class DeviceReflectionService : IService
     {
-        private RpcConnectionService rpcConnectionService;
+        private EmbeddedNetworkService rpcConnectionService;
 
         private GrpcChannel channel;
         private DeviceReflection.DeviceReflectionClient client;
 
         public bool Init()
         {
-            rpcConnectionService = ServiceLocator.Resolve<RpcConnectionService>();
+            rpcConnectionService = ServiceLocator.Resolve<EmbeddedNetworkService>();
 
             channel = rpcConnectionService.GetChannel();
             if (channel != null)

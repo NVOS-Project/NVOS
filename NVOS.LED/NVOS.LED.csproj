@@ -6,6 +6,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\NVOS.Core\NVOS.Core.csproj" />
+	  <ProjectReference Include="..\NVOS.Network\NVOS.Network.csproj" />
 	  <ProjectReference Include="..\NVOS.UI\NVOS.UI.csproj" />
 	</ItemGroup>
 

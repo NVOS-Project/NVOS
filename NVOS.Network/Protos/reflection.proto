@@ -6,7 +6,8 @@ import "void.proto";
 option csharp_namespace = "NVOS.Network.gRPC";
 
 enum CapabilityId {
-    Dummy = 0;
+    LEDController = 0;
+    GPS = 1;
 }
 
 message Device {

@@ -10,17 +10,17 @@ using System.Threading.Tasks;
 namespace NVOS.Network.Capabilities
 {
     [ServiceType(Core.Services.Enums.ServiceType.Singleton)]
-    [ServiceDependency(typeof(RpcConnectionService))]
+    [ServiceDependency(typeof(EmbeddedNetworkService))]
     public class GpsRpcService : IService
     {
-        private RpcConnectionService rpcConnectionService;
+        private EmbeddedNetworkService rpcConnectionService;
 
         private GrpcChannel channel;
         private Gps.GpsClient client;
 
         public bool Init()
         {
-            rpcConnectionService = ServiceLocator.Resolve<RpcConnectionService>();
+            rpcConnectionService = ServiceLocator.Resolve<EmbeddedNetworkService>();
             channel = rpcConnectionService.GetChannel();
 
             if (channel != null)

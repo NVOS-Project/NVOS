@@ -8,17 +8,20 @@ using NVOS.Core.Services.Enums;
 using NVOS.Network.gRPC;
 using System;
 using System.Net.Http;
+using System.Runtime.Serialization.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace NVOS.Network
 {
     [ServiceType(ServiceType.Singleton)]
-    public class RpcConnectionService : IService, IDisposable
+    public class EmbeddedNetworkService : IService, IDisposable
     {
         private const string HOSTNAME = "http://localhost";
         private const int PORT = 30000;
         private const int CONNECT_RETRY_ATTEMPTS = 3;
+        private const int RETRY_INTERVAL_MS = 3000;
+        private const int BACKOFF_DURATION_MS = 10000;
 
         private bool isConnected;
         private bool isDisposed;
@@ -31,6 +34,8 @@ namespace NVOS.Network
         public event EventHandler ChannelLost;
 
         private BufferingLogger logger;
+
+        public bool IsConnected { get { return isConnected; } }
 
         public bool Init()
         {
@@ -98,7 +103,7 @@ namespace NVOS.Network
                     isConnected = false;
                     mutex.ReleaseMutex();
 
-                    logger.Debug("Lost RPC connection");
+                    logger.Info("Lost RPC connection");
                     ChannelLost?.Invoke(this, System.EventArgs.Empty);
                 }
             }
@@ -124,10 +129,9 @@ namespace NVOS.Network
                 {
                     await heartbeatClient.PingAsync(new gRPC.Void());
                 }
-                catch (Exception ex)
+                catch
                 {
-                    logger.Debug($"Failed to ping heartbeat service: {ex}");
-                    await Task.Delay(1000);
+                    await Task.Delay(RETRY_INTERVAL_MS);
                     continue;
                 }
 
@@ -139,7 +143,7 @@ namespace NVOS.Network
                     isConnected = true;
                     mutex.ReleaseMutex();
 
-                    logger.Debug("Estabilished RPC connection");
+                    logger.Info("Estabilished RPC connection");
                     ChannelConnected?.Invoke(this, System.EventArgs.Empty);
                     return;
                 }
@@ -153,6 +157,7 @@ namespace NVOS.Network
             }
 
             logger.Warn($"Attempted estabilishing a connection {CONNECT_RETRY_ATTEMPTS} times, backing off...");
+            await Task.Delay(BACKOFF_DURATION_MS);
         }
 
         public GrpcChannel GetChannel()
