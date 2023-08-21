@@ -9,7 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Device = NVOS.Network.Structs.Device;
 
-namespace NVOS.Network.Services
+namespace NVOS.Network
 {
     [ServiceType(Core.Services.Enums.ServiceType.Singleton)]
     [ServiceDependency(typeof(RpcConnectionService))]

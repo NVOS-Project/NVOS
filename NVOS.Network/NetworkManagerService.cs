@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Port = NVOS.Network.Structs.Port;
 
-namespace NVOS.Network.Services
+namespace NVOS.Network
 {
     [ServiceType(Core.Services.Enums.ServiceType.Singleton)]
     [ServiceDependency(typeof(RpcConnectionService))]

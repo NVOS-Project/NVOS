@@ -7,11 +7,11 @@ using NVOS.Network.Structs;
 using System;
 using System.Threading.Tasks;
 
-namespace NVOS.Network.Services
+namespace NVOS.Network.Capabilities
 {
     [ServiceType(Core.Services.Enums.ServiceType.Singleton)]
     [ServiceDependency(typeof(RpcConnectionService))]
-    public class GpsService : IService
+    public class GpsRpcService : IService
     {
         private RpcConnectionService rpcConnectionService;
 

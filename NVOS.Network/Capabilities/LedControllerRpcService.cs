@@ -8,11 +8,11 @@ using NVOS.Network.Structs;
 using System;
 using System.Threading.Tasks;
 
-namespace NVOS.Network.Services
+namespace NVOS.Network.Capabilities
 {
     [ServiceType(Core.Services.Enums.ServiceType.Singleton)]
     [ServiceDependency(typeof(RpcConnectionService))]
-    public class LedControllerService : IService
+    public class LedControllerRpcService : IService
     {
         private RpcConnectionService rpcConnectionService;
 
