@@ -1,8 +1,10 @@
 ﻿using NVOS.Core;
+using NVOS.Core.Services;
 using NVOS.Core.Services.Attributes;
 using NVOS.Core.Services.Enums;
 using NVOS.UI.Models;
 using NVOS.UI.Models.EventArgs;
+using NVOS.Unity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,13 +13,13 @@ using UnityEngine;
 namespace NVOS.UI.Services
 {
     [ServiceType(ServiceType.Singleton)]
+    [ServiceDependency(typeof(UpdateProviderService))]
     public class WorldUIService : IService, IDisposable
     {
+        private UpdateProviderService updateProvider;
         private List<Window3D> windows;
         private GameObject worldAnchor;
-
-        private GameObject tickerObject;
-        private GameTickProvider gameTickProvider;
+        private bool isDisposed;
 
         private bool isMoving;
         private float moveWaitTime;
@@ -29,28 +31,28 @@ namespace NVOS.UI.Services
 
         public bool Init()
         {
+            updateProvider = ServiceLocator.Resolve<UpdateProviderService>();
             worldAnchor = new GameObject("WorldUIAnchor");
             worldAnchor.transform.position = Vector3.zero;
-            tickerObject = new GameObject("WorldUITicker");
             moveWaitTime = 5f;
             windowSpeed = 2f;
             walkSpeed = 0.7f;
             windowSpawnDistance = 0.5f;
             windowBubbleRadius = 3f;
-            gameTickProvider = tickerObject.AddComponent<GameTickProvider>();
-            gameTickProvider.OnLateUpdate += GameTickProvider_OnLateUpdate;
+
+            updateProvider.OnLateUpdate += UpdateProvider_OnLateUpdate;
 
             windows = new List<Window3D>();
-
             return true;
         }
 
         public void Dispose()
         {
-            gameTickProvider.OnLateUpdate -= GameTickProvider_OnLateUpdate;
-            gameTickProvider = null;
-            GameObject.Destroy(tickerObject);
-            tickerObject = null;
+            if (isDisposed)
+                return;
+
+            updateProvider.OnLateUpdate -= UpdateProvider_OnLateUpdate;
+            updateProvider = null;
 
             foreach (Window3D window in windows)
             {
@@ -60,6 +62,7 @@ namespace NVOS.UI.Services
 
             GameObject.Destroy(worldAnchor);
             worldAnchor = null;
+            isDisposed = true;
         }
 
         public Window3D CreateWindow(string name, float width, float height)
@@ -102,7 +105,7 @@ namespace NVOS.UI.Services
             windows.Remove((Window3D)e.Window);
         }
 
-        private void GameTickProvider_OnLateUpdate(object sender, EventArgs e)
+        private void UpdateProvider_OnLateUpdate(object sender, EventArgs e)
         {
             Transform worldAnchorTransform = worldAnchor.transform;
             Transform cameraTransform = Camera.main.transform;

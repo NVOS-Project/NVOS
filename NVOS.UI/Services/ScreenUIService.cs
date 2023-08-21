@@ -1,7 +1,9 @@
 ﻿using NVOS.Core;
+using NVOS.Core.Services;
 using NVOS.Core.Services.Attributes;
 using NVOS.Core.Services.Enums;
 using NVOS.UI.Models;
+using NVOS.Unity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,11 +14,11 @@ namespace NVOS.UI.Services
     [ServiceType(ServiceType.Singleton)]
     public class ScreenUIService : IService, IDisposable
     {
+        private UpdateProviderService updateProvider;
+        private bool isDisposed;
+
         private Canvas canvas;
         private Dictionary<Window2D, Vector2Int> windows;
-
-        private GameObject tickerObject;
-        private GameTickProvider gameTickProvider;
 
         private int gridWidth;
         private int gridHeight;
@@ -29,9 +31,7 @@ namespace NVOS.UI.Services
 
         public bool Init()
         {
-            tickerObject = new GameObject("ScreenUITicker");
-            gameTickProvider = tickerObject.AddComponent<GameTickProvider>();
-            gameTickProvider.OnLateUpdate += GameTickProvider_OnLateUpdate;
+            updateProvider = ServiceLocator.Resolve<UpdateProviderService>();
 
             // get values from db??
             gridWidth = 8;
@@ -55,12 +55,18 @@ namespace NVOS.UI.Services
             tileHeight = hudHeight / gridHeight;
 
             windows = new Dictionary<Window2D, Vector2Int>();
-
+            updateProvider.OnLateUpdate += UpdateProvider_OnLateUpdate;
             return true;
         }
 
         public void Dispose()
         {
+            if (isDisposed)
+                return;
+
+            updateProvider.OnLateUpdate -= UpdateProvider_OnLateUpdate;
+            updateProvider = null;
+
             GameObject.Destroy(canvas.gameObject);
             canvas = null;
 
@@ -68,9 +74,10 @@ namespace NVOS.UI.Services
             {
                 window.Dispose();
             }
-            windows = null;
 
+            windows = null;
             grid = null;
+            isDisposed = true;
         }
 
         public Window2D CreateWindow(string name, int widthCount, int heightCount, int columnIndex, int rowIndex)
@@ -146,7 +153,7 @@ namespace NVOS.UI.Services
             return gridSize;
         }
 
-        private void GameTickProvider_OnLateUpdate(object sender, EventArgs e)
+        private void UpdateProvider_OnLateUpdate(object sender, EventArgs e)
         {
             foreach (Window2D window in windows.Keys)
             {

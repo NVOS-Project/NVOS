@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace NVOS.UI
 {
-    public class GameTickProvider : MonoBehaviour
+    public class UpdateProvider : MonoBehaviour
     {
         public event EventHandler OnUpdate;
         public event EventHandler OnFixedUpdate;

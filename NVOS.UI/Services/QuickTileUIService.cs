@@ -1,7 +1,9 @@
 ﻿using NVOS.Core;
+using NVOS.Core.Services;
 using NVOS.Core.Services.Attributes;
 using NVOS.Core.Services.Enums;
 using NVOS.UI.Models;
+using NVOS.Unity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,13 +17,14 @@ using UnityEngine.XR.Management;
 namespace NVOS.UI.Services
 {
     [ServiceType(ServiceType.Singleton)]
+    [ServiceDependency(typeof(UpdateProviderService))]
     public class QuickTileUIService : IService, IDisposable
     {
+        private UpdateProviderService updateProvider;
+        private bool isDisposed;
+
         private GameObject rightWristAnchor;
         private GameObject leftWristAnchor;
-
-        private GameObject tickerObject;
-        private GameTickProvider gameTickProvider;
 
         private Window3D tileWindow;
         private GridLayoutPanel tileGrid;
@@ -30,9 +33,7 @@ namespace NVOS.UI.Services
 
         public bool Init()
         {
-            tickerObject = new GameObject("QuickTileUITicker");
-            gameTickProvider = tickerObject.AddComponent<GameTickProvider>();
-            gameTickProvider.OnLateUpdate += GameTickProvider_OnLateUpdate;
+            updateProvider = ServiceLocator.Resolve<UpdateProviderService>();
 
             leftWristAnchor = new GameObject("Left Wrist");
             rightWristAnchor = new GameObject("Right Wrist");
@@ -73,14 +74,17 @@ namespace NVOS.UI.Services
             XRHandSubsystem handSubsystem = XRGeneralSettings.Instance.Manager.activeLoader.GetLoadedSubsystem<XRHandSubsystem>();
             handSubsystem.updatedHands += OnHandUpdate;
 
+            updateProvider.OnLateUpdate += UpdateProvider_OnLateUpdate;
             return true;
         }
 
         public void Dispose()
         {
-            gameTickProvider = null;
-            GameObject.Destroy(tickerObject);
-            tickerObject = null;
+            if (isDisposed)
+                return;
+
+            updateProvider.OnLateUpdate -= UpdateProvider_OnLateUpdate;
+            updateProvider = null;
 
             GameObject.Destroy(leftWristAnchor);
             leftWristAnchor = null;
@@ -93,7 +97,9 @@ namespace NVOS.UI.Services
             {
                 tile.Dispose();
             }
+
             tiles = null;
+            isDisposed = true;
         }
 
         private void WristWindowSetup()
@@ -226,7 +232,7 @@ namespace NVOS.UI.Services
             return tile;
         }
 
-        private void GameTickProvider_OnLateUpdate(object sender, EventArgs e)
+        private void UpdateProvider_OnLateUpdate(object sender, EventArgs e)
         {
             tileWindow.Update();
         }
