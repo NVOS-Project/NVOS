@@ -158,6 +158,11 @@ namespace NVOS.Core.Modules
             ModuleUnloaded?.Invoke(this, new ModuleEventArgs(assembly, manifest));
         }
 
+        public bool IsLoaded(Assembly assembly)
+        {
+            return loadedModules.ContainsKey(assembly);
+        }
+
         public IEnumerable<KeyValuePair<Assembly, IModule>> GetLoadedModules()
         {
             return loadedModules;

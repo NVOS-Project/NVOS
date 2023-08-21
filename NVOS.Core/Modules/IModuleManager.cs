@@ -12,6 +12,7 @@ namespace NVOS.Core.Modules
 
         IModule Load(Assembly module);
         void Unload(Assembly module);
+        bool IsLoaded(Assembly module);
         IEnumerable<KeyValuePair<Assembly, IModule>> GetLoadedModules();
     }
 }
