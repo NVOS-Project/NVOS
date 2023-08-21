@@ -1,4 +1,5 @@
 ﻿using NVOS.Core;
+using NVOS.Core.Database;
 using NVOS.Core.Services;
 using NVOS.Core.Services.Attributes;
 using NVOS.Core.Services.Enums;
@@ -32,12 +33,13 @@ namespace NVOS.UI.Services
         public bool Init()
         {
             updateProvider = ServiceLocator.Resolve<UpdateProviderService>();
+            IDatabaseService db = ServiceLocator.Resolve<IDatabaseService>();
+            DbCollection collection = db.GetCollection("screen-ui");
 
-            // get values from db??
-            gridWidth = 8;
-            gridHeight = 5;
-            hudWidth = 120f;
-            hudHeight = 90f;
+            gridWidth = (int)collection.ReadOrDefault("gridWidth", 8);
+            gridHeight = (int)collection.ReadOrDefault("gridHeight", 5);
+            hudWidth = (float)collection.ReadOrDefault("hudWidth", 120f);
+            hudHeight = (float)collection.ReadOrDefault("hudHeight", 90f);
             grid = new bool[gridWidth, gridHeight];
 
             canvas = new GameObject("HUD").AddComponent<Canvas>();
