@@ -31,7 +31,7 @@ namespace NVOS.UI.Services
 
         private List<Control> tiles;
 
-        public bool Init()
+        public void Init()
         {
             updateProvider = ServiceLocator.Resolve<UpdateProviderService>();
 
@@ -75,7 +75,6 @@ namespace NVOS.UI.Services
             handSubsystem.updatedHands += OnHandUpdate;
 
             updateProvider.OnLateUpdate += UpdateProvider_OnLateUpdate;
-            return true;
         }
 
         public void Dispose()

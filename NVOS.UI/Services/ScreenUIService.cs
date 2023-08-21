@@ -30,7 +30,7 @@ namespace NVOS.UI.Services
 
         private bool[,] grid;
 
-        public bool Init()
+        public void Init()
         {
             updateProvider = ServiceLocator.Resolve<UpdateProviderService>();
             IDatabaseService db = ServiceLocator.Resolve<IDatabaseService>();
@@ -58,7 +58,6 @@ namespace NVOS.UI.Services
 
             windows = new Dictionary<Window2D, Vector2Int>();
             updateProvider.OnLateUpdate += UpdateProvider_OnLateUpdate;
-            return true;
         }
 
         public void Dispose()

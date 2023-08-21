@@ -20,14 +20,13 @@ namespace NVOS.Unity
         public event EventHandler OnFixedUpdate;
         public event EventHandler OnLateUpdate;
 
-        public bool Init()
+        public void Init()
         {
             tickerObject = new GameObject();
             tickerScript = tickerObject.AddComponent<UpdateProvider>();
             tickerScript.OnUpdate += OnUpdate;
             tickerScript.OnFixedUpdate += OnFixedUpdate;
             tickerScript.OnLateUpdate += OnLateUpdate;
-            return true;
         }
 
         public void Dispose()

@@ -30,7 +30,7 @@ namespace NVOS.UI.Services
         private float windowSpawnDistance;
         private float windowBubbleRadius;
 
-        public bool Init()
+        public void Init()
         {
             updateProvider = ServiceLocator.Resolve<UpdateProviderService>();
             IDatabaseService db = ServiceLocator.Resolve<IDatabaseService>();
@@ -47,7 +47,6 @@ namespace NVOS.UI.Services
 
             windows = new List<Window3D>();
             updateProvider.OnLateUpdate += UpdateProvider_OnLateUpdate;
-            return true;
         }
 
         public void Dispose()
