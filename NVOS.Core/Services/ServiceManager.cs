@@ -76,46 +76,19 @@ namespace NVOS.Core.Services
         private void StartDependencies(Type type)
         {
             List<Type> chain = resolver.ResolveDependencyOrder(type);
-            List<Type> started = new List<Type>();
             AssertChainDependenciesMet(chain);
-            Exception error = null;
 
             foreach (Type dependency in chain)
             {
                 try
                 {
-                    ServiceUnit unit = serviceUnits[dependency];
-                    if (unit.State == ServiceState.Running)
-                        continue;
-
                     StartUnit(dependency);
-                    started.Add(dependency);
                 }
                 catch (Exception ex)
                 {
                     logger.Error($"[ServiceManager] Service chain start failed. Unit {dependency.Name} reported an error: {ex}");
-                    error = ex;
-                    break;
+                    throw ex;
                 }
-            }
-
-            if (error != null)
-            {
-                // Error must have occurred
-                foreach (Type dependency in started.Reverse<Type>())
-                {
-                    try
-                    {
-                        StopUnit(dependency, ServiceStopReason.Failure);
-                    }
-                    catch (Exception ex)
-                    {
-                        logger.Warn($"[ServiceManager] Stopping aborted chain start failed. Unit {dependency.Name} reported an error: {ex}");
-                        break;
-                    }
-                }
-
-                throw error;
             }
         }
 
