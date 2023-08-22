@@ -48,9 +48,16 @@ namespace NVOS.Core.Modules
             }
         }
 
-        private void RegisterServices(Assembly assembly)
+        public IModule Load(Assembly assembly)
         {
+            if (loadedModules.ContainsKey(assembly))
+                throw new InvalidOperationException("Module is already loaded.");
+
+            IModule manifest = assembly.GetModuleManifest();
+            LoadDependencies(assembly);
+
             logger.Info($"[ModuleManager] Registering services for module {assembly.FullName}");
+            List<Type> registered = new List<Type>();
 
             IEnumerable<Type> services = assembly.GetModuleServices();
             foreach (Type service in services)
@@ -58,41 +65,17 @@ namespace NVOS.Core.Modules
                 try
                 {
                     serviceManager.Register(service);
+                    registered.Add(service);
                 }
                 catch (Exception ex)
                 {
-                    logger.Error($"[ModuleManager] Failed to register service {service.FullName}: {ex}");
-                    logger.Info("[ModuleManager] Starting registration rollback");
-                    UnregisterServices(assembly);
-                    logger.Info("[ModuleManager] Registrations rolled back");
-                    throw;
+                    logger.Warn($"[ModuleManager] Failed to register service {service.FullName}: {ex}");
                 }
             }
+            logger.Info($"[ModuleManager] Registered {registered.Count()} services");
 
-            logger.Info($"[ModuleManager] Registered {services.Count()} services");
-        }
-
-        private void UnregisterServices(Assembly assembly)
-        {
-            logger.Info($"[ModuleManager] Unregistering services for module {assembly.FullName}");
-            foreach (Type service in assembly.GetModuleServices())
-            {
-                try
-                {
-                    if (serviceManager.IsRegistered(service))
-                        serviceManager.Unregister(service);
-                }
-                catch (Exception ex)
-                {
-                    logger.Warn($"[ModuleManager] Failed to unregister service {service.FullName}: {ex}");
-                }
-            }
-        }
-
-        private void StartServices(Assembly assembly)
-        {
             logger.Info($"[ModuleManager] Starting all services for module {assembly.FullName}");
-            foreach (Type service in assembly.GetModuleServices())
+            foreach (Type service in registered)
             {
                 try
                 {
@@ -103,34 +86,6 @@ namespace NVOS.Core.Modules
                     logger.Warn($"[ModuleManager] Failed to start service {service.FullName}: {ex}");
                 }
             }
-        }
-
-        private void StopServices(Assembly assembly)
-        {
-            logger.Info($"[ModuleManager] Stopping all services for module {assembly.FullName}");
-            foreach (Type service in assembly.GetModuleServices())
-            {
-                try
-                {
-                    serviceManager.Stop(service);
-                }
-                catch (Exception ex)
-                {
-                    logger.Warn($"[ModuleManager] Failed to stop service {service.FullName}: {ex}");
-                }
-            }
-        }
-
-        public IModule Load(Assembly assembly)
-        {
-            if (loadedModules.ContainsKey(assembly))
-                throw new InvalidOperationException("Module is already loaded.");
-
-            IModule manifest = assembly.GetModuleManifest();
-            LoadDependencies(assembly);
-
-            RegisterServices(assembly);
-            StartServices(assembly);
 
             logger.Info($"[ModuleManager] Module {manifest.Name} ({assembly.FullName}) loaded");
             logger.Info($"[ModuleManager] {manifest.Name} version {manifest.Version} by {manifest.Author}");
@@ -149,8 +104,35 @@ namespace NVOS.Core.Modules
 
             IModule manifest = loadedModules[assembly];
 
-            StopServices(assembly);
-            UnregisterServices(assembly);
+            logger.Info($"[ModuleManager] Stopping all services for module {assembly.FullName}");
+            IEnumerable<Type> services = assembly.GetModuleServices();
+            foreach (Type service in services)
+            {
+                try
+                {
+                    serviceManager.Stop(service);
+                }
+                catch (Exception ex)
+                {
+                    logger.Warn($"[ModuleManager] Failed to stop service {service.FullName}: {ex}");
+                }
+            }
+
+            logger.Info($"[ModuleManager] Unregistering services for module {assembly.FullName}");
+            foreach (Type service in services)
+            {
+                try
+                {
+                    if (serviceManager.IsRegistered(service))
+                        serviceManager.Unregister(service);
+                }
+                catch (Exception ex)
+                {
+                    logger.Warn($"[ModuleManager] Failed to unregister service {service.FullName}: {ex}");
+                    // This is actually a pretty big problem
+                    throw;
+                }
+            }
 
             logger.Info($"[ModuleManager] Module {manifest.Name} ({assembly.FullName}) unloaded.");
 
