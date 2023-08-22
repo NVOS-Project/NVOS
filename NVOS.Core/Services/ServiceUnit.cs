@@ -90,7 +90,15 @@ namespace NVOS.Core.Services
             IService instance = (IService)OwningScope.Resolve(DeclaringType);
             if (!instances.Contains(instance))
             {
-                instance.Init();
+                try
+                {
+                    instance.Init();
+                }
+                catch(Exception ex)
+                {
+                    throw new Exception("Service init handler returned an error", ex);
+                }
+
                 instances.Add(instance);
             }
 

@@ -73,35 +73,40 @@ namespace NVOS.Core.Services
             ServiceStopped?.Invoke(this, new ServiceEventArgs(type, unit.Domain));
         }
 
-        private void StartChain(Type type)
+        private void StartDependencies(Type type)
         {
             List<Type> chain = resolver.ResolveDependencyOrder(type);
             List<Type> started = new List<Type>();
             AssertChainDependenciesMet(chain);
+            Exception error = null;
+
             foreach (Type dependency in chain)
             {
                 try
                 {
+                    ServiceUnit unit = serviceUnits[dependency];
+                    if (unit.State == ServiceState.Running)
+                        continue;
+
                     StartUnit(dependency);
+                    started.Add(dependency);
                 }
                 catch (Exception ex)
                 {
                     logger.Error($"[ServiceManager] Service chain start failed. Unit {dependency.Name} reported an error: {ex}");
+                    error = ex;
                     break;
                 }
-
-                started.Add(dependency);
             }
 
-            if (chain.Count != started.Count)
+            if (error != null)
             {
                 // Error must have occurred
                 foreach (Type dependency in started.Reverse<Type>())
                 {
                     try
                     {
-                        if (GetServiceState(dependency) == ServiceState.Running)
-                            StopUnit(dependency, ServiceStopReason.Failure);
+                        StopUnit(dependency, ServiceStopReason.Failure);
                     }
                     catch (Exception ex)
                     {
@@ -109,27 +114,29 @@ namespace NVOS.Core.Services
                         break;
                     }
                 }
+
+                throw error;
             }
         }
 
-        private void StopChain(Type type, ServiceStopReason reason = ServiceStopReason.Normal)
+        private void StopDependentServices(Type type, ServiceStopReason reason = ServiceStopReason.Normal)
         {
-            List<Type> chain = resolver.ResolveInverseDependencyOrder(type);
-            foreach (Type dependency in chain)
+            List<Type> chain = resolver.ResolveDependentOrder(type);
+            foreach (Type dependent in chain)
             {
-                if (!serviceUnits.ContainsKey(dependency))
+                if (!serviceUnits.ContainsKey(dependent))
                     continue;
 
                 try
                 {
-                    if (dependency == type)
-                        StopUnit(dependency, reason);
+                    if (dependent == type)
+                        StopUnit(dependent, reason);
                     else
-                        StopUnit(dependency, ServiceStopReason.Dependency);
+                        StopUnit(dependent, ServiceStopReason.Dependency);
                 }
                 catch (Exception ex)
                 {
-                    logger.Warn($"[ServiceManager] Unit {dependency.Name} reported an error while stopping {type.Name}'s chain: {ex}");
+                    logger.Warn($"[ServiceManager] Unit {dependent.Name} reported an error while stopping {type.Name}'s dependents: {ex}");
                 }
             }
         }
@@ -244,7 +251,7 @@ namespace NVOS.Core.Services
             if (!serviceUnits.ContainsKey(type))
                 throw new KeyNotFoundException($"Service type {type.Name} is not registered");
 
-            StartChain(type);
+            StartDependencies(type);
         }
 
         public void Stop<T>() where T : IService
@@ -257,7 +264,7 @@ namespace NVOS.Core.Services
             if (!serviceUnits.ContainsKey(type))
                 throw new KeyNotFoundException($"Service type {type.Name} is not registered");
 
-            StopChain(type);
+            StopDependentServices(type);
         }
 
         public ServiceState GetServiceState<T>() where T : IService

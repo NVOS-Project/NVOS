@@ -125,7 +125,7 @@ namespace NVOS.Core.Services
             return resolved;
         }
 
-        public List<Type> ResolveInverseDependencyOrder(Type type)
+        public List<Type> ResolveDependentOrder(Type type)
         {
             List<Type> resolved = new List<Type>();
             List<Type> seen = new List<Type>();

@@ -32,7 +32,7 @@ namespace NVOS.Core.Modules
             foreach (AssemblyName dependency in dependencies)
             {
                 Assembly dependencyAssembly = Assembly.Load(dependency);
-                if (loadedModules.ContainsKey(dependencyAssembly))
+                if (IsLoaded(dependencyAssembly))
                 {
                     logger.Debug($"[ModuleManager] Skipping already resolved module {assembly.FullName}");
                     continue;
