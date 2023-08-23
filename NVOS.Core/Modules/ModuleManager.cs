@@ -34,13 +34,13 @@ namespace NVOS.Core.Modules
                 Assembly dependencyAssembly = Assembly.Load(dependency);
                 if (IsLoaded(dependencyAssembly))
                 {
-                    logger.Debug($"[ModuleManager] Skipping already resolved module {assembly.FullName}");
+                    logger.Debug($"[ModuleManager] Skipping already resolved module {dependency.FullName}");
                     continue;
                 }
 
                 if (!dependencyAssembly.HasModuleManifest())
                 {
-                    logger.Debug($"[ModuleManager] Assembly {assembly.FullName} is not a module, skipping.");
+                    logger.Debug($"[ModuleManager] Assembly {dependency.FullName} is not a module, skipping.");
                     continue;
                 }
 

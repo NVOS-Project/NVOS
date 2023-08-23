@@ -103,7 +103,7 @@ namespace NVOS.UI.Services
 
         private void WristWindowSetup()
         {
-            tileWindow = new Window3D("Quick Tiles", 20f, 20f);
+            tileWindow = new Window3D("Quick Tiles", 18f, 20f);
             tileWindow.GetContent().BackgroundColor = Color.gray;
 
             tileGrid = new GridLayoutPanel("Tile Grid");
