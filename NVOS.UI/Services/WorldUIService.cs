@@ -26,6 +26,7 @@ namespace NVOS.UI.Services
         private float moveWaitTime;
         private float moveWaitTimePassed;
         private float windowSpeed;
+        private float rotationSpeed;
         private float walkSpeed;
         private float windowSpawnDistance;
         private float windowBubbleRadius;
@@ -36,14 +37,17 @@ namespace NVOS.UI.Services
             IDatabaseService db = ServiceLocator.Resolve<IDatabaseService>();
             DbCollection collection = db.GetCollection("world_ui");
 
-            moveWaitTime = (float)collection.ReadOrDefault("moveWaitTime", 5f);
-            windowSpeed = (float)collection.ReadOrDefault("windowSpeed", 2f);
+            moveWaitTime = (float)collection.ReadOrDefault("moveWaitTime", 2.5f); 
+            windowSpeed = (float)collection.ReadOrDefault("windowSpeed", 2f); // 2 meters per second
+            rotationSpeed = (float)collection.ReadOrDefault("rotationSpeed", 360f); // 360 degrees per second
             walkSpeed = (float)collection.ReadOrDefault("walkSpeed", 0.7f);
             windowSpawnDistance = (float)collection.ReadOrDefault("windowSpawnDistance", 0.5f);
-            windowBubbleRadius = (float)collection.ReadOrDefault("windowBubbleRadius", 3f);
+            windowBubbleRadius = (float)collection.ReadOrDefault("windowBubbleRadius", 1f);
 
             worldAnchor = new GameObject("WorldUIAnchor");
-            worldAnchor.transform.position = Vector3.zero;
+            Transform cameraTransform = Camera.main.transform;
+            worldAnchor.transform.position = cameraTransform.position;
+            worldAnchor.transform.rotation = Quaternion.Euler(0f, cameraTransform.rotation.eulerAngles.y, 0f);
 
             windows = new List<Window3D>();
             updateProvider.OnLateUpdate += UpdateProvider_OnLateUpdate;
@@ -148,9 +152,11 @@ namespace NVOS.UI.Services
 
             if (isMoving)
             {
-                float step = windowSpeed * Time.deltaTime;
-                worldAnchorTransform.position = Vector3.MoveTowards(worldAnchorTransform.position, cameraTransform.position, step);
-                worldAnchorTransform.position = new Vector3(worldAnchorTransform.position.x, 0, worldAnchorTransform.position.z);
+                float position_step = windowSpeed * Time.deltaTime;
+                float rotation_step = rotationSpeed * Time.deltaTime;
+                worldAnchorTransform.position = Vector3.MoveTowards(worldAnchorTransform.position, cameraTransform.position, position_step);
+                worldAnchorTransform.rotation = Quaternion.RotateTowards(worldAnchorTransform.rotation, Quaternion.Euler(0f, worldAnchorTransform.rotation.eulerAngles.y, 0f), rotation_step);
+
                 if (Vector3.Distance(worldAnchorTransform.position, cameraTransform.position) < 1f)
                 {
                     if (Camera.main.velocity.magnitude < walkSpeed)
