@@ -1,6 +1,10 @@
-﻿using NVOS.UI.Models.EventArgs;
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using UnityEngine;
+using NVOS.UI.Models.EventArgs;
 using UnityEngine.UI;
 
 namespace NVOS.UI.Models
@@ -211,7 +215,7 @@ namespace NVOS.UI.Models
             root.AddComponent<HorizontalLayoutGroup>();
 
             deactivatedColor = button.BackgroundColor;
-            activatedColor = Color.gray;
+            activatedColor = new Color32(100, 100, 100, 255);
             highlightColor = button.HighlightColor;
             pressedColor = button.PressedColor;
 

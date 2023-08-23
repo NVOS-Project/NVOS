@@ -307,7 +307,11 @@ namespace NVOS.LED
                 if (deviceAddress == null)
                     return;
 
-                ledRpcService.SetPowerState(deviceAddress.Value, e.IsOn);
+                executorService.ExecuteAsync(async() =>
+                {
+                    await ledRpcService.SetPowerStateAsync(deviceAddress.Value, e.IsOn);
+                });
+                
             }
             catch(Exception ex)
             {
@@ -322,16 +326,18 @@ namespace NVOS.LED
                 if (deviceAddress == null)
                     return;
 
-                // false = VIS, true = IR
-                if (e.IsOn)
+                executorService.ExecuteAsync(async () =>
                 {
-                    ledRpcService.SetMode(deviceAddress.Value, Network.gRPC.LEDMode.Ir);
-                }
-                else
-                {
-                    ledRpcService.SetMode(deviceAddress.Value, Network.gRPC.LEDMode.Vis);
-
-                }
+                    if (e.IsOn)
+                    {
+                        await ledRpcService.SetModeAsync(deviceAddress.Value, Network.gRPC.LEDMode.Ir);
+                    }
+                    else
+                    {
+                        await ledRpcService.SetModeAsync(deviceAddress.Value, Network.gRPC.LEDMode.Vis);
+                    }
+                });
+                
             }
             catch (Exception ex)
             {
@@ -346,7 +352,11 @@ namespace NVOS.LED
                 if (deviceAddress == null)
                     return;
 
-                ledRpcService.SetBrightness(deviceAddress.Value, e.Value);
+                executorService.ExecuteAsync(async () =>
+                {
+                    await ledRpcService.SetBrightnessAsync(deviceAddress.Value, e.Value);
+                });
+                
             }
             catch (Exception ex)
             {
