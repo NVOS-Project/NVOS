@@ -70,9 +70,6 @@ namespace NVOS.UI.Services
 
         public Window3D CreateWindow(string name, float width, float height)
         {
-            if (windows.Where(x => x.Name == name).Count() > 0)
-                throw new Exception($"Window of name '{name}' already exists!");
-
             Window3D window = new Window3D(name, width, height);
 
             Transform cameraTransform = Camera.main.transform;
@@ -97,10 +94,9 @@ namespace NVOS.UI.Services
             return windows;
         }
 
-        public Window3D GetWindowByName(string name)
+        public IEnumerable<Window3D> GetWindowsWithName(string name)
         {
-            Window3D window = windows.Where(x => x.Name == name).FirstOrDefault();
-            return window;
+            return windows.Where(x => x.Name == name);
         }
 
         private void Window_OnClose(object sender, WindowEventArgs e)

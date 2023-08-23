@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NVOS.LED", "NVOS.LED\NVOS.L
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NVOS.Il2CppLoader", "NVOS.Il2CppLoader\NVOS.Il2CppLoader.csproj", "{5C367746-3DC8-48D3-A102-94E48551DBCE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NVOS.Unity", "NVOS.Unity\NVOS.Unity.csproj", "{FC9AAAE3-527A-4FEB-AE88-7B26FB4D17D5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NVOS.Unity", "NVOS.Unity\NVOS.Unity.csproj", "{FC9AAAE3-527A-4FEB-AE88-7B26FB4D17D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NVOS.SystemTools", "NVOS.SystemTools\NVOS.SystemTools.csproj", "{E12713CD-F368-4451-82D7-80145679F4EE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{FC9AAAE3-527A-4FEB-AE88-7B26FB4D17D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC9AAAE3-527A-4FEB-AE88-7B26FB4D17D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FC9AAAE3-527A-4FEB-AE88-7B26FB4D17D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E12713CD-F368-4451-82D7-80145679F4EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E12713CD-F368-4451-82D7-80145679F4EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E12713CD-F368-4451-82D7-80145679F4EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E12713CD-F368-4451-82D7-80145679F4EE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

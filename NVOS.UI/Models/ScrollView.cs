@@ -1,5 +1,11 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using UnityEngine.UI;
+using UnityEngine;
+using static UnityEngine.UI.ContentSizeFitter;
 
 namespace NVOS.UI.Models
 {
@@ -9,10 +15,13 @@ namespace NVOS.UI.Models
         private ScrollRect scrollRect;
         private Panel horizontalScrollbarPanel;
         private Panel verticalScrollbarPanel;
+        private Scrollbar horizontalScrollbar;
+        private Scrollbar verticalScrollbar;
 
         private Color backgroundColor;
         private bool horizontalScroll;
         private bool verticalScroll;
+
 
         public Color BackgroundColor
         {
@@ -53,7 +62,29 @@ namespace NVOS.UI.Models
             }
         }
 
-        public ScrollView() : this("ScrollView", new Panel()) { }
+        public float HorizontalValue
+        {
+            get
+            {
+                return horizontalScrollbar.value;
+            }
+            set
+            {
+                horizontalScrollbar.value = value;
+            }
+        }
+
+        public float VerticalValue
+        {
+            get
+            {
+                return verticalScrollbar.value;
+            }
+            set
+            {
+                verticalScrollbar.value = value;
+            }
+        }
 
         public ScrollView(string name, Control content) : base(name)
         {
@@ -78,16 +109,14 @@ namespace NVOS.UI.Models
             AddChild(horizontalScrollbarPanel);
             horizontalScrollbarPanel.SizeScaleX = 1f;
             horizontalScrollbarPanel.SizeOffsetY = 0.3f;
-            horizontalScrollbarPanel.PositionOffsetY = 29.7f;
-            Scrollbar horizontalScrollbar = horizontalScrollbarPanel.GetRootObject().AddComponent<Scrollbar>();
+            horizontalScrollbar = horizontalScrollbarPanel.GetRootObject().AddComponent<Scrollbar>();
 
             verticalScrollbarPanel = new Panel("Vertical Scrollbar");
             verticalScrollbarPanel.BackgroundColor = Color.clear;
             AddChild(verticalScrollbarPanel);
             verticalScrollbarPanel.SizeOffsetX = 0.3f;
             verticalScrollbarPanel.SizeScaleY = 1f;
-            verticalScrollbarPanel.PositionOffsetX = 29.7f;
-            Scrollbar verticalScrollbar = verticalScrollbarPanel.GetRootObject().AddComponent<Scrollbar>();
+            verticalScrollbar = verticalScrollbarPanel.GetRootObject().AddComponent<Scrollbar>();
             verticalScrollbar.direction = Scrollbar.Direction.BottomToTop;
 
             Panel horizontalArea = new Panel("Sliding Area");
