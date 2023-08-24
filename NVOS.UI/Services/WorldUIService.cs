@@ -117,7 +117,7 @@ namespace NVOS.UI.Services
 
                 GameObject windowObject = window.GetRootObject();
                 // Constrain the window position to the bubble
-                //windowObject.transform.localPosition = Vector3.ClampMagnitude(windowObject.transform.localPosition, windowBubbleRadius);
+                windowObject.transform.localPosition = Vector3.ClampMagnitude(windowObject.transform.localPosition, windowBubbleRadius);
                 // Constain the rotation to look at the anchor
                 Quaternion rotation = Quaternion.LookRotation(windowObject.transform.localPosition.normalized, Vector3.up);
                 windowObject.transform.localEulerAngles = new Vector3(0f, rotation.eulerAngles.y, 0f);
