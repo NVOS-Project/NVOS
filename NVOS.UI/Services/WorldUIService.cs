@@ -38,8 +38,8 @@ namespace NVOS.UI.Services
             DbCollection collection = db.GetCollection("world_ui");
 
             moveWaitTime = (float)collection.ReadOrDefault("moveWaitTime", 1.25f); 
-            positionSmoothing = (float)collection.ReadOrDefault("positionSmoothing", 0.125f);
-            rotationSmoothing = (float)collection.ReadOrDefault("rotationSmoothing", 0.125f);
+            positionSmoothing = (float)collection.ReadOrDefault("positionSmoothing", 0.250f);
+            rotationSmoothing = (float)collection.ReadOrDefault("rotationSmoothing", 0.250f);
             walkSpeed = (float)collection.ReadOrDefault("walkSpeed", 0.1f);
             windowSpawnDistance = (float)collection.ReadOrDefault("windowSpawnDistance", 0.5f);
             windowBubbleRadius = (float)collection.ReadOrDefault("windowBubbleRadius", 0.75f);
@@ -145,7 +145,7 @@ namespace NVOS.UI.Services
                 worldAnchorTransform.position = Vector3.Lerp(worldAnchorTransform.position, cameraTransform.position, position_step);
                 worldAnchorTransform.rotation = Quaternion.Lerp(worldAnchorTransform.rotation, Quaternion.Euler(0f, cameraTransform.rotation.eulerAngles.y, 0f), rotation_step);
 
-                if (Vector3.Distance(worldAnchorTransform.position, cameraTransform.position) < 0.01f)
+                if (Vector3.Distance(worldAnchorTransform.position, cameraTransform.position) < 0.025f)
                 {
                     if (Camera.main.velocity.magnitude < walkSpeed)
                         moveWaitTimePassed += Time.deltaTime;
