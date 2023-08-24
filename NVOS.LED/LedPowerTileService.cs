@@ -49,7 +49,7 @@ namespace NVOS.LED
             if (networkService.IsConnected)
                 OnRpcConnected();
             else
-                powerTile.Interactable = false;
+                powerTile.Enabled = false;
 
             networkService.ChannelConnected += NetworkService_ChannelConnected;
             networkService.ChannelLost += NetworkService_ChannelLost;
@@ -96,7 +96,7 @@ namespace NVOS.LED
 
                 executorService.ExecuteAsync(async () =>
                 {
-                    await ledRpcService.SetPowerStateAsync(deviceAddress.Value, e.IsOn);
+                    await ledRpcService.SetPowerStateAsync(deviceAddress.Value, e.Value);
                 });
 
             }
@@ -118,13 +118,13 @@ namespace NVOS.LED
                     SetPowerTileValue(state.PoweredOn);
 
                     deviceAddress = device.Address;
-                    powerTile.Interactable = true;
+                    powerTile.Enabled = true;
                     logger.Info("[LEDPowerTileService] Tile enabled");
                 });
             }
             else
             {
-                powerTile.Interactable = false;
+                powerTile.Enabled = false;
                 logger.Error("[LEDPowerTileService] No LED controllers are connected");
             }
         }
@@ -134,7 +134,7 @@ namespace NVOS.LED
             executorService.Execute(() =>
             {
                 deviceAddress = null;
-                powerTile.Interactable = false;
+                powerTile.Enabled = false;
                 logger.Info("[LEDPowerTileService] Tile disabled");
             });
         }
@@ -156,7 +156,7 @@ namespace NVOS.LED
 
         private void SetPowerTileValue(bool poweredOn)
         {
-            powerTile.IsOn = poweredOn;
+            powerTile.Value = poweredOn;
         }
     }
 }

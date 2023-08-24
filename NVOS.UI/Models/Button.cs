@@ -13,7 +13,7 @@ namespace NVOS.UI.Models
         private Color pressedColor;
         private Color backgroundColor;
 
-        private bool interactable;
+        private bool enabled;
 
         public event EventHandler<System.EventArgs> OnClick;
 
@@ -63,15 +63,15 @@ namespace NVOS.UI.Models
             }
         }
 
-        public bool Interactable
+        public bool Enabled
         {
             get
             {
-                return interactable;
+                return enabled;
             }
             set
             {
-                interactable = value;
+                enabled = value;
                 button.interactable = value;
             }
         }
@@ -109,7 +109,7 @@ namespace NVOS.UI.Models
             highlightColor = new Color32(70, 70, 70, 255);
             pressedColor = new Color32(170, 170, 170, 255);
 
-            interactable = true;
+            enabled = true;
         }
 
         private void HandleClick()

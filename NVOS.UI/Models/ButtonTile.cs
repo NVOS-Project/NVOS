@@ -13,7 +13,7 @@ namespace NVOS.UI.Models
         private Color pressedColor;
         private Color textColor;
 
-        private bool interactable;
+        private bool enabled;
 
         private string text;
 
@@ -84,16 +84,16 @@ namespace NVOS.UI.Models
             }
         }
 
-        public bool Interactable
+        public bool Enabled
         {
             get
             {
-                return interactable;
+                return enabled;
             }
             set
             {
-                interactable = value;
-                button.Interactable = value;
+                enabled = value;
+                button.Enabled = value;
             }
         }
 
@@ -122,7 +122,7 @@ namespace NVOS.UI.Models
             pressedColor = button.PressedColor;
 
             button.OnClick += Button_OnClick;
-            interactable = true;
+            enabled = true;
         }
 
         private void Button_OnClick(object sender, System.EventArgs e)

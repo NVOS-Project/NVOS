@@ -19,8 +19,8 @@ namespace NVOS.UI.Models
         private Color deactivatedTextColor;
         private Color activatedTextColor;
 
-        private bool isOn;
-        private bool interactable;
+        private bool value;
+        private bool enabled;
 
         public event EventHandler<SwitchTileValueChangedEventArgs> OnValueChanged;
 
@@ -128,16 +128,16 @@ namespace NVOS.UI.Models
             }
         }
 
-        public bool IsOn
+        public bool Value
         {
             get
             {
-                return isOn;
+                return value;
             }
             set
             {
-                isOn = value;
-                button.IsOn = value;
+                this.value = value;
+                button.Value = value;
             }
         }
 
@@ -179,16 +179,16 @@ namespace NVOS.UI.Models
             }
         }
 
-        public bool Interactable
+        public bool Enabled
         {
             get
             {
-                return interactable;
+                return enabled;
             }
             set
             {
-                interactable = value;
-                button.Interactable = value;
+                enabled = value;
+                button.Enabled = value;
             }
         }
 
@@ -219,12 +219,12 @@ namespace NVOS.UI.Models
             activatedTextColor = button.ActivatedTextColor;
 
             button.OnValueChanged += Button_OnValueChanged;
-            interactable = true;
+            enabled = true;
         }
 
         private void Button_OnValueChanged(object sender, SwitchButtonValueChangedEventArgs e)
         {
-            OnValueChanged?.Invoke(this, new SwitchTileValueChangedEventArgs(this, e.IsOn));
+            OnValueChanged?.Invoke(this, new SwitchTileValueChangedEventArgs(this, e.Value));
         }
     }
 }

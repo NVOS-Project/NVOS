@@ -5,12 +5,12 @@ namespace NVOS.UI.Models.EventArgs
     public class ToggleValueChangedEventArgs : System.EventArgs
     {
         public Toggle Toggle;
-        public bool IsChecked;
+        public bool Value;
 
-        public ToggleValueChangedEventArgs(Toggle toggle, bool isChecked)
+        public ToggleValueChangedEventArgs(Toggle toggle, bool value)
         {
             Toggle = toggle ?? throw new ArgumentNullException(nameof(toggle));
-            IsChecked = isChecked;
+            Value = value;
         }
     }
 }

@@ -25,7 +25,7 @@ namespace NVOS.UI.Models
         private float maxValue;
 
         private bool wholeNumbers;
-        private bool interactable;
+        private bool enabled;
 
         public event EventHandler<SliderValueChangedEventArgs> OnValueChanged;
 
@@ -136,15 +136,15 @@ namespace NVOS.UI.Models
             }
         }
 
-        public bool Interactable
+        public bool Enabled
         {
             get
             {
-                return interactable;
+                return enabled;
             }
             set
             {
-                interactable = value;
+                enabled = value;
                 slider.interactable = value;
             }
         }
@@ -194,7 +194,7 @@ namespace NVOS.UI.Models
             slider.fillRect = fill.GetRootObject().GetComponent<RectTransform>();
             slider.handleRect = handle.GetRootObject().GetComponent<RectTransform>();
             slider.targetGraphic = handle.GetRootObject().GetComponent<Image>();
-            interactable = true;
+            enabled = true;
         }
 
         private void PointerHandler_PointerUp(object sender, System.EventArgs e)

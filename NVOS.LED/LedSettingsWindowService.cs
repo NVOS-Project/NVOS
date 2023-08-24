@@ -264,21 +264,21 @@ namespace NVOS.LED
         private void Window_OnWindowStateChanged(object sender, UI.Models.EventArgs.WindowStateChangedEventArgs e)
         {
             if (e.State == UI.Models.Enums.WindowState.Normal)
-                windowTile.IsOn = true;
+                windowTile.Value = true;
 
             if (e.State == UI.Models.Enums.WindowState.Hidden)
-                windowTile.IsOn = false;
+                windowTile.Value = false;
         }
 
         private void Window_OnClose(object sender, UI.Models.EventArgs.WindowEventArgs e)
         {
-            windowTile.IsOn = false;
+            windowTile.Value = false;
             window = null;
         }
 
         private void SetPowerControlValue(bool poweredOn)
         {
-            ledPowerSwitch.IsOn = poweredOn;
+            ledPowerSwitch.Value = poweredOn;
         }
 
         private void SetModeControlValue(Network.gRPC.LEDMode mode)
@@ -287,10 +287,10 @@ namespace NVOS.LED
             switch (mode)
             {
                 case Network.gRPC.LEDMode.Ir:
-                    ledModeSwitch.IsOn = true;
+                    ledModeSwitch.Value = true;
                     break;
                 case Network.gRPC.LEDMode.Vis:
-                    ledModeSwitch.IsOn = false;
+                    ledModeSwitch.Value = false;
                     break;
             }
         }
@@ -309,7 +309,7 @@ namespace NVOS.LED
 
                 executorService.ExecuteAsync(async() =>
                 {
-                    await ledRpcService.SetPowerStateAsync(deviceAddress.Value, e.IsOn);
+                    await ledRpcService.SetPowerStateAsync(deviceAddress.Value, e.Value);
                 });
                 
             }
@@ -328,7 +328,7 @@ namespace NVOS.LED
 
                 executorService.ExecuteAsync(async () =>
                 {
-                    if (e.IsOn)
+                    if (e.Value)
                     {
                         await ledRpcService.SetModeAsync(deviceAddress.Value, Network.gRPC.LEDMode.Ir);
                     }
@@ -372,7 +372,7 @@ namespace NVOS.LED
                 return;
             }
 
-            if (e.IsOn)
+            if (e.Value)
                 window.Show();
             else
                 window.Hide();

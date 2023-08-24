@@ -23,8 +23,8 @@ namespace NVOS.UI.Models
         private Color deactivatedTextColor;
         private Color activatedTextColor;
 
-        private bool isOn;
-        private bool interactable;
+        private bool value;
+        private bool enabled;
 
         public event EventHandler<SwitchButtonValueChangedEventArgs> OnValueChanged;
 
@@ -37,7 +37,7 @@ namespace NVOS.UI.Models
             set
             {
                 deactivatedColor = value;
-                if (!isOn)
+                if (!this.value)
                     button.BackgroundColor = value;
             }
         }
@@ -51,7 +51,7 @@ namespace NVOS.UI.Models
             set
             {
                 activatedColor = value;
-                if (isOn)
+                if (this.value)
                     button.BackgroundColor = value;
             }
         }
@@ -91,7 +91,7 @@ namespace NVOS.UI.Models
             set
             {
                 deactivatedText = value;
-                if (!isOn)
+                if (!this.value)
                     button.Label.Text = value;
             }
         }
@@ -105,7 +105,7 @@ namespace NVOS.UI.Models
             set
             {
                 activatedText = value;
-                if (isOn)
+                if (this.value)
                     button.Label.Text = value;
             }
         }
@@ -119,7 +119,7 @@ namespace NVOS.UI.Models
             set
             {
                 deactivatedTextColor = value;
-                if (!isOn)
+                if (!this.value)
                     button.Label.TextColor = value;
             }
         }
@@ -133,7 +133,7 @@ namespace NVOS.UI.Models
             set
             {
                 activatedTextColor = value;
-                if (isOn)
+                if (this.value)
                     button.Label.TextColor = value;
             }
         }
@@ -176,11 +176,11 @@ namespace NVOS.UI.Models
             }
         }
 
-        public bool IsOn
+        public bool Value
         {
             get
             {
-                return isOn;
+                return value;
             }
             set
             {
@@ -188,16 +188,16 @@ namespace NVOS.UI.Models
             }
         }
 
-        public bool Interactable
+        public bool Enabled
         {
             get
             {
-                return interactable;
+                return enabled;
             }
             set
             {
-                interactable = value;
-                button.Interactable = value;
+                enabled = value;
+                button.Enabled = value;
             }
         }
 
@@ -224,22 +224,22 @@ namespace NVOS.UI.Models
             deactivatedTextColor = button.Label.TextColor;
             activatedTextColor = button.Label.TextColor;
 
-            isOn = false;
+            value = false;
 
             button.OnClick += Button_OnClick;
-            interactable = true;
+            enabled = true;
         }
 
 
         private void Button_OnClick(object sender, System.EventArgs e)
         {
-            SetActivated(!isOn);
-            OnValueChanged?.Invoke(this, new SwitchButtonValueChangedEventArgs(this, isOn));
+            SetActivated(!value);
+            OnValueChanged?.Invoke(this, new SwitchButtonValueChangedEventArgs(this, value));
         }
 
         private void SetActivated(bool value)
         {
-            isOn = value;
+            this.value = value;
             if (value)
             {
                 button.BackgroundColor = activatedColor;

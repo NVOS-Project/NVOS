@@ -50,7 +50,7 @@ namespace NVOS.LED
             if (networkService.IsConnected)
                 OnRpcConnected();
             else
-                modeTile.Interactable = false;
+                modeTile.Enabled = false;
 
             networkService.ChannelConnected += NetworkService_ChannelConnected;
             networkService.ChannelLost += NetworkService_ChannelLost;
@@ -98,7 +98,7 @@ namespace NVOS.LED
 
                 executorService.ExecuteAsync(async () =>
                 {
-                    if (e.IsOn)
+                    if (e.Value)
                     {
                         await ledRpcService.SetModeAsync(deviceAddress.Value, Network.gRPC.LEDMode.Ir);
                     }
@@ -127,13 +127,13 @@ namespace NVOS.LED
                     SetModeTileValue(state.Mode);
 
                     deviceAddress = device.Address;
-                    modeTile.Interactable = true;
+                    modeTile.Enabled = true;
                     logger.Info("[LEDModeTileService] Tile enabled");
                 });
             }
             else
             {
-                modeTile.Interactable = false;
+                modeTile.Enabled = false;
                 logger.Error("[LEDModeTileService] No LED controllers are connected");
             }
         }
@@ -143,7 +143,7 @@ namespace NVOS.LED
             executorService.Execute(() =>
             {
                 deviceAddress = null;
-                modeTile.Interactable = false;
+                modeTile.Enabled = false;
                 logger.Info("[LEDModeTileService] Tile disabled");
             });
         }
@@ -169,10 +169,10 @@ namespace NVOS.LED
             switch (mode)
             {
                 case Network.gRPC.LEDMode.Ir:
-                    modeTile.IsOn = true;
+                    modeTile.Value = true;
                     break;
                 case Network.gRPC.LEDMode.Vis:
-                    modeTile.IsOn = false;
+                    modeTile.Value = false;
                     break;
             }
         }

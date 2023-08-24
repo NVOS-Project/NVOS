@@ -207,7 +207,7 @@ namespace NVOS.UI.Models
 
         private void LockButton_OnValueChanged(object sender, SwitchButtonValueChangedEventArgs e)
         {
-            isLocked = e.IsOn;
+            isLocked = e.Value;
         }
 
         private void MinimizeButton_OnClick(object sender, System.EventArgs e)

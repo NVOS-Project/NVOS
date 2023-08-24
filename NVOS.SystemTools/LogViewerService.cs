@@ -80,14 +80,14 @@ namespace NVOS.SystemTools
         private void Window_OnWindowStateChanged(object sender, UI.Models.EventArgs.WindowStateChangedEventArgs e)
         {
             if (e.State == UI.Models.Enums.WindowState.Normal)
-                windowTile.IsOn = true;
+                windowTile.Value = true;
             else
-                windowTile.IsOn = false;
+                windowTile.Value = false;
         }
 
         private void Window_OnClose(object sender, UI.Models.EventArgs.WindowEventArgs e)
         {
-            windowTile.IsOn = false;
+            windowTile.Value = false;
             window = null;
         }
 
@@ -158,9 +158,9 @@ namespace NVOS.SystemTools
                 return;
             }
 
-            if (e.IsOn)
+            if (e.Value)
                 window.Show();
-            if (!e.IsOn)
+            if (!e.Value)
                 window.Hide();
         }
     }
