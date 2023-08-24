@@ -339,8 +339,9 @@ namespace NVOS.UI.Models
             rectTransform.anchorMax = new Vector2(positionScaleX + sizeScaleX, 1f - positionScaleY);
             rectTransform.anchoredPosition = new Vector2(positionOffsetX, -positionOffsetY);
             rectTransform.sizeDelta = new Vector2(sizeOffsetX, sizeOffsetY);
-            width = rectTransform.rect.width;
-            height = rectTransform.rect.height;
+            Canvas.ForceUpdateCanvases();
+            width = rectTransform.rect.size.x;
+            height = rectTransform.rect.size.y;
         }
 
         public virtual void Update()
