@@ -151,97 +151,97 @@ namespace NVOS.LED
 
         private void SetupWindow()
         {
-            window = worldUIService.CreateWindow("LED settings", 60f, 40f);
+            window = worldUIService.CreateWindow("LED settings", 30f, 20f);
 
             HorizontalLayoutPanel ledPowerPanel = new HorizontalLayoutPanel("Light Panel");
-            ledPowerPanel.SizeOffsetX = 40f;
-            ledPowerPanel.SizeOffsetY = 5f;
-            ledPowerPanel.Spacing = 5f;
+            ledPowerPanel.SizeOffsetX = 20f;
+            ledPowerPanel.SizeOffsetY = 3f;
+            ledPowerPanel.Spacing = 3f;
             ledPowerPanel.PositionOffsetX = (window.Width - ledPowerPanel.SizeOffsetX) / 2;
             ledPowerPanel.PositionScaleY = 0.15f;
             window.GetContent().AddChild(ledPowerPanel);
 
             Label ledPowerLabel = new Label("Light Label");
-            ledPowerLabel.PreferredWidth = 20f;
+            ledPowerLabel.PreferredWidth = 12f;
             ledPowerLabel.Text = "LED power";
-            ledPowerLabel.FontSize = 2f;
+            ledPowerLabel.FontSize = 1.5f;
             ledPowerLabel.TextAlignment = TMPro.TextAlignmentOptions.Left;
             ledPowerPanel.AddChild(ledPowerLabel);
 
             ledPowerSwitch = new SwitchButton("Light Switch");
-            ledPowerSwitch.PreferredWidth = 5f;
+            ledPowerSwitch.PreferredWidth = 3f;
             ledPowerSwitch.DeactivatedColor = Color.black;
             ledPowerSwitch.ActivatedColor = Color.gray;
             ledPowerSwitch.DeactivatedText = "OFF";
             ledPowerSwitch.ActivatedText = "ON";
-            ledPowerSwitch.FontSize = 2f;
+            ledPowerSwitch.FontSize = 1f;
             ledPowerSwitch.DeactivatedColor = new Color32(150, 30, 30, 255);
             ledPowerSwitch.ActivatedColor = new Color32(30, 150, 50, 255);
             ledPowerSwitch.OnValueChanged += LedPowerSwitch_OnValueChanged;
             ledPowerPanel.AddChild(ledPowerSwitch);
 
             HorizontalLayoutPanel ledModePanel = new HorizontalLayoutPanel("LED Panel");
-            ledModePanel.SizeOffsetX = 40f;
-            ledModePanel.SizeOffsetY = 5f;
-            ledModePanel.Spacing = 5f;
+            ledModePanel.SizeOffsetX = 20f;
+            ledModePanel.SizeOffsetY = 3f;
+            ledModePanel.Spacing = 3f;
             ledModePanel.PositionOffsetX = (window.Width - ledModePanel.SizeOffsetX) / 2;
             ledModePanel.PositionScaleY = 0.45f;
             window.GetContent().AddChild(ledModePanel);
 
             Label ledModeLabel = new Label("LED Label");
-            ledModeLabel.PreferredWidth = 20f;
+            ledModeLabel.PreferredWidth = 12f;
             ledModeLabel.Text = "LED mode";
-            ledModeLabel.FontSize = 2f;
+            ledModeLabel.FontSize = 1.5f;
             ledModeLabel.TextAlignment = TMPro.TextAlignmentOptions.Left;
             ledModePanel.AddChild(ledModeLabel);
 
             ledModeSwitch = new SwitchButton("LED Switch");
-            ledModeSwitch.PreferredWidth = 5f;
+            ledModeSwitch.PreferredWidth = 3f;
             ledModeSwitch.DeactivatedColor = Color.black;
             ledModeSwitch.ActivatedColor = Color.gray;
             ledModeSwitch.DeactivatedText = "VIS";
             ledModeSwitch.ActivatedText = "IR";
-            ledModeSwitch.FontSize = 2f;
+            ledModeSwitch.FontSize = 1f;
             ledModeSwitch.OnValueChanged += LedModeSwitch_OnValueChanged;
             ledModeSwitch.DeactivatedColor = new Color32(50, 50, 50, 255);
             ledModeSwitch.ActivatedColor = new Color32(150, 0, 0, 255);
             ledModePanel.AddChild(ledModeSwitch);
 
             HorizontalLayoutPanel brightnessPanel = new HorizontalLayoutPanel("Brightness Panel");
-            brightnessPanel.SizeOffsetX = 40f;
-            brightnessPanel.SizeOffsetY = 5f;
-            brightnessPanel.Spacing = 5f;
+            brightnessPanel.SizeOffsetX = 25f;
+            brightnessPanel.SizeOffsetY = 3f;
+            brightnessPanel.Spacing = 3f;
             brightnessPanel.PositionOffsetX = (window.Width - brightnessPanel.SizeOffsetX) / 2;
             brightnessPanel.PositionScaleY = 0.75f;
             window.GetContent().AddChild(brightnessPanel);
 
             Label brightnessLabel = new Label("Brightness Label");
             brightnessLabel.Text = "Brightness";
-            brightnessLabel.PreferredWidth = 10f;
-            brightnessLabel.SizeOffsetY = 5f;
-            brightnessLabel.FontSize = 2f;
+            brightnessLabel.PreferredWidth = 4.5f;
+            brightnessLabel.SizeOffsetY = 3f;
+            brightnessLabel.FontSize = 1f;
             brightnessLabel.TextAlignment = TMPro.TextAlignmentOptions.Left;
             brightnessPanel.AddChild(brightnessLabel);
 
             Panel sliderPanel = new Panel();
-            sliderPanel.PreferredWidth = 25f;
+            sliderPanel.PreferredWidth = 15f;
             brightnessPanel.AddChild(sliderPanel);
 
             brightnessSlider = new HorizontalSlider("Brightness Slider");
-            brightnessSlider.SizeOffsetX = 25f;
-            brightnessSlider.SizeOffsetY = 2f;
-            brightnessSlider.PositionOffsetY = 1.5f;
+            brightnessSlider.SizeOffsetX = 15f;
+            brightnessSlider.SizeOffsetY = 1f;
+            brightnessSlider.PositionOffsetY = 1;
             brightnessSlider.OnValueChanged += BrightnessSlider_OnValueChanged;
             sliderPanel.AddChild(brightnessSlider);
 
             warningPanel = new Panel("Warning Panel");
             warningPanel.BackgroundColor = new Color32(255, 100, 100, 255);
             warningPanel.SizeScaleX = 1f;
-            warningPanel.SizeOffsetY = 3f;
+            warningPanel.SizeOffsetY = 2f;
             window.GetContent().AddChild(warningPanel);
 
             Label warningLabel = new Label("Warning Label");
-            warningLabel.FontSize = 2;
+            warningLabel.FontSize = 1;
             warningLabel.Text = "LED controller is unavailable";
             warningLabel.SizeScaleX = 1f;
             warningLabel.SizeScaleY = 1f;

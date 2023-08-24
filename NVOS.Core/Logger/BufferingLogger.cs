@@ -90,7 +90,7 @@ namespace NVOS.Core.Logger
             buffer.PushBack(logMessage);
             streamWriter.WriteLine(logMessage);
             streamWriter.Flush();
-            OnLog?.Invoke(this, new LogEventArgs(level, message));
+            OnLog?.Invoke(this, new LogEventArgs(level, logMessage));
         }
 
         public void Debug(string message)

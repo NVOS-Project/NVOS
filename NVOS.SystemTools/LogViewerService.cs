@@ -25,6 +25,8 @@ namespace NVOS.SystemTools
         private ScrollView scrollView;
         private VerticalLayoutPanel logList;
 
+        private bool isLogCountEven = true;
+
         private List<KeyValuePair<LogLevel, string>> logs;
 
         public void Init()
@@ -56,7 +58,7 @@ namespace NVOS.SystemTools
 
         private void SetupWindow()
         {
-            window = worldUIService.CreateWindow("Log Viewer", 60f, 40f);
+            window = worldUIService.CreateWindow("Log Viewer", 30f, 20f);
             logList = new VerticalLayoutPanel("Log List");
             logList.VerticalFit = UnityEngine.UI.ContentSizeFitter.FitMode.PreferredSize;
             logList.SizeScaleX = 1f;
@@ -65,8 +67,8 @@ namespace NVOS.SystemTools
             logList.ControlChildHeight = false;
 
             scrollView = new ScrollView("Log ScrollView", logList);
-            scrollView.SizeOffsetX = 60f;
-            scrollView.SizeOffsetY = window.Height * 0.9f;
+            scrollView.SizeScaleX = 1f;
+            scrollView.SizeScaleY = 1f;
             window.GetContent().AddChild(scrollView);
             window.OnWindowStateChanged += Window_OnWindowStateChanged;
             window.OnClose += Window_OnClose;
@@ -104,34 +106,37 @@ namespace NVOS.SystemTools
             switch (logLevel)
             {
                 case LogLevel.DEBUG:
-                    logColor = new Color32(40, 130, 0, 255);
+                    logColor = new Color32(50, 255, 50, 255);
                     break;
                 case LogLevel.INFO:
-                    logColor = Color.clear;
+                    logColor = Color.white;
                     break;
                 case LogLevel.WARN:
-                    logColor = new Color32(130, 100, 0, 255);
+                    logColor = new Color32(255, 255, 50, 255);
                     break;
                 case LogLevel.ERROR:
-                    logColor = new Color32(130, 0, 0, 255);
+                    logColor = new Color32(255, 50, 50, 255);
                     break;
                 default:
-                    logColor = Color.clear;
+                    logColor = Color.white;
                     break;
             }
 
+            isLogCountEven = !isLogCountEven;
+
             Panel logPanel = new Panel("Log Item");
-            logPanel.BackgroundColor = logColor;
-            logPanel.SizeOffsetY = 4.4f;
+            if (isLogCountEven)
+                logPanel.BackgroundColor = new Color32(100, 100, 100, 255);
+            logPanel.SizeOffsetY = 2.2f;
 
             Label logLabel = new Label("Log Label");
             logLabel.Text = message;
             logLabel.SizeScaleX = 1f;
             logLabel.SizeScaleY = 1f;
-            logLabel.TextColor = Color.white;
-            logLabel.FontSize = 1f;
+            logLabel.TextColor = logColor;
+            logLabel.FontSize = 0.5f;
             logLabel.TextAlignment = TMPro.TextAlignmentOptions.BottomLeft;
-            logLabel.Margin = new Vector4(1f, 1f, 1f, 1f);
+            logLabel.Margin = new Vector4(0.5f, 0.5f, 0.5f, 0.5f);
             logLabel.Overflow = TMPro.TextOverflowModes.Ellipsis;
             logPanel.AddChild(logLabel);
 
