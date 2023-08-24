@@ -41,8 +41,8 @@ namespace NVOS.UI.Services
             positionSmoothing = (float)collection.ReadOrDefault("positionSmoothing", 0.125f);
             rotationSmoothing = (float)collection.ReadOrDefault("rotationSmoothing", 0.125f);
             walkSpeed = (float)collection.ReadOrDefault("walkSpeed", 0.1f);
-            windowSpawnDistance = (float)collection.ReadOrDefault("windowSpawnDistance", 0.25f);
-            windowBubbleRadius = (float)collection.ReadOrDefault("windowBubbleRadius", 1f);
+            windowSpawnDistance = (float)collection.ReadOrDefault("windowSpawnDistance", 0.5f);
+            windowBubbleRadius = (float)collection.ReadOrDefault("windowBubbleRadius", 0.75f);
 
             worldAnchor = new GameObject("WorldUIAnchor");
             Transform cameraTransform = Camera.main.transform;
@@ -75,13 +75,12 @@ namespace NVOS.UI.Services
         public Window3D CreateWindow(string name, float width, float height)
         {
             Window3D window = new Window3D(name, width, height);
-
-            Transform cameraTransform = Camera.main.transform;
             GameObject windowObject = window.GetRootObject();
+            Transform cameraTransform = Camera.main.transform;
             windowObject.transform.SetParent(worldAnchor.transform, true);
 
-            Vector3 targetWorldPos = (cameraTransform.forward * windowSpawnDistance) + cameraTransform.position;
-            windowObject.transform.localPosition = windowObject.transform.InverseTransformPoint(targetWorldPos);
+            Vector3 targetWorldPos = (cameraTransform.forward.normalized * windowSpawnDistance) + cameraTransform.position;
+            windowObject.transform.localPosition = worldAnchor.transform.InverseTransformPoint(targetWorldPos);
 
             Vector3 directionVector = windowObject.transform.localPosition.normalized;
             windowObject.transform.localRotation = Quaternion.LookRotation(directionVector, Vector3.up);
@@ -118,7 +117,7 @@ namespace NVOS.UI.Services
 
                 GameObject windowObject = window.GetRootObject();
                 // Constrain the window position to the bubble
-                windowObject.transform.localPosition = Vector3.ClampMagnitude(windowObject.transform.localPosition, windowBubbleRadius);
+                //windowObject.transform.localPosition = Vector3.ClampMagnitude(windowObject.transform.localPosition, windowBubbleRadius);
                 // Constain the rotation to look at the anchor
                 Quaternion rotation = Quaternion.LookRotation(windowObject.transform.localPosition.normalized, Vector3.up);
                 windowObject.transform.localEulerAngles = new Vector3(0f, rotation.eulerAngles.y, 0f);
