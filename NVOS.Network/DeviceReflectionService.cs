@@ -189,11 +189,15 @@ namespace NVOS.Network
 
         private Device ConvertDevice(gRPC.Device responseDevice)
         {
+            Guid address = Guid.Parse(responseDevice.Address);
             List<CapabilityId> capabilities = new List<CapabilityId>();
             foreach (CapabilityId capability in responseDevice.Capabilities)
                 capabilities.Add(capability);
+            string deviceName = responseDevice.DeviceName;
+            string driverName = responseDevice.DriverName;
+            bool isRunning = responseDevice.IsRunning;
 
-            return new Device(Guid.Parse(responseDevice.Address), capabilities);
+            return new Device(address, capabilities, deviceName, driverName, isRunning);
         }
 
         private void AssertClient()
