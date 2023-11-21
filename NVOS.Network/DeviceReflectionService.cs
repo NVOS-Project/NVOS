@@ -124,6 +124,32 @@ namespace NVOS.Network
             return devices;
         }
 
+        public Device GetDeviceByName(string deviceName)
+        {
+            AssertClient();
+
+            ListDevicesResponse response = client.ListDevices(new gRPC.Void());
+
+            gRPC.Device responseDevice = response.Devices.FirstOrDefault(x => x.DeviceName == deviceName);
+            if (responseDevice == null)
+                return null;
+
+            return ConvertDevice(responseDevice);
+        }
+
+        public async Task<Device> GetDeviceByNameAsync(string deviceName)
+        {
+            AssertClient();
+
+            ListDevicesResponse response = await client.ListDevicesAsync(new gRPC.Void());
+
+            gRPC.Device responseDevice = response.Devices.FirstOrDefault(x => x.DeviceName == deviceName);
+            if (responseDevice == null)
+                return null;
+
+            return ConvertDevice(responseDevice);
+        }
+
         public int GetDeviceCount()
         {
             AssertClient();
