@@ -6,6 +6,9 @@ using NVOS.Core.Logger.EventArgs;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace NVOS.Core.Logger
 {
@@ -79,10 +82,18 @@ namespace NVOS.Core.Logger
             return logLevel;
         }
 
-        public void Log(LogLevel level, string message)
+        private void Log(LogLevel level, string message, string optionalTag = null)
         {
             if (level < logLevel)
                 return;
+
+            string[] tags = new string[] {};
+
+            Type caller = new System.Diagnostics.StackTrace().GetFrame(2).GetMethod().DeclaringType;
+
+            if (optionalTag != null)
+                tags.Append(optionalTag);
+            tags.Append(caller.Name);
 
             string logMessage = $"[{DateTime.Now}] <{level}> {message}";
 
@@ -90,27 +101,30 @@ namespace NVOS.Core.Logger
             buffer.PushBack(logMessage);
             streamWriter.WriteLine(logMessage);
             streamWriter.Flush();
-            OnLog?.Invoke(this, new LogEventArgs(level, logMessage));
+            OnLog?.Invoke(this, new LogEventArgs(level, logMessage, tags));
         }
 
-        public void Debug(string message)
+        public void Debug(string message, string optionalTag = null)
         {
-            Log(LogLevel.DEBUG, message);
+            Log(LogLevel.DEBUG, message, optionalTag);
         }
 
-        public void Info(string message)
+        public void Info(string message, string optionalTag = null)
         {
-            Log(LogLevel.INFO, message);
+            Type caller = new System.Diagnostics.StackTrace().GetFrame(1).GetMethod().DeclaringType;
+            Log(LogLevel.INFO, message, optionalTag);
         }
 
-        public void Warn(string message)
+        public void Warn(string message, string optionalTag = null)
         {
-            Log(LogLevel.WARN, message);
+            Type caller = new System.Diagnostics.StackTrace().GetFrame(1).GetMethod().DeclaringType;
+            Log(LogLevel.WARN, message, optionalTag);
         }
 
-        public void Error(string message)
+        public void Error(string message, string optionalTag = null)
         {
-            Log(LogLevel.ERROR, message);
+            Type caller = new System.Diagnostics.StackTrace().GetFrame(1).GetMethod().DeclaringType;
+            Log(LogLevel.ERROR, message, optionalTag);
         }
 
         public IEnumerable<string> ReadLogs()
