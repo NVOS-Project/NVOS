@@ -99,6 +99,8 @@ namespace NVOS.UI.Models
 
         public Label(string name) : base(name)
         {
+            SizeScaleX = 1f;
+            SizeScaleY = 1f;
             textComponent = root.AddComponent<TextMeshProUGUI>();
             textComponent.text = name;
             text = name;

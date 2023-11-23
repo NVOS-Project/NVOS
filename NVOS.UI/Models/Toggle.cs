@@ -8,13 +8,12 @@ namespace NVOS.UI.Models
     public class Toggle : Control
     {
         private Panel check;
-        private Panel uncheck;
-        private Image backgroundImage;
+        private Panel backgroundPanel;
+        private Panel mainPanel;
         private UnityEngine.UI.Toggle toggle;
 
         private Color backgroundColor;
         private Color checkColor;
-        private Color uncheckColor;
         private Color highlightColor;
         private Color pressedColor;
 
@@ -31,7 +30,7 @@ namespace NVOS.UI.Models
             set
             {
                 backgroundColor = value;
-                backgroundImage.color = value;
+                backgroundPanel.BackgroundColor = value;
             }
         }
 
@@ -45,21 +44,6 @@ namespace NVOS.UI.Models
             {
                 checkColor = value;
                 check.BackgroundColor = value;
-            }
-        }
-
-        public Color UncheckColor
-        {
-            get
-            {
-                return uncheckColor;
-            }
-            set
-            {
-                uncheckColor = value;
-                ColorBlock colorBlock = toggle.colors;
-                colorBlock.normalColor = value;
-                toggle.colors = colorBlock;
             }
         }
 
@@ -106,25 +90,33 @@ namespace NVOS.UI.Models
             }
         }
 
+        public Label Label { get; }
+
         public Toggle() : this("Toggle") { }
 
         public Toggle(string name) : base(name)
         {
-            backgroundImage = root.AddComponent<Image>();
-            backgroundImage.color = Color.gray;
+            HorizontalLayoutGroup horizontalGroup = root.AddComponent<HorizontalLayoutGroup>();
+
+
+            mainPanel = new Panel("Main Panel");
+            mainPanel.SizeScaleX = 1f;
+            mainPanel.SizeScaleY = 1f;
+            mainPanel.BackgroundColor = Color.clear;
+            AddChild(mainPanel);
+
+            backgroundPanel = new Panel("Toggle Panel");
+            mainPanel.AddChild(backgroundPanel);
+            backgroundPanel.SizeScaleX = 0.5f;
+            backgroundPanel.SizeScaleY = 0.5f;
+            backgroundPanel.PositionScaleX = 0.25f;
+            backgroundPanel.PositionScaleY = 0.25f;
+
+            backgroundPanel.BackgroundColor = Color.gray;
             backgroundColor = Color.gray;
 
-            uncheck = new Panel("Uncheck");
-            AddChild(uncheck);
-            uncheck.BackgroundColor = Color.white;
-
-            uncheck.SizeScaleX = 0.7f;
-            uncheck.SizeScaleY = 0.7f;
-            uncheck.PositionScaleX = 0.15f;
-            uncheck.PositionScaleY = 0.15f;
-
             check = new Panel("Check");
-            AddChild(check);
+            backgroundPanel.AddChild(check);
             check.BackgroundColor = Color.black;
             checkColor = Color.black;
 
@@ -133,9 +125,14 @@ namespace NVOS.UI.Models
             check.PositionScaleX = 0.15f;
             check.PositionScaleY = 0.15f;
 
+            Label = new Label("Label");
+            AddChild(Label);
+            Label.Text = name;
+            Label.TextAlignment = TMPro.TextAlignmentOptions.Left;
+
             toggle = root.AddComponent<UnityEngine.UI.Toggle>();
-            toggle.image = uncheck.GetRootObject().GetComponent<Image>();
             toggle.graphic = check.GetRootObject().GetComponent<Image>();
+            toggle.image = backgroundPanel.GetRootObject().GetComponent<Image>();
             toggle.onValueChanged.AddListener(new UnityEngine.Events.UnityAction<bool>(HandleClick));
 
             Navigation navigation = toggle.navigation;
@@ -149,9 +146,15 @@ namespace NVOS.UI.Models
             toggle.colors = colorBlock;
             highlightColor = Color.gray;
             pressedColor = Color.white;
-            uncheck.BackgroundColor = Color.white;
 
             enabled = true;
+        }
+
+        public override void Update()
+        {
+            base.Update();
+            mainPanel.PreferredWidth = Height;
+            Label.PreferredWidth = Width - mainPanel.PreferredWidth;
         }
 
         private void HandleClick(bool isChecked)
