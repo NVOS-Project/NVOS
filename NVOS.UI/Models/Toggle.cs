@@ -97,7 +97,7 @@ namespace NVOS.UI.Models
         public Toggle(string name) : base(name)
         {
             HorizontalLayoutGroup horizontalGroup = root.AddComponent<HorizontalLayoutGroup>();
-
+            horizontalGroup.childForceExpandWidth = false;
 
             mainPanel = new Panel("Main Panel");
             mainPanel.SizeScaleX = 1f;
