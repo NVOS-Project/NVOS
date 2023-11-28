@@ -212,16 +212,16 @@ namespace NVOS.SystemTools.LogViewer
             switch (log.Level)
             {
                 case LogLevel.DEBUG:
-                    logColor = new Color32(50, 255, 50, 255);
+                    logColor = new Color32(30, 30, 30, 255);
                     break;
                 case LogLevel.INFO:
                     logColor = Color.white;
                     break;
                 case LogLevel.WARN:
-                    logColor = new Color32(255, 255, 50, 255);
+                    logColor = new Color32(255, 220, 50, 255);
                     break;
                 case LogLevel.ERROR:
-                    logColor = new Color32(255, 50, 50, 255);
+                    logColor = new Color32(145, 15, 27, 255);
                     break;
                 default:
                     logColor = Color.white;
@@ -232,7 +232,6 @@ namespace NVOS.SystemTools.LogViewer
             logPanel.SizeScaleX = 1f;
             if (nextLog) {
                 logPanel.BackgroundColor = new Color32(100, 100, 100, 255);
-                nextLog = !nextLog;
             }
                 
             logPanel.SizeOffsetY = 2.2f;
@@ -250,6 +249,8 @@ namespace NVOS.SystemTools.LogViewer
 
             logList.AddChild(logPanel);
             logPanel.SizeOffsetY = 2.2f;
+
+            nextLog = !nextLog;
         }
 
         private void Logger_OnLog(object sender, Core.Logger.EventArgs.LogEventArgs e)
