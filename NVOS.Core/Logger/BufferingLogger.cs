@@ -87,13 +87,13 @@ namespace NVOS.Core.Logger
             if (level < logLevel)
                 return;
 
-            string[] tags = new string[] {};
+            List<string> tags = new List<string>();
 
             Type caller = new System.Diagnostics.StackTrace().GetFrame(2).GetMethod().DeclaringType;
 
             if (optionalTag != null)
-                tags.Append(optionalTag);
-            tags.Append(caller.Name);
+                tags.Add(optionalTag);
+            tags.Add(caller.Name);
 
             string logMessage = $"[{DateTime.Now}] <{level}> {message}";
 
@@ -101,7 +101,7 @@ namespace NVOS.Core.Logger
             buffer.PushBack(logMessage);
             streamWriter.WriteLine(logMessage);
             streamWriter.Flush();
-            OnLog?.Invoke(this, new LogEventArgs(level, logMessage, tags));
+            OnLog?.Invoke(this, new LogEventArgs(level, logMessage, tags.ToArray()));
         }
 
         public void Debug(string message, string optionalTag = null)
