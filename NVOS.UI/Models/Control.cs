@@ -37,6 +37,7 @@ namespace NVOS.UI.Models
 
         private bool isTransformDirty = false;
         private bool isVisible = true;
+        private bool ignoreLayout = false;
 
         private RectTransform rectTransform;
         private LayoutElement layoutElement;
@@ -188,6 +189,19 @@ namespace NVOS.UI.Models
                     isVisible = value;
                     root.SetActive(value);
                 }
+            }
+        }
+
+        public bool IgnoreLayout
+        {
+            get
+            {
+                return ignoreLayout;
+            }
+            set
+            {
+                layoutElement.ignoreLayout = value;
+                ignoreLayout = value;
             }
         }
 
