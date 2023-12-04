@@ -9,6 +9,7 @@ using NVOS.UI.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit.UI;
@@ -86,7 +87,19 @@ namespace NVOS.SystemTools.LogViewer
             VerticalLayoutPanel mainPanel = new VerticalLayoutPanel("Main Panel");
             mainPanel.SizeScaleX = 1f;
             mainPanel.SizeScaleY = 1f;
+            mainPanel.ReverseArrangement = true;
             window.GetContent().AddChild(mainPanel);
+
+            logList = new VerticalLayoutPanel("Log List");
+            logList.VerticalFit = UnityEngine.UI.ContentSizeFitter.FitMode.PreferredSize;
+            logList.SizeScaleX = 1f;
+            logList.ReverseArrangement = false;
+            logList.PaddingBottom = 1;
+            logList.ControlChildHeight = false;
+
+            scrollView = new ScrollView("Log ScrollView", logList);
+            scrollView.PreferredHeight = 18f;
+            mainPanel.AddChild(scrollView);
 
             filterPanel = new Panel("Filter Panel");
             filterPanel.SizeScaleX = 1f;
@@ -94,13 +107,6 @@ namespace NVOS.SystemTools.LogViewer
             filterPanel.BackgroundColor = new Color32(50, 50, 50, 255);
 
             mainPanel.AddChild(filterPanel);
-
-            // stupid unity workaround because the hierarchy is stupid
-            Canvas canvas = filterPanel.GetRootObject().AddComponent<Canvas>();
-            canvas.overrideSorting = true;
-            canvas.sortingOrder = 1;
-            filterPanel.GetRootObject().AddComponent<GraphicRaycaster>();
-            filterPanel.GetRootObject().AddComponent<TrackedDeviceGraphicRaycaster>();
 
             levelFilterDropdown = new DropdownList("Level Filter Dropdown");
             levelFilterDropdown.DropdownSwitch.ActivatedText = "Filter by level";
@@ -131,17 +137,6 @@ namespace NVOS.SystemTools.LogViewer
                 levelFilterDropdown.AddListItem(levelToggle);
             }
             filterPanel.AddChild(levelFilterDropdown);
-
-            logList = new VerticalLayoutPanel("Log List");
-            logList.VerticalFit = UnityEngine.UI.ContentSizeFitter.FitMode.PreferredSize;
-            logList.SizeScaleX = 1f;
-            logList.ReverseArrangement = false;
-            logList.PaddingBottom = 1;
-            logList.ControlChildHeight = false;
-
-            scrollView = new ScrollView("Log ScrollView", logList);
-            scrollView.PreferredHeight = 18f;
-            mainPanel.AddChild(scrollView);
 
             window.OnWindowStateChanged += Window_OnWindowStateChanged;
             window.OnClose += Window_OnClose;
@@ -228,27 +223,27 @@ namespace NVOS.SystemTools.LogViewer
                     break;
             }
 
-            Panel logPanel = new Panel("Log Item");
+            HorizontalLayoutPanel logPanel = new HorizontalLayoutPanel("Log Item");
             logPanel.SizeScaleX = 1f;
             if (nextLog) {
                 logPanel.BackgroundColor = new Color32(100, 100, 100, 255);
             }
                 
-            logPanel.SizeOffsetY = 2.2f;
+            logPanel.VerticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
             Label logLabel = new Label("Log Label");
             logLabel.Text = log.Message;
+            logLabel.Overflow = TMPro.TextOverflowModes.Ellipsis;
             logLabel.SizeScaleX = 1f;
             logLabel.SizeScaleY = 1f;
             logLabel.TextColor = logColor;
             logLabel.FontSize = 0.5f;
             logLabel.TextAlignment = TMPro.TextAlignmentOptions.BottomLeft;
             logLabel.Margin = new Vector4(0.5f, 0.5f, 0.5f, 0.5f);
-            logLabel.Overflow = TMPro.TextOverflowModes.Ellipsis;
+
             logPanel.AddChild(logLabel);
 
             logList.AddChild(logPanel);
-            logPanel.SizeOffsetY = 2.2f;
 
             nextLog = !nextLog;
         }
