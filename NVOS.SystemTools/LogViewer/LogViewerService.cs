@@ -228,7 +228,7 @@ namespace NVOS.SystemTools.LogViewer
             if (nextLog) {
                 logPanel.BackgroundColor = new Color32(100, 100, 100, 255);
             }
-                
+
             logPanel.VerticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
             Label logLabel = new Label("Log Label");
@@ -240,10 +240,38 @@ namespace NVOS.SystemTools.LogViewer
             logLabel.FontSize = 0.5f;
             logLabel.TextAlignment = TMPro.TextAlignmentOptions.BottomLeft;
             logLabel.Margin = new Vector4(0.5f, 0.5f, 0.5f, 0.5f);
-
             logPanel.AddChild(logLabel);
 
             logList.AddChild(logPanel);
+
+            if (log.Message.Length > 120)
+            {
+                logPanel.PreferredHeight = 1.56f;
+
+                SwitchButton logButton = new SwitchButton("Log Button");
+                logButton.IgnoreLayout = true;
+                logButton.SizeScaleX = 1f;
+                logButton.SizeScaleY = 1f;
+                logButton.ActivatedColor = Color.clear;
+                logButton.DeactivatedColor = Color.clear;
+                logButton.HighlightColor = Color.clear;
+                logButton.ActivatedText = "";
+                logButton.DeactivatedText = "";
+                logButton.OnValueChanged += (object sender, UI.Models.EventArgs.SwitchButtonValueChangedEventArgs e) =>
+                {
+                    if (e.Value)
+                    {
+                        logPanel.GetRootObject().GetComponent<LayoutElement>().enabled = false;
+                        logPanel.SizeOffsetX = 1f;
+                    }
+                    else
+                    {
+                        logPanel.GetRootObject().GetComponent<LayoutElement>().enabled = true;
+                        logPanel.PreferredHeight = 1.56f;
+                    }
+                };
+                logPanel.AddChild(logButton);
+            }
 
             nextLog = !nextLog;
         }
