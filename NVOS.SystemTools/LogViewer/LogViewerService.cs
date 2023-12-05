@@ -94,7 +94,6 @@ namespace NVOS.SystemTools.LogViewer
             logList.VerticalFit = UnityEngine.UI.ContentSizeFitter.FitMode.PreferredSize;
             logList.SizeScaleX = 1f;
             logList.ReverseArrangement = false;
-            logList.PaddingBottom = 1;
             logList.ControlChildHeight = false;
 
             scrollView = new ScrollView("Log ScrollView", logList);
@@ -239,13 +238,14 @@ namespace NVOS.SystemTools.LogViewer
             logLabel.TextColor = logColor;
             logLabel.FontSize = 0.5f;
             logLabel.TextAlignment = TMPro.TextAlignmentOptions.BottomLeft;
-            logLabel.Margin = new Vector4(0.5f, 0.5f, 0.5f, 0.5f);
+            logLabel.Margin = new Vector4(0.5f, 0.1f, 0.5f, 0.1f);
             logPanel.AddChild(logLabel);
 
             logList.AddChild(logPanel);
 
             if (log.Message.Length > 120)
             {
+                logLabel.Margin = new Vector4(0.5f, 0.5f, 0.5f, 0.5f);
                 logPanel.PreferredHeight = 1.56f;
 
                 SwitchButton logButton = new SwitchButton("Log Button");
