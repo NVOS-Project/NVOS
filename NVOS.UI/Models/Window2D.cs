@@ -1,17 +1,19 @@
-﻿namespace NVOS.UI.Models
+﻿using UnityEngine;
+
+namespace NVOS.UI.Models
 {
     public class Window2D : Window
     {
-        private int tileWidth;
-        private int tileHeight;
-
-        public int TileWidth { get { return tileWidth; } }
-        public int TileHeight { get { return tileHeight; } }
-
-        public Window2D(string name, int tileWidth, int tileHeight) : base(name)
+        protected Canvas canvas;
+        public Window2D(string name, float width, float height) : base(name)
         {
-            this.tileWidth = tileWidth;
-            this.tileHeight = tileHeight;
+            canvas = root.AddComponent<Canvas>();
+            root.AddComponent<CanvasRenderer>();
+            root.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
+            canvas.renderMode = RenderMode.WorldSpace;
+            canvas.worldCamera = Camera.main;
+            canvas.sortingOrder = 999;
+            rectTransform.sizeDelta = new Vector2(width, height);
         }
     }
 }

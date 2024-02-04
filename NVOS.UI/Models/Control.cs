@@ -338,6 +338,7 @@ namespace NVOS.UI.Models
         public Control(string name)
         {
             root = new GameObject(name);
+            this.name = name;
             rectTransform = root.AddComponent<RectTransform>();
             rectTransform.pivot = new Vector2(0f, 1f);
             rectTransform.anchorMin = new Vector2(0f, 1f);
@@ -382,7 +383,12 @@ namespace NVOS.UI.Models
             return root;
         }
 
-        public void Dispose()
+        public RectTransform GetRectTransform()
+        {
+            return rectTransform;
+        }
+
+        public virtual void Dispose()
         {
             foreach (Control child in controls)
                 child.Dispose();
